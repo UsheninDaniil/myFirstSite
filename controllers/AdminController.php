@@ -147,7 +147,7 @@ Class AdminController
 
     public function actionCreateNewParameter(){
         echo '
-            <form  enctype="multipart/form-data" name = "add_product" action="" method ="post" class="feedback">
+            <form  enctype="multipart/form-data" id ="create_new_parameter_information" name = "add_product" action="" method ="post" class="feedback">
                 <br /><label>Аббревиатура (латиницей):</label><br />
                 <input type="text" name="parameter_name" />
                 <br /><label>Название:</label><br />
@@ -167,23 +167,21 @@ Class AdminController
 
         $segments = explode('/',$uri);
 
-        echo 'Содержимое POST';
+        echo '<br />Содержимое POST<br />';
         print_r($_POST);
 
         if (isset($_POST['parameter_id'])){
             $save_parameters_list = $_POST['parameter_id'];
         }
 
-        echo"<br />Список параметров на сохранение <br />";
+        echo"<br /><br />Список параметров на сохранение <br />";
         print_r($save_parameters_list);
 
-//        $parameters_list = $_POST[''];
 
-//
-//            if(isset($segments[3])){
-//                $category_id = $segments[3];
-//                Admin::save_selected_existing_parameters($category_id,$parameters_list);
-//            }
+            if(isset($segments[3])){
+                $category_id = $segments[3];
+                Admin::save_selected_existing_parameters($category_id,$save_parameters_list);
+            }
 
 
 
@@ -191,7 +189,34 @@ Class AdminController
     }
 
     public function actionSaveNewParameter(){
-        echo "сохранено";
+
+        require_once (ROOT. '/models/Admin.php');
+
+        $uri=$_SERVER['REQUEST_URI'];
+
+        print_r($uri);
+        echo "<br />";
+
+        $segments = explode('/',$uri);
+
+        if(isset($segments[3])){
+            $category_id = $segments[3];
+            echo "<br/> Категория $category_id";
+        }
+
+        echo '<br/><br/>Содержимое POST<br/>';
+        print_r($_POST);
+
+        if (isset($_POST['parameter_name'])){
+            $parameter_name = $_POST['parameter_name'];
+        }
+
+        if (isset($_POST['parameter_russian_name'])){
+            $parameter_russian_name = $_POST['parameter_russian_name'];
+        }
+
+        Admin::save_new_parameter($category_id, $parameter_name, $parameter_russian_name);
+
     }
 
     public function actionRemoveParameter(){

@@ -83,13 +83,20 @@
     {
         event.preventDefault();
 
-        var parameters_list = $("input").serialize();
+        var form = $('#create_new_parameter_information');
+
+        var value1 = form.find('input[name="parameter_name"]').val();
+        var value2 = form.find('input[name="parameter_russian_name"]').val();
+        var new_parameter_information={parameter_name:value1, parameter_russian_name:value2};
+
+
+        var category_id = $(this).parents(".parameter_list_table").data("categoryId");
         // alert(parameters_list);
 
-        // $.post("/admin/save_new_parameter/"+parameters_list, {}, function (data) {
-        //         $(".check_save_new_parameter_button").html(data);
-        //     }, "html"
-        // );
+        $.post("/admin/save_new_parameter/"+category_id, new_parameter_information , function (data) {
+                $(".remove_info").html(data);
+            }, "html"
+        );
 
         console.log(parameters_list);
     });
@@ -126,7 +133,6 @@
         var category_id = $(this).parents(".parameter_list_table").data("categoryId");
 
         alert("нажато сохранение параметра");
-        alert(category_id);
 
         $.post("/admin/save_selected_existing_parameters/"+category_id, parameters_list_data, function (data) {
                 $(".remove_info").html(data);

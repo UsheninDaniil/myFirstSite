@@ -18,16 +18,6 @@
             <?php endforeach;?>
     </tr>
 
-
-
-
-
-
-
-
-
-
-
     <?php
 
     $id=$compareData[2];
@@ -35,9 +25,7 @@
     $product_info=Product::get_product_by_id($id);
     $product_parameters_info=Product::get_product_parameters_by_id($id);
 
-    foreach ($product_parameters_info as $parameter_name => $parameter_value):
-
-        ?>
+    foreach ($product_parameters_info as $parameter_name => $parameter_value):?>
 
     <tr>
         <th>
@@ -59,12 +47,8 @@
     </tr>
 
     <?php
-
     endforeach;
-
     ?>
-
-
 
 
 
