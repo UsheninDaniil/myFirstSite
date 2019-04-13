@@ -4,6 +4,8 @@
 
 <script src="/template/jquery-3.3.1.min.js"></script>
 
+
+<!--Управление корзиной-->
 <script>
     $(document).ready(function(){
         $(".add-to-cart").click(function (event) {
@@ -30,52 +32,128 @@
     });
 </script>
 
+<!--Управление категориями в панеле администратора-->
 <script>
 
     function edit_category() {
-
-        // var selected = document.getElementById('product_category_id');
-        // category_id = document.getElementById(selected.value).innerHTML;
-
-        // $(".replace").load('/admin/edit_category/1');
-
         var e = document.getElementById("product_category_id");
         category_id = e.options[e.selectedIndex].value;
 
-        $.post("/admin/edit_category/"+category_id, {}, function (data) {
+        $.post("/admin/edit_selected_category/"+category_id, {}, function (data) {
                 $(".replace").html(data);
             },"html"
         );
     }
 
-    $(document).on('click', '.load_existing_parameters', function (event)
+    $(document).on('click', '.load_existing_parameters_form', function (event)
+    {
+        event.preventDefault();
+        $("#load_existing_parameters_form").show();
+        $("#hide_load_existing_parameters_form_button").show();
+    });
+
+    $(document).on('click', '.hide_load_existing_parameters_form_button', function (event) {
+        event.preventDefault();
+        $("#load_existing_parameters_form").hide();
+        $("#hide_load_existing_parameters_form_button").hide();
+    });
+
+    $(document).on('click', '.load_new_parameter_form', function (event)
+    {
+        event.preventDefault();
+        $("#load_new_parameter_form").show();
+        $("#hide_load_new_parameter_form_button").show();
+    });
+
+    $(document).on('click', '.hide_load_new_parameter_form_button', function (event) {
+        event.preventDefault();
+        $("#load_new_parameter_form").hide();
+        $("#hide_load_new_parameter_form_button").hide();
+    });
+
+    $(document).on('click', '.save_new_parameter_to_category', function (event)
     {
         event.preventDefault();
 
-        $.post("/admin/load_existing_parameters", {}, function (data) {
-                $(".existing-parameters").html(data);
+        var form = $('#create_new_parameter_information');
+        var value1 = form.find('input[name="parameter_name"]').val();
+        var value2 = form.find('input[name="parameter_russian_name"]').val();
+        var value3 = form.find('input[name="parameter_unit"]').val();
+        var new_parameter_information={parameter_name:value1, parameter_russian_name:value2, parameter_unit:value3};
+        var category_id = $(this).parents(".parameter_list_table").data("categoryId");
+
+        $.post("/admin/save_new_parameter_to_category/"+category_id, new_parameter_information , function (data) {
+                $(".remove_info").html(data);
             }, "html"
+        );
+
+        $.post("/admin/edit_selected_category/"+category_id, {}, function (data) {
+                $(".replace").html(data);
+            },"html"
         );
     });
 
-
-    $(document).on('click', '.load_existing_parameters', function (event)
-    {
+    $(document).on('click', '.remove_parameter_from_category', function (event) {
         event.preventDefault();
 
-        $.post("/admin/load_existing_parameters", {}, function (data) {
-                $(".load_existing_parameters_result").html(data);
+        var remove_parameter_id = $(this).data("parameterId");
+        var category_id = $(this).parents(".parameter_list_table").data("categoryId");
+
+        $.post("/admin/remove_parameter_from_category/"+remove_parameter_id+"/"+category_id, {}, function (data) {
+            $(".remove_info").html(data);
             }, "html"
+        );
+
+        $.post("/admin/edit_selected_category/"+category_id, {}, function (data) {
+                $(".replace").html(data);
+            },"html"
         );
     });
 
-    $(document).on('click', '.create_new_parameter', function (event)
-    {
+    $(document).on('click', '.save_selected_existing_parameters_to_category', function (event) {
         event.preventDefault();
 
-        $.post("/admin/create_new_parameter", {}, function (data) {
-                $(".create_new_parameter_result").html(data);
+        var form = $('#save_parameters_list');
+        var parameters_list_data = form.serialize();
+        var category_id = $(this).parents(".parameter_list_table").data("categoryId");
+
+        $.post("/admin/save_selected_existing_parameters_to_category/"+category_id, parameters_list_data, function (data) {
+                $(".remove_info").html(data);
             }, "html"
+        );
+
+        $.post("/admin/edit_selected_category/"+category_id, {}, function (data) {
+                $(".replace").html(data);
+            },"html"
+        );
+    });
+
+</script>
+
+<!--Управление параметрами в панеле администратора-->
+<script>
+
+    $(document).on('click', '.load_new_parameter_form_2', function (event)
+    {
+        event.preventDefault();
+        $("#load_new_parameter_form_2").show();
+        $("#hide_load_new_parameter_form_button_2").show();
+
+    });
+
+    $(document).on('click', '.hide_load_new_parameter_form_button_2', function (event) {
+        event.preventDefault();
+        $("#load_new_parameter_form_2").hide();
+        $("#hide_load_new_parameter_form_button_2").hide();
+    });
+
+    $(document).on('click', '.remove_selected_parameter', function (event) {
+        event.preventDefault();
+        var remove_parameter_id = $(this).data("parameterId");
+
+        $.post("/admin/remove_selected_parameter/"+remove_parameter_id, {}, function (data) {
+                $(".parameters_list_table").html(data);
+            },"html"
         );
     });
 
@@ -83,83 +161,39 @@
     {
         event.preventDefault();
 
-        var form = $('#create_new_parameter_information');
-
+        var form = $('#create_new_parameter_information_2');
         var value1 = form.find('input[name="parameter_name"]').val();
         var value2 = form.find('input[name="parameter_russian_name"]').val();
-        var new_parameter_information={parameter_name:value1, parameter_russian_name:value2};
-
-
+        var value3 = form.find('input[name="parameter_unit"]').val();
+        var new_parameter_information={parameter_name:value1, parameter_russian_name:value2, parameter_unit:value3};
         var category_id = $(this).parents(".parameter_list_table").data("categoryId");
-        // alert(parameters_list);
 
-        $.post("/admin/save_new_parameter/"+category_id, new_parameter_information , function (data) {
-                $(".remove_info").html(data);
+        $.post("/admin/save_new_parameter", new_parameter_information , function (data) {
+            $(".check_result").html(data);
             }, "html"
         );
 
-        console.log(parameters_list);
+        $.post("/admin/load_parameters_table", {}, function (data) {
+                $(".parameters_list_table").html(data);
+            },"html"
+        );
     });
 
-    $(document).on('click', '.remove_parameter', function (event) {
+    $(document).on('click', '.update_selected_parameter_information', function (event) {
         event.preventDefault();
 
-        var remove_parameter_id = $(this).data("parameterId");
-        var category_id = $(this).parents(".parameter_list_table").data("categoryId");
+        var parameter_id = $(this).data("parameterId");
+        var form = $('#update_selected_parameter_information');
+        var value1 = form.find('input[name="update_parameter_name"]').val();
+        var value2 = form.find('input[name="update_parameter_russian_name"]').val();
+        var value3 = form.find('input[name="update_parameter_unit"]').val();
+        var new_parameter_information = {parameter_name: value1, parameter_russian_name: value2, parameter_unit: value3};
 
-        alert("нажато удаление параметра");
-
-        $.post("/admin/remove_parameter/"+remove_parameter_id+"/"+category_id, {}, function (data) {
-            $(".remove_info").html(data);
+        $.post("/admin/update_selected_parameter/" + parameter_id, new_parameter_information, function (data) {
+                document.location.href = "/admin/edit_parameters";
             }, "html"
         );
     });
-
-
-    $(document).on('click', '.save_selected_existing_parameters', function (event) {
-        event.preventDefault();
-
-        var form = $('#save_parameters_list');
-
-        // var value1 = form.find('input[name="name1"]').val();
-        // var value2 = form.find('input[name="name2"]').val();
-        // var new_parameter_data={name1:value1, name2:value2};
-
-        var parameters_list_data = form.serialize();
-
-        console.log("Данные формы");
-        console.log(parameters_list_data);
-
-        var category_id = $(this).parents(".parameter_list_table").data("categoryId");
-
-        alert("нажато сохранение параметра");
-
-        $.post("/admin/save_selected_existing_parameters/"+category_id, parameters_list_data, function (data) {
-                $(".remove_info").html(data);
-            }, "html"
-        );
-    });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 </script>
 

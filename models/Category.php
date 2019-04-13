@@ -14,23 +14,15 @@ Class Category{
         $i = 0;
         $categoryList = array();
 
-
         while ($i < $result->num_rows){
             $row = $result->fetch_array();
             $categoryList[$i]['id'] = $row['id'];
             $categoryList[$i]['name'] = $row['name'];
             $i++;
         }
-
-   //   print_r($categoryList);
         $mysqli->close();
-
         return $categoryList;
-
     }
-
-
-
 
     public static function  get_category_name_by_id($category_id){
 
@@ -46,9 +38,7 @@ Class Category{
         $category_name = ucfirst($row['name']);
 
         $mysqli->close();
-
         return $category_name;
-
     }
 
 

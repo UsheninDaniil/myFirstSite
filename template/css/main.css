@@ -204,18 +204,6 @@ a.add-to-compare:hover{
     background-color: black;
 }
 
-a.load_existing_parameters, a.create_new_parameter{
-    text-decoration: none;
-    color: green;
-    display: inline-block;
-}
-
-a.load_existing_parameters:hover, a.create_new_parameter:hover{
-    text-decoration: underline;
-    color: red;
-}
-
-
 .glyphicon-check{
     color: green;
 }
@@ -234,7 +222,46 @@ a.load_existing_parameters:hover, a.create_new_parameter:hover{
     color: red;
 }
 
-a.save_new_parameter,add_selected_existing_parameters{
+a.load_existing_parameters_form, a.load_new_parameter_form, a.load_new_parameter_form_2{
+    text-decoration: none;
+    color: green;
+    display: inline-block;
+}
+
+a.load_existing_parameters_form:hover, a.load_new_parameter_form:hover, a.load_new_parameter_form_2:hover{
+    text-decoration: underline;
+    color: red;
+}
+
+a.save_selected_existing_parameters_to_category, a.save_new_parameter_to_category, a.save_new_parameter,
+a.hide_load_existing_parameters_form_button, a.hide_load_new_parameter_form_button, a.hide_load_new_parameter_form_button_2{
     color: #c9302c;
     text-decoration:none;
+}
+
+a{
+    text-decoration: none;
+}
+
+a:visited{
+    color: blue;
+}
+
+a.go-back-to-admin-panel{
+    text-decoration: none;
+    color: green;
+    display: inline-block;
+}
+
+a.go-back-to-admin-panel:hover{
+    text-decoration: underline;
+    color: red;
+}
+
+.glyphicon-remove{
+    color: red;
+}
+
+.glyphicon-pencil{
+    color: green;
 }

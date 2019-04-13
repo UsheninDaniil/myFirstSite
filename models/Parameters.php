@@ -46,7 +46,7 @@ class Parameters
         $mysqli->query ("SET NAMES 'utf8'");
 
         //выбрать id и имя и отсортировать по возрастанию и положить в переменную $result
-        $result = $mysqli->query ("SELECT id,russian_name FROM parameters_list ORDER BY sort_order, name ASC");
+        $result = $mysqli->query ("SELECT * FROM parameters_list ORDER BY id ASC");
 
         $i = 0;
         $parameters_list = array();
@@ -55,7 +55,9 @@ class Parameters
         while ($i < $result->num_rows) {
             $row = $result->fetch_array();
             $parameters_list[$i]['id'] = $row['id'];
+            $parameters_list[$i]['name'] = $row['name'];
             $parameters_list[$i]['russian_name'] = $row['russian_name'];
+            $parameters_list[$i]['unit'] = $row['unit'];
             $i++;
 
         }

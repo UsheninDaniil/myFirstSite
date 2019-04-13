@@ -1,7 +1,5 @@
 <?php
 
-
-
 if(isset($_POST["send"])){
 
     $product_information['product_name'] = htmlspecialchars ($_POST['product_name']);
@@ -11,8 +9,6 @@ if(isset($_POST["send"])){
 
     $product_id = Admin::add_new_product($product_information);
 
-
-
     if (is_uploaded_file($_FILES["image"]["tmp_name"])) {
         // Если загружалось, переместим его в нужную папке, дадим новое имя
 //        $photo
@@ -21,9 +17,7 @@ if(isset($_POST["send"])){
         echo "Фото загружено";
 
     }
-
     echo 'Создан файл с айди '.$product_id;
-
 }
 
 require_once (ROOT. '/models/Category.php');
@@ -31,8 +25,12 @@ $categoryList = Category::get_category_list();
 
 ?>
 
-
-<h2>Панель администратора</h2>
+<br />
+<a href="/admin" class="go-back-to-admin-panel" /><b>Панель администратора</b></a>
+→
+<a href="/admin/edit_products" class="go-back-to-admin-panel"/><b>Управление товарами</b></a>
+→
+<a href="/admin/add_product" class="go-back-to-admin-panel"/><b>Добавление товара</b></a>
 
 <h4>Добавить новый товар</h4>
 

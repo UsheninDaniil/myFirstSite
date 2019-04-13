@@ -1,7 +1,7 @@
 
 
-
 <h2>Панель администратора</h2>
+<a href="/admin" class="go-back-to-admin-panel" "><span class="glyphicon glyphicon-circle-arrow-left"></span><b> Вернуться в панель администратора</b></a>
 <h3>Удаление товара</h3>
 
 <?php

@@ -62,7 +62,7 @@ Class Product{
     }
 
 
-    public static function get_product_parameters_by_id($id = null){
+    public static function get_product_parameters_by_id($id = []){
 
         if (isset($id)){
             $product_id=$id;
@@ -131,6 +131,7 @@ Class Product{
             $productInfo['name'] = $row['name'];
             $productInfo['price'] = $row['price'];
             $productInfo['status'] = $row['status'];
+            $productInfo['category_id'] = $row['category_id'];
 
 
         $mysqli->close();
