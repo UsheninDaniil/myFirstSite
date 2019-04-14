@@ -198,6 +198,44 @@
 </script>
 
 
+<!--Управление товарами в панеле администратора-->
+<script>
+
+    $(document).on('click', 'form#edit_product a#load_existing_parameter', function (event)
+    {
+        event.preventDefault();
+        $(".existing_parameters_form").show();
+        $("form#edit_product .hide_button").show();
+    });
+
+    $(document).on('click', 'form#edit_product .hide_button', function (event) {
+        event.preventDefault();
+        $(".existing_parameters_form").hide();
+        $(this).hide();
+    });
+
+    $(document).on('click', 'form#edit_product .existing_parameters_form a#add_selected_parameters', function (event) {
+        event.preventDefault();
+
+        var form = $('form#edit_product ');
+        console.log(form);
+        var parameters_list_data = form.serialize();
+        console.log(parameters_list_data);
+
+        $.post("/admin/load_selected_parameters_to_additional_product_parameters", parameters_list_data, function (data) {
+                $('form#edit_product .additional_parameters .new_parameters').html(data);
+                $(".existing_parameters_form").hide();
+                $("form#edit_product .hide_button").hide();
+            }, "html"
+        );
+        
+    });
+
+
+
+
+</script>
+
 
 </body>
 </html>

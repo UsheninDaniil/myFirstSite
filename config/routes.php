@@ -30,6 +30,7 @@
     '/admin/add_product' => 'adminProduct/addProduct',
     '/delete_product/[0-9]{0,4}' => 'adminProduct/deleteProduct',
     '/edit_poduct/[0-9]{0,4}' => 'adminProduct/editProduct',
+    '/load_selected_parameters_to_additional_product_parameters' => 'adminProduct/loadSelectedParametersList',
 
 //    Управление категориями в панеле администратора
     '/admin/edit_category' => 'adminCategory/editCategoryView',

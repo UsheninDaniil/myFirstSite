@@ -75,5 +75,28 @@ class AdminParameter
         return $parameter_value;
     }
 
+    public static function get_specified_parameters_by_product_id($product_id)
+    {
+        $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
+        $mysqli->query ("SET NAMES 'utf8'");
+
+        $result = $mysqli->query ("SELECT * FROM `myFirstSite`.`parameter_values` WHERE `product_id`='$product_id' ");
+
+        $i = 0;
+        $specified_parameters_list = array();
+
+        while ($i < $result->num_rows){
+            $row = $result->fetch_array();
+            $specified_parameters_list[] = $row['parameter_id'];
+            $i++;
+        }
+
+        $mysqli->close();
+
+        return $specified_parameters_list;
+    }
+
+
+
 
 }
