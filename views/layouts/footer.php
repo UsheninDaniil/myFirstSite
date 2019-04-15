@@ -228,7 +228,7 @@
                 $("form#edit_product .hide_button").hide();
             }, "html"
         );
-        
+
     });
 
 

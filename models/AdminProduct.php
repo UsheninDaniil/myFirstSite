@@ -29,4 +29,32 @@ class AdminProduct
 
         return $product_id;
     }
+
+    public static function update_main_product_information_by_product_id($product_id,$product_name,$product_price){
+        $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
+        $mysqli->query ("SET NAMES 'utf8'");
+
+        $mysqli->query("UPDATE product SET `name` = '$product_name', `price`='$product_price' WHERE id = '$product_id'");
+
+        $mysqli->close();
+    }
+
+    public static function update_product_information_by_product_id_and_parameter_id($product_id, $parameter_id, $parameter_value){
+
+        $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
+        $mysqli->query ("SET NAMES 'utf8'");
+
+        $mysqli->query("UPDATE parameter_values SET `value` = '$parameter_value' WHERE product_id = '$product_id' AND parameter_id = '$parameter_id'");
+
+        $mysqli->close();
+    }
+
+    public static function add_new_existing_parameter_to_product($product_id, $parameter_id, $parameter_value){
+        $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
+        $mysqli->query ("SET NAMES 'utf8'");
+
+        $mysqli->query ("INSERT INTO `myFirstSite`.`parameter_values` (`product_id`,`parameter_id`,`value`) VALUES ('$product_id', '$parameter_id', '$parameter_value')");
+
+        $mysqli->close();
+    }
 }
