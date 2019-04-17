@@ -20,7 +20,7 @@
             <td><a href="/product/<?= $product['id']?> "> <?= $product['name'] ?></a></td>
             <td><?= $product['price'] ?></td>
             <td><a href="/admin/delete_product/<?= $product['id']?>"><span class="glyphicon glyphicon-remove"></span></a></td>
-            <td><a href="/admin/edit_poduct/<?= $product['id']?>"><span class="glyphicon glyphicon-pencil"></span></a></td>
+            <td><a href="/admin/edit_product/<?= $product['id']?>"><span class="glyphicon glyphicon-pencil"></span></a></td>
 
         </tr>
 

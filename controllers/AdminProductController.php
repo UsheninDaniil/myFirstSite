@@ -142,9 +142,20 @@ class AdminProductController
             $parameter_russian_name = $parameter_information['russian_name'];
             $parameter_name = $parameter_information['name'];
             $parameter_id = $parameter_information['id'];
-            echo "<br /><label>$parameter_name</label><br />";
+            echo "<br /><label>$parameter_russian_name</label><br />";
             echo "<input type='text' name='new_dynamic_parameters[$parameter_id]'  value=''>";
         }
 
     }
+
+    public function actionDeleteAdditionalParameter(){
+        $uri=$_SERVER['REQUEST_URI'];
+        $segments = explode('/',$uri);
+        $product_id=$segments[3];
+        $parameter_id=$segments[4];
+
+        require_once ('/models/AdminProduct.php');
+        AdminProduct::delete_additional_parameter_from_product($product_id, $parameter_id);
+    }
+
 }

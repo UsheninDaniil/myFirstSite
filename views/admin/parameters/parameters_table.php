@@ -3,7 +3,7 @@
 
 <div class="parameters_list_table"><br /><br />
 
-    <table border="1" width="50%" cellpadding="5" class="product_list_table">
+    <table border="1" width="50%" cellpadding="5" class="product_list_table" id="parameters_table">
 
         <tr>
             <th>Id</th>

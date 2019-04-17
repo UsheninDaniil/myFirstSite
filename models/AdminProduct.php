@@ -57,4 +57,14 @@ class AdminProduct
 
         $mysqli->close();
     }
+
+    public static function delete_additional_parameter_from_product($product_id, $parameter_id){
+        $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
+        $mysqli->query ("SET NAMES 'utf8'");
+
+        $mysqli->query ("DELETE FROM `parameter_values` WHERE `product_id`='$product_id' AND `parameter_id`='$parameter_id'");
+
+        $mysqli->close();
+    }
+
 }

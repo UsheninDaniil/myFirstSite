@@ -147,7 +147,7 @@
         $("#hide_load_new_parameter_form_button_2").hide();
     });
 
-    $(document).on('click', '.remove_selected_parameter', function (event) {
+    $(document).on('click', 'form#parameters_table .remove_selected_parameter', function (event) {
         event.preventDefault();
         var remove_parameter_id = $(this).data("parameterId");
 
@@ -228,9 +228,21 @@
                 $("form#edit_product .hide_button").hide();
             }, "html"
         );
-
     });
 
+    $(document).on('click', 'form#edit_product a.remove_additional_parameter', function (event)
+    {
+        event.preventDefault();
+
+        var product_id = $('form#edit_product').data("productId");
+        var parameter_id = $(this).data("parameterId");
+
+        $.post("/admin/delete_additional_parameter_from_edit_product/"+ product_id + "/" + parameter_id, {}, function (data) {
+            document.location.href = "/admin/edit_product/" + product_id;
+            }, "html"
+        );
+
+    });
 
 
 

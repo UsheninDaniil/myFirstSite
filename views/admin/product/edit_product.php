@@ -7,7 +7,7 @@
 <a href="/admin/edit_poduct/<?=$product_id?>" class="go-back-to-admin-panel"><b>Изменение товара #<?=$product_id?></b></a>
 
 
-<form  enctype="multipart/form-data" id = "edit_product" action="" method ="post">
+<form  enctype="multipart/form-data" id = "edit_product" data-product-id = "<?=$product_id?>" action="" method ="post">
 
     <br /><b style="color: #dd0029"><?php echo "Основные параметры"?></b><br /><br />
 
@@ -62,7 +62,8 @@
 
         <label><?=$parameter_russian_name;?><br /></label>
 
-        <input type="text" name="dynamic_parameters[<?=$parameter_id?>]" value="<?=$value?>"><br />
+        <input type="text" name="dynamic_parameters[<?=$parameter_id?>]" value="<?=$value?>">
+        <a href="javascript:void(0);" class="remove_additional_parameter" data-parameter-id="<?=$parameter_id?>"><span class="glyphicon glyphicon-remove"></span></a><br />
 
         <?php endforeach;?>
 
@@ -92,5 +93,4 @@
     <input type = "submit" name ="update_product_information" value="Изменить товар "><br />
 
 </form>
-
 
