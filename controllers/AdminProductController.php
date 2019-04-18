@@ -22,6 +22,35 @@ class AdminProductController
         }
 
         if($user_role == "admin"){
+
+            if(isset($_POST["save_new_product"])){
+
+                $product_information['product_name'] =  $_POST['product_name'];
+                $product_information['product_price'] = $_POST['product_price'];
+                $product_information['product_availability'] = $_POST['product_availability'];
+                $product_information['product_category'] = $_POST['product_category_id'];
+
+                $product_id = AdminProduct::add_new_product($product_information);
+
+                if (is_uploaded_file($_FILES["image"]["tmp_name"])) {
+                    // Если загружалось, переместим его в нужную папке, дадим новое имя $photo
+                    move_uploaded_file($_FILES["image"]["tmp_name"], $_SERVER['DOCUMENT_ROOT'] . "/images/$product_id.jpg");
+                    echo "Фото загружено";
+                }
+
+                print_r($_POST);
+
+                if(isset($_POST["category_parameters"])){
+                    foreach ($_POST["category_parameters"] as $parameter_id => $parameter_value){
+                        if(!empty ($parameter_value)){
+                            AdminProduct::save_parameter_value_by_product_id_and_parameter_id($product_id, $parameter_id, $parameter_value);
+                        }
+                    }
+                }
+
+                echo 'Создан файл с айди '.$product_id;
+            }
+
             require_once ('/views/layouts/header.php');
             require_once (ROOT.'/views/admin/product/add_product.php');
             require_once ('/views/layouts/footer.php');
@@ -98,10 +127,11 @@ class AdminProductController
 
         if(isset($_POST["update_product_information"])){
 
-            if (isset($_POST['product_name'],$_POST['product_price'])){
+            if (isset($_POST['product_name'], $_POST['product_price'], $_POST['availability'])){
                 $product_name = $_POST['product_name'];
                 $product_price = $_POST['product_price'];
-                AdminProduct::update_main_product_information_by_product_id($product_id, $product_name, $product_price);
+                $availability = $_POST['availability'];
+                AdminProduct::update_main_product_information_by_product_id($product_id, $product_name, $product_price, $availability);
             }
 
             if (isset($_POST['dynamic_parameters'])){
@@ -114,13 +144,14 @@ class AdminProductController
             if (isset($_POST['new_dynamic_parameters'])){
 
                 foreach ($_POST['new_dynamic_parameters'] as $parameter_id => $parameter_value){
-                    AdminProduct::add_new_existing_parameter_to_product($product_id, $parameter_id, $parameter_value);
+                    if(!empty ($parameter_value)){
+                        AdminProduct::save_parameter_value_by_product_id_and_parameter_id($product_id, $parameter_id, $parameter_value);
+                    }
                 }
             }
 
            header('Location: /admin/edit_products');
         }
-
 
         require_once ('/views/layouts/header.php');
         require_once (ROOT.'/views/admin/product/edit_product.php');
@@ -145,7 +176,6 @@ class AdminProductController
             echo "<br /><label>$parameter_russian_name</label><br />";
             echo "<input type='text' name='new_dynamic_parameters[$parameter_id]'  value=''>";
         }
-
     }
 
     public function actionDeleteAdditionalParameter(){
@@ -156,6 +186,46 @@ class AdminProductController
 
         require_once ('/models/AdminProduct.php');
         AdminProduct::delete_additional_parameter_from_product($product_id, $parameter_id);
+    }
+
+    public function actionLoadCategoryParameters(){
+        include_once ('/models/Parameters.php');
+        include_once ('/models/AdminParameter.php');
+
+        $uri=$_SERVER['REQUEST_URI'];
+        $segments = explode('/',$uri);
+        $category_id=$segments[3];
+
+        $category_parameters_list_after_checking = [];
+
+        $category_parameters_list = Parameters::get_category_parameters_list($category_id);
+        $existing_parameters = Parameters::get_all_parameters();
+
+        $existing_parameters_list = [];
+        foreach ($existing_parameters as $parameter_information){
+            $parameter_id = $parameter_information['id'];
+            array_push($existing_parameters_list, "$parameter_id");
+        }
+
+//        echo "<br /><br />Список всех существующих параметров: <br />";
+//        print_r($existing_parameters_list);
+
+        $category_parameters_list_after_checking = array_intersect ($category_parameters_list, $existing_parameters_list);
+
+//        echo "<br /><br />Список параметров категории после проверки: <br />";
+//        print_r($category_parameters_list_after_checking);
+
+        foreach ($category_parameters_list_after_checking as $parameter_id){
+            $parameter_information = AdminParameter::get_parameter_information_by_parameter_id($parameter_id);
+            $parameter_name = $parameter_information['name'];
+            $parameter_russian_name = $parameter_information['russian_name'];
+            echo "<br /><label>$parameter_russian_name</label><br />";
+            echo "<input type='text' name='category_parameters[$parameter_id]'>";
+        }
+
+
+
+
     }
 
 }

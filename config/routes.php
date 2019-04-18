@@ -32,6 +32,7 @@
     '/edit_product/[0-9]{0,4}' => 'adminProduct/editProduct',
     '/load_selected_parameters_to_additional_product_parameters' => 'adminProduct/loadSelectedParametersList',
     '/admin/delete_additional_parameter_from_edit_product/(.*)/(.*)' => 'adminProduct/deleteAdditionalParameter',
+    '/admin/load_category_parameters_to_add_product/(.*)' => 'adminProduct/loadCategoryParameters',
 
 //    Управление категориями в панеле администратора
     '/admin/edit_category' => 'adminCategory/editCategoryView',

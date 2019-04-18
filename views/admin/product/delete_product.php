@@ -1,8 +1,11 @@
 
 
-<h2>Панель администратора</h2>
-<a href="/admin" class="go-back-to-admin-panel" "><span class="glyphicon glyphicon-circle-arrow-left"></span><b> Вернуться в панель администратора</b></a>
-<h3>Удаление товара</h3>
+<br />
+<a href="/admin" class="go-back-to-admin-panel" /><b>Панель администратора</b></a>
+→
+<a href="/admin/edit_products" class="go-back-to-admin-panel"/><b>Управление товарами</b></a>
+→
+<a href="/admin/delete_product/<?=$product_id?>" class="go-back-to-admin-panel"/><b>Удаление товара #<?=$product_id?></b></a>
 
 <?php
 
@@ -21,17 +24,16 @@ if(file_exists(ROOT."/images/$product_id.jpg")){
     unlink(ROOT."/images/$product_id.jpg");
 }
 
-echo "Товар $product_id удален";
+echo "<br /><br />Товар $product_id удален";
 }
 
 ?>
 
 
-<form name = "delete product" action="" method ="post">
+<form name = "delete product" action="" method ="post"><br />
 
     <input type="submit" name="delete_product" value="Удалить товар №<?= $product_id ?>" />
 
 </form>
 
-<br /><a href="/admin">Вернуться в панель администратора</a>
 

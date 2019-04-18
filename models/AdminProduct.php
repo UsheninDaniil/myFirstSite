@@ -12,12 +12,12 @@ class AdminProduct
 
         $product_name =   $product_information['product_name'];
         $product_price = $product_information['product_price'];
-        $product_description = $product_information['product_description'];
+        $product_availability = $product_information['product_availability'];
         $product_category = $product_information['product_category'];
 
         $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
         $mysqli->query ("SET NAMES 'utf8'");
-        $mysqli->query ("INSERT INTO `myFirstSite`.`product` (`name`,`description`,`price`, `category_id`) VALUES ('$product_name ', '$product_description', '$product_price', '$product_category')");
+        $mysqli->query ("INSERT INTO `myFirstSite`.`product` (`name`,`status`,`price`, `category_id`) VALUES ('$product_name ', '$product_availability', '$product_price', '$product_category')");
 
         $result = $mysqli->query ("SELECT id FROM product WHERE  name = '$product_name' ");
 
@@ -30,11 +30,11 @@ class AdminProduct
         return $product_id;
     }
 
-    public static function update_main_product_information_by_product_id($product_id,$product_name,$product_price){
+    public static function update_main_product_information_by_product_id($product_id, $product_name, $product_price, $availability){
         $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
         $mysqli->query ("SET NAMES 'utf8'");
 
-        $mysqli->query("UPDATE product SET `name` = '$product_name', `price`='$product_price' WHERE id = '$product_id'");
+        $mysqli->query("UPDATE product SET `name` = '$product_name', `price`='$product_price', `status` = '$availability' WHERE id = '$product_id'");
 
         $mysqli->close();
     }
@@ -49,7 +49,7 @@ class AdminProduct
         $mysqli->close();
     }
 
-    public static function add_new_existing_parameter_to_product($product_id, $parameter_id, $parameter_value){
+    public static function save_parameter_value_by_product_id_and_parameter_id($product_id, $parameter_id, $parameter_value){
         $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
         $mysqli->query ("SET NAMES 'utf8'");
 

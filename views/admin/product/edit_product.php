@@ -4,7 +4,7 @@
 →
 <a href="/admin/edit_products" class="go-back-to-admin-panel"><b>Управление товарами</b></a>
 →
-<a href="/admin/edit_poduct/<?=$product_id?>" class="go-back-to-admin-panel"><b>Изменение товара #<?=$product_id?></b></a>
+<a href="/admin/edit_product/<?=$product_id?>" class="go-back-to-admin-panel"><b>Изменение товара #<?=$product_id?></b></a>
 
 
 <form  enctype="multipart/form-data" id = "edit_product" data-product-id = "<?=$product_id?>" action="" method ="post">
@@ -18,6 +18,10 @@
 
     <label>Цена:</label><br />
     <input type="text" name="product_price" value="<?=$product_information['price']?>" ><br />
+
+    <label>Есть в наличии?</label><br />
+        <input name="availability" type="radio" value="1" <?php if($product_information['status']=1){echo "checked";} ?>>Да
+        <input name="availability" type="radio" value="0" <?php if($product_information['status']=0){echo "checked";} ?>>Нет
 
     </div>
 

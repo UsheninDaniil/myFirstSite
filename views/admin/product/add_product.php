@@ -1,24 +1,6 @@
 <?php
 
-if(isset($_POST["send"])){
 
-    $product_information['product_name'] = htmlspecialchars ($_POST['product_name']);
-    $product_information['product_price'] = htmlspecialchars($_POST['product_price']);
-    $product_information['product_description'] = htmlspecialchars($_POST['product_description']);
-    $product_information['product_category'] = htmlspecialchars($_POST['product_category_id']);
-
-    $product_id = Admin::add_new_product($product_information);
-
-    if (is_uploaded_file($_FILES["image"]["tmp_name"])) {
-        // Если загружалось, переместим его в нужную папке, дадим новое имя
-//        $photo
-        move_uploaded_file($_FILES["image"]["tmp_name"], $_SERVER['DOCUMENT_ROOT'] . "/images/$photo$product_id.jpg");
-
-        echo "Фото загружено";
-
-    }
-    echo 'Создан файл с айди '.$product_id;
-}
 
 require_once (ROOT. '/models/Category.php');
 $categoryList = Category::get_category_list();
@@ -39,8 +21,17 @@ $categoryList = Category::get_category_list();
     <label>Название товара:</label><br />
     <input type="text" name="product_name" /><br />
 
+    <label>Цена:</label><br />
+    <input type="text" name="product_price" /><br />
+
+    <label>Есть в наличии?</label><br />
+    <input name="product_availability" type="radio" value="1" checked>Да
+    <input name="product_availability" type="radio" value="0">Нет
+    <br /><br />
+
     <label>Категория:</label><br />
-    <select name="product_category_id">
+    <select name="product_category_id" onchange="load_category_parameters()" id="load_category_parameters_to_add_product">
+        <option>Выберите категорию</option>
         <?php if(is_array($categoryList)): ?>
             <?php foreach ($categoryList as $category): ?>
                 <option value="<?= $category['id']; ?>">
@@ -50,21 +41,16 @@ $categoryList = Category::get_category_list();
         <?php endif;?>
     </select><br />
 
-    <label>Цена:</label><br />
-    <input type="text" name="product_price" /><br />
+    <div class="category_parameters_list" id="category_parameters_list">
 
-    <label>Описание товара:</label><br />
-    <textarea name = "product_description" colls ="30" rows="10"></textarea><br /><br />
-
+    </div>
 
 <!--    <input type="hidden" name="MAX_FILE_SIZE" value="30000" />-->
 
-
-    Выберите изображение: <br /><br />
+    <br />Выберите изображение: <br />
     <input name="image" type="file" /><br /><br />
 
-
-    <input type = "submit" name ="send" value="Добавить товар "><br />
+    <input type = "submit" name ="save_new_product" value="Добавить товар "><br />
 
 </form>
 

@@ -38,7 +38,12 @@
 
                     <?php
                     $product_id =$productItem['id'];
-                    $path = "/images/"."$product_id.jpg";
+                    if (file_exists(ROOT."/images/$product_id.jpg")) {
+                        $path = "/images/$product_id.jpg";
+                    }
+                    else {
+                        $path = "/images/no_photo.png";
+                    }
                     ?>
 
                     <img src= "<?php echo $path ?>" alt="photo" class="product_photo" />

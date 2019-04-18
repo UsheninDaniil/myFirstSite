@@ -244,6 +244,17 @@
 
     });
 
+    function load_category_parameters() {
+        var form = document.getElementById("load_category_parameters_to_add_product");
+        category_id = form.options[form.selectedIndex].value;
+
+        $.post("/admin/load_category_parameters_to_add_product/"+category_id, {}, function (data) {
+                // $("form#add_product .category_parameters_list").html(data);
+                $("#category_parameters_list").html(data);
+            },"html"
+        );
+    }
+
 
 
 </script>
