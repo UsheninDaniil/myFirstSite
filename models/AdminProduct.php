@@ -39,12 +39,12 @@ class AdminProduct
         $mysqli->close();
     }
 
-    public static function update_product_information_by_product_id_and_parameter_id($product_id, $parameter_id, $parameter_value){
+    public static function update_parameter_value_by_product_id_and_parameter_id($product_id, $parameter_id, $parameter_value){
 
         $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
         $mysqli->query ("SET NAMES 'utf8'");
 
-        $mysqli->query("UPDATE parameter_values SET `value` = '$parameter_value' WHERE product_id = '$product_id' AND parameter_id = '$parameter_id'");
+        $mysqli->query("INSERT INTO `parameter_values`(`product_id`,`parameter_id`,`value`) VALUES ('$product_id', '$parameter_id,', '$parameter_value') ON DUPLICATE KEY UPDATE `value` = '$parameter_value'");
 
         $mysqli->close();
     }
@@ -65,6 +65,21 @@ class AdminProduct
         $mysqli->query ("DELETE FROM `parameter_values` WHERE `product_id`='$product_id' AND `parameter_id`='$parameter_id'");
 
         $mysqli->close();
+    }
+
+    public static function delete_product($product_id){
+        $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
+        $mysqli->query ("SET NAMES 'utf8'");
+
+        $mysqli->query ("DELETE FROM `product` WHERE id = '$product_id'");
+
+        $mysqli->query ("DELETE FROM `parameter_values` WHERE product_id = '$product_id'");
+
+        $mysqli->close();
+
+        if(file_exists(ROOT."/images/$product_id.jpg")){
+            unlink(ROOT."/images/$product_id.jpg");
+        }
     }
 
 }

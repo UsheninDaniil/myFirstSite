@@ -14,6 +14,9 @@ class AdminParameter
         $mysqli->query ("SET NAMES 'utf8'");
 
         $mysqli->query ("DELETE FROM `parameters_list` WHERE `id`='$parameter_id' ");
+        $mysqli->query ("DELETE FROM `category_parameters` WHERE `parameter_id`='$parameter_id' ");
+        $mysqli->query ("DELETE FROM `parameter_values` WHERE `parameter_id`='$parameter_id' ");
+
         $mysqli->close();
     }
 

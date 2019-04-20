@@ -147,7 +147,7 @@
         $("#hide_load_new_parameter_form_button_2").hide();
     });
 
-    $(document).on('click', 'form#parameters_table .remove_selected_parameter', function (event) {
+    $(document).on('click', '.parameters_list_table .remove_selected_parameter', function (event) {
         event.preventDefault();
         var remove_parameter_id = $(this).data("parameterId");
 
@@ -157,7 +157,7 @@
         );
     });
 
-    $(document).on('click', '.save_new_parameter', function (event)
+    $(document).on('click', '.parameters_list_table .save_new_parameter', function (event)
     {
         event.preventDefault();
 
@@ -196,7 +196,6 @@
     });
 
 </script>
-
 
 <!--Управление товарами в панеле администратора-->
 <script>

@@ -27,7 +27,6 @@ Class Product{
         return $productList;
     }
 
-
     public static function get_product_list_by_category_id($category_id)
     {
         //создается новый объект $mysqli
@@ -53,14 +52,12 @@ Class Product{
         return $productList;
     }
 
-
     public static function get_product_id(){
         $uri=$_SERVER['REQUEST_URI'];
         $segments = explode('/',$uri);
         $product_id=$segments[2];
         return $product_id;
     }
-
 
     public static function get_product_parameters_by_id($id = []){
 
@@ -98,7 +95,6 @@ Class Product{
         return $ParameterValuesList;
     }
 
-
     public static function get_parameter_name_by_parameter_id($parameter_id){
 
         //создается новый объект $mysqli
@@ -114,7 +110,6 @@ Class Product{
 
         return $parameter_name;
     }
-
 
     public static function get_product_by_id($product_id)
     {
@@ -133,15 +128,31 @@ Class Product{
             $productInfo['status'] = $row['status'];
             $productInfo['category_id'] = $row['category_id'];
 
-
         $mysqli->close();
 
         return $productInfo;
     }
 
+    public static function get_compare_parameters_list_by_product_list($product_list){
+        $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
+        $mysqli->query ("SET NAMES 'utf8'");
 
+        $result = $mysqli->query ("SELECT parameter_id FROM parameter_values WHERE product_id IN (".implode(',',$product_list).") GROUP BY parameter_id");
 
+        $i = 0;
+        $parameters_list = array();
 
+        while ($i < $result->num_rows){
+            $row = $result->fetch_array();
+            $parameter_id = $row['parameter_id'];
+            array_push($parameters_list, $parameter_id);
+            $i++;
+        }
+
+        $mysqli->close();
+
+        return $parameters_list;
+    }
 }
 
 

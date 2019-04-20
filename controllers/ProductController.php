@@ -101,7 +101,7 @@ Class ProductController
 
         if (isset($compareData[$product_id])) {
         } else {
-            $compareData[$product_id] = 1;
+            array_push($compareData, $product_id);
         }
 
         $_SESSION['compare_product_list'] = serialize($compareData);
@@ -109,8 +109,8 @@ Class ProductController
         if (isset($_SESSION['compare_product_list'])) {
             $compareData = unserialize($_SESSION['compare_product_list']);
             $compare_product_amount=0;
-            foreach ($compareData as $id => $amount){
-                $compare_product_amount = $compare_product_amount + $amount;
+            foreach ($compareData as $id){
+                $compare_product_amount = $compare_product_amount + 1;
             }
         }
 

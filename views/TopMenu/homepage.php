@@ -1,9 +1,8 @@
+
 <h2 class="headline">Главная страница</h2>
 
 <div class="side_menu">
     <h2 class="headline">Каталог</h2>
-
-
 
     <!-- разбирает двумерный массив $categoryList по элментам, то есть переменная $categoryItem будет по порядку использоваться для хранения асоциативных массивов-->
     <?php foreach ($categoryList as $categoryItem) : ?>
@@ -19,8 +18,6 @@
     </div>
 
     <?php endforeach; ?>
-
-
 
 </div>
 
@@ -75,12 +72,15 @@
             <a href="#" data-id="<?php echo $productItem['id']; ?>" class="add-to-compare">
                 Сравнить <span class="glyphicon glyphicon-stats"></span>
 
-                <span class="check-in-the-compare<?php echo $productItem['id']; ?>">
+                <span class="check-in-the-compare<?=$product_id?>">
                     <?php
                     if (isset($_SESSION['compare_product_list'])){
-                        $compareData = unserialize($_SESSION['compare_product_list']);
-                        if (isset($compareData[$productItem['id']])){
-                            echo "<span class=\"glyphicon glyphicon-check\"></span>";
+                        $compareData = unserialize($_SESSION['compare_product_list']);  // тут хранятся айди товаров, добавленных в сравнение
+
+                        foreach ($compareData as $compare_product_id){
+                            if ($compare_product_id == $product_id){
+                                echo "<span class='glyphicon glyphicon-check'></span>";
+                            }
                         }
                     }
                     ?>

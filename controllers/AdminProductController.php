@@ -66,6 +66,17 @@ class AdminProductController
         $segments = explode('/',$uri);
         $product_id=$segments[3];
 
+        require_once('/models/Product.php');
+        require_once('/models/AdminProduct.php');
+
+
+        if (isset($_POST["delete_product"])){
+
+            AdminProduct::delete_product($product_id);
+
+            header("Location: /admin/edit_products");
+        }
+
         require_once ('/views/layouts/header.php');
         require_once (ROOT.'/views/admin/product/delete_product.php');
         require_once ('/views/layouts/footer.php');
@@ -137,7 +148,7 @@ class AdminProductController
             if (isset($_POST['dynamic_parameters'])){
 
                 foreach ($_POST['dynamic_parameters'] as $parameter_id => $parameter_value){
-                        AdminProduct::update_product_information_by_product_id_and_parameter_id($product_id, $parameter_id, $parameter_value);
+                        AdminProduct::update_parameter_value_by_product_id_and_parameter_id($product_id, $parameter_id, $parameter_value);
                 }
             }
 

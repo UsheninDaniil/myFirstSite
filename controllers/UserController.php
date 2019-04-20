@@ -14,6 +14,25 @@ class UserController
 
     public function actionLogin()
     {
+        if(isset($_POST["login"])){
+
+            $email = htmlspecialchars ($_POST["email"]);
+            $password = htmlspecialchars ($_POST["password"]);
+
+            $_SESSION["email"] = $email;
+            $_SESSION["password"] = $password;
+
+            User::check_login_form($email,$password);
+
+            $error = User::check_login_form($email, $password)[0];
+            $error_email = User::check_login_form($email, $password)[1];
+            $error_password = User::check_login_form($email, $password)[2];
+
+            if(!$error){
+                User::action_authorization($email, $password);
+            }
+        }
+
         require_once ('/views/layouts/header.php');
         require_once (ROOT.'/views/user/login.php');
         require_once ('/views/layouts/footer.php');
@@ -26,8 +45,6 @@ class UserController
         require_once ('/views/layouts/footer.php');
     }
 
-
-
     public function actionCabinet()
     {
         require_once ('/views/layouts/header.php');
@@ -35,13 +52,10 @@ class UserController
         require_once ('/views/layouts/footer.php');
     }
 
-
     public function actionCart()
     {
         require_once(ROOT. '/models/Product.php');
         require_once(ROOT. '/models/Admin.php');
-
-
 
         if (isset($_SESSION['cart_product_list'])) {
             $cartData = unserialize($_SESSION['cart_product_list']);

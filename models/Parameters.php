@@ -15,13 +15,20 @@ class Parameters
         $mysqli->query ("SET NAMES 'utf8'");
 
         //выбрать id и имя и отсортировать по возрастанию и положить в переменную $result
-        $result = $mysqli->query ("SELECT category_parameters FROM category WHERE  id = '$category_id' ");
+        $result = $mysqli->query ("SELECT parameters_list.id FROM parameters_list INNER JOIN category_parameters ON category_parameters.parameter_id = parameters_list.id WHERE category_parameters.category_id = '$category_id'");
 
-        $result_array = $result->fetch_array();
+        $i = 0;
+        $parameters_list = array();
 
-        $category_parameters = unserialize($result_array['category_parameters']);
+        while ($i < $result->num_rows) {
+            $row = $result->fetch_array();
+            $id = $row['id'];
+            array_push($parameters_list, $id);
+            $i++;
 
-        return $category_parameters;
+        }
+
+        return $parameters_list;
 
     }
 

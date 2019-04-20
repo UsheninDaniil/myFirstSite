@@ -1,14 +1,11 @@
-
-<div style="text-align: center">Сравнение товаров</div>
-<br />
-
+<br /><br /><br />
+<div style="text-align: center">Сравнение товаров</div> <br />
 
 <table border="1" width="50%" cellpadding="5" class="product_list_table">
 
-
     <tr>
         <th>Фото</th>
-        <?php  foreach ($compareData as $id => $count):
+        <?php  foreach ($compareData as $id):
         $product_id = $id;
         $path = "/images/"."$product_id.jpg";
         ?>
@@ -18,14 +15,39 @@
             <?php endforeach;?>
     </tr>
 
+    <tr>
+        <th>Название товара</th>
+        <?php  foreach ($compareData as $id):
+            $product_info=Product::get_product_by_id($id);
+        ?>
+        <th colspan="2">
+            <a href="/product/<?php echo $product_info['id'];?>"><?php echo $product_info['name'];?></a>
+        </th>
+        <?php endforeach;?>
+    </tr>
+
+    <tr>
+        <th>Цена</th>
+        <?php  foreach ($compareData as $id):
+            $product_info=Product::get_product_by_id($id);
+            ?>
+            <th colspan="2">
+                <?php echo $product_info['price'];?>
+            </th>
+        <?php endforeach;?>
+    </tr>
+
     <?php
 
-    $id=$compareData[2];
+//    $id = User::find_product_with_the_most_parameters_from_product_list($compareData);
+//    $product_info=Product::get_product_by_id($id);
+//    $product_parameters_info=Product::get_product_parameters_by_id($id);
 
-    $product_info=Product::get_product_by_id($id);
-    $product_parameters_info=Product::get_product_parameters_by_id($id);
+    $product_parameters_list=Product::get_compare_parameters_list_by_product_list($compareData);
 
-    foreach ($product_parameters_info as $parameter_name => $parameter_value):?>
+    foreach ($product_parameters_list as $parameter_id):
+    $parameter_name=Product::get_parameter_name_by_parameter_id($parameter_id);
+    ?>
 
     <tr>
         <th>
@@ -33,28 +55,25 @@
         </th>
 
         <?php
-        foreach ($compareData as $id=>$count):
-        $product_parameters_info=Product::get_product_parameters_by_id($id);
+        foreach ($compareData as $product_id):
+        $product_parameters_values=Product::get_product_parameters_by_id($product_id);
         ?>
 
         <th colspan="2">
             <?php
-            if(isset($product_parameters_info[$parameter_name])){
-            echo $product_parameters_info[$parameter_name];}
+            if(isset($product_parameters_values[$parameter_name])){
+            echo $product_parameters_values[$parameter_name];}
             ?>
         </th>
         <?php endforeach;?>
     </tr>
 
     <?php
-    endforeach;
-    ?>
-
-
+    endforeach; ?>
 
     <tr>
         <th rowspan="2"></th>
-        <?php  foreach ($compareData as $id => $count):?>
+        <?php  foreach ($compareData as $id):?>
             <td>
                 <form action="" method ="post">
                     <input type="hidden" name="delete_product_id" value="<?= $id ?>">
@@ -69,8 +88,5 @@
             </td>
         <?php endforeach;?>
     </tr>
-
-
-
 
 </table>

@@ -9,10 +9,10 @@ class User{
         $result = $mysqli->query ("SELECT * FROM `myFirstSite`.`user` WHERE email = '$email' AND password = '$password' ");
         $user_data = $result->fetch_array();
         if ($result->num_rows == 1){
-            echo "Вы успешно вошли";
             $_SESSION["login"]= $user_data["login"];
             $_SESSION["logged_in"]=true;
             $_SESSION["user_id"]=$user_data["id"];
+            header("Location: /cabinet");
         }
         else {
             echo "Неверный логин или праоль";
@@ -20,7 +20,6 @@ class User{
         }
         $mysqli->close();
     }
-
 
     public static function action_check_authorization(){
         if(isset($_SESSION['logged_in'])){
@@ -33,7 +32,6 @@ class User{
         }
         return $authorization_result;
     }
-
 
     public static function check_login_form($email, $password){
         $error_email = "";
@@ -51,14 +49,12 @@ class User{
         return array($error, $error_email, $error_password);
     }
 
-
     public static function action_register_new($login, $password, $email){
         $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
         $mysqli->query ("SET NAMES 'utf8'");
         $mysqli->query ("INSERT INTO `myFirstSite`.`user` (`login`,`password`,`email`) VALUES ('$login', '$password', '$email')");
         $mysqli->close();
     }
-
 
     public static function check_register_form($login, $password, $email){
         $error_login = "";
@@ -84,7 +80,6 @@ class User{
             "error_password" => $error_password,
             "error_email" => $error_email);
     }
-
 
     public static function check_feedback_form($from, $to, $subject, $message)
     {
@@ -130,7 +125,6 @@ class User{
 
     }
 
-
     public static function get_order_list_by_user_id($user_id)
     {
         $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
@@ -155,7 +149,6 @@ class User{
 
     }
 
-
     public static function make_an_order($cartData,$user_id,$current_date,$current_time)
     {
         $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
@@ -164,7 +157,6 @@ class User{
         $mysqli->close();
         unset($_SESSION['cart_product_list']);
     }
-
 
     public static function delete_product_from_cart_list($delete_product_id)
     {
@@ -190,7 +182,6 @@ class User{
         header("Location: /cart");
     }
 
-
     public static function delete_product_from_compare_list($delete_product_id)
     {
         $compareData = unserialize($_SESSION['compare_product_list']);
@@ -213,6 +204,22 @@ class User{
             $_SESSION['compare_product_list'] = serialize($compareData);
         }
         header("Location: /compare");
+    }
+
+    public static function find_product_with_the_most_parameters_from_product_list($product_list)
+    {
+        $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
+        $mysqli->query ("SET NAMES 'utf8'");
+//        $result = $mysqli->query ("SELECT product_id, COUNT(*) FROM parameter_values WHERE product_id IN (1,2,3) GROUP BY product_id ORDER BY 2 DESC LIMIT 1");
+        $result = $mysqli->query ("SELECT product_id, COUNT(*) FROM parameter_values WHERE product_id IN (".implode(',',$product_list).") GROUP BY product_id ORDER BY 2 DESC LIMIT 1");
+
+
+        $result_array = $result->fetch_array();
+
+        $product_id = $result_array['product_id'];
+
+        $mysqli->close();
+        return $product_id;
     }
 
 

@@ -11,8 +11,9 @@ $categoryList = Category::get_category_list();
 <form  enctype="multipart/form-data" name = "add_product" action="" method ="post" class="feedback">
 
 
-    <br /><label>Выберите категрию:</label><br />
+    <br /><label>Категрия:</label><br />
     <select name="product_category_id" onchange="edit_category()" id="product_category_id">
+        <option>Выберите категорию</option>
         <?php if(is_array($categoryList)): ?>
             <?php foreach ($categoryList as $category): ?>
                 <option value="<?= $category['id']; ?>">
