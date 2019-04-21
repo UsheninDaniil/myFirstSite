@@ -27,8 +27,8 @@ ul.list-of-sections li {
 
 .product_field {
     box-sizing: border-box;
-    padding: 5px; /* внутренние поля вокруг */
-    background: lightskyblue;
+    padding: 0px; /* внутренние поля вокруг */
+    background: white;
     /*float:left;*/
     width:33.33%;
     border-style: solid;

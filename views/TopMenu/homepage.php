@@ -1,3 +1,9 @@
+<?php
+if (isset($_SESSION['compare_product_list'])) {
+    $compareData = unserialize($_SESSION['compare_product_list']);  // тут хранятся айди товаров, добавленных в сравнение
+    print_r($compareData);
+}
+?>
 
 <h2 class="headline">Главная страница</h2>
 
@@ -77,8 +83,8 @@
                     if (isset($_SESSION['compare_product_list'])){
                         $compareData = unserialize($_SESSION['compare_product_list']);  // тут хранятся айди товаров, добавленных в сравнение
 
-                        foreach ($compareData as $compare_product_id){
-                            if ($compare_product_id == $product_id){
+                        foreach ($compareData as $compare_category_products){
+                            if(in_array ($product_id, $compare_category_products)){
                                 echo "<span class='glyphicon glyphicon-check'></span>";
                             }
                         }

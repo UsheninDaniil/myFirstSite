@@ -82,14 +82,14 @@ Class ProductController
         echo "Корзина ($cart_product_amount)";
     }
 
-
-
-
     public function actionAdd_compare(){
+        require_once ('/models/Category.php');
 
         $uri=$_SERVER['REQUEST_URI'];
         $segments = explode('/',$uri);
         $product_id=$segments[3];
+
+        $category_id = Category::get_category_id_by_product_id($product_id);
 
         $cart_product_list = [];
 
@@ -99,19 +99,25 @@ Class ProductController
             $compareData = [];
         }
 
-        if (isset($compareData[$product_id])) {
-        } else {
-            array_push($compareData, $product_id);
-        }
+            if (isset($compareData[$category_id])){
+
+                if (in_array($product_id,$compareData[$category_id])){
+                }
+                else{
+                    array_push($compareData[$category_id], $product_id);
+                }
+            }
+
+            else{
+                $compareData[$category_id] = array();
+                array_push($compareData[$category_id], $product_id);
+            }
 
         $_SESSION['compare_product_list'] = serialize($compareData);
 
         if (isset($_SESSION['compare_product_list'])) {
             $compareData = unserialize($_SESSION['compare_product_list']);
-            $compare_product_amount=0;
-            foreach ($compareData as $id){
-                $compare_product_amount = $compare_product_amount + 1;
-            }
+            $compare_product_amount=count($compareData, COUNT_RECURSIVE)-count($compareData);
         }
 
         $_SESSION['compare_product_amount']=$compare_product_amount;

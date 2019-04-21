@@ -182,38 +182,46 @@ class User{
         header("Location: /cart");
     }
 
-    public static function delete_product_from_compare_list($delete_product_id)
+    public static function delete_product_from_compare_list($delete_product_id, $category_id)
     {
         $compareData = unserialize($_SESSION['compare_product_list']);
-        unset($compareData[$delete_product_id]);
 
+        $compare_category_products = $compareData[$category_id];
 
-        $compare_product_amount=0;
-        foreach ($compareData as $id => $amount){
-            $compare_product_amount = $compare_product_amount + 1;
-        }
+        $i = array_search("$delete_product_id", $compare_category_products);
 
-        $_SESSION['compare_product_amount']=$compare_product_amount;
+        unset($compare_category_products[$i]);
 
+            if(empty($compare_category_products)){
+                unset($compareData[$category_id]);
+//                print_r($compareData);
+                if (empty($compareData)){
+                    unset($_SESSION['compare_product_list']);
+                    unset($_SESSION['compare_product_amount']);
+                }
+                else{
+                    $_SESSION['compare_product_list'] = serialize($compareData);
+                    $compare_product_amount=count($compareData, COUNT_RECURSIVE)-count($compareData);
+                    $_SESSION['compare_product_amount']=$compare_product_amount;
+                }
+            }
+            else{
+                $compareData[$category_id] = $compare_category_products;
+                $_SESSION['compare_product_list'] = serialize($compareData);
+                $compare_product_amount=count($compareData, COUNT_RECURSIVE)-count($compareData);
+                $_SESSION['compare_product_amount']=$compare_product_amount;
+            }
 
-        if (empty($compareData)){
-            unset($_SESSION['compare_product_list']);
-            unset($_SESSION['compare_product_amount']);
-        }
-        else {
-            $_SESSION['compare_product_list'] = serialize($compareData);
-        }
-        header("Location: /compare");
+        header("Location: /compare_category/$category_id");
     }
 
     public static function find_product_with_the_most_parameters_from_product_list($product_list)
     {
         $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
         $mysqli->query ("SET NAMES 'utf8'");
-//        $result = $mysqli->query ("SELECT product_id, COUNT(*) FROM parameter_values WHERE product_id IN (1,2,3) GROUP BY product_id ORDER BY 2 DESC LIMIT 1");
+
         $result = $mysqli->query ("SELECT product_id, COUNT(*) FROM parameter_values WHERE product_id IN (".implode(',',$product_list).") GROUP BY product_id ORDER BY 2 DESC LIMIT 1");
-
-
+        
         $result_array = $result->fetch_array();
 
         $product_id = $result_array['product_id'];

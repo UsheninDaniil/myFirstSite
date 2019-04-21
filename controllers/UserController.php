@@ -94,21 +94,31 @@ class UserController
     }
 
 
-    public function actionCompare()
+    public function actionCompareCategoryProducts()
     {
         require_once(ROOT. '/models/Product.php');
         require_once(ROOT. '/models/Admin.php');
         require_once (ROOT. '/models/User.php');
 
+
+        $uri=$_SERVER['REQUEST_URI'];
+        $segments = explode('/',$uri);
+        if(isset($segments[2])){
+            $category_id =$segments[2];
+        }
+
         if (isset($_SESSION['compare_product_list'])) {
             $compareData = unserialize($_SESSION['compare_product_list']);
+            if(isset($compareData[$category_id])){
+                $compare_product_list_of_selected_category = $compareData[$category_id];
+            }
         } else {
             $compareData = [];
         }
 
         if(isset($_POST["delete_product_from_compare_list"])) {
             $delete_product_id = $_POST["delete_product_id"];
-            User::delete_product_from_compare_list($delete_product_id);
+            User::delete_product_from_compare_list($delete_product_id, $category_id);
         }
 
         if(isset($_POST["add_to_cart"])) {
@@ -154,14 +164,25 @@ class UserController
             }
         }
         require_once ('/views/layouts/header.php');
-        if (isset($_SESSION['compare_product_list'])){
-            require_once (ROOT.'/views/user/compare.php');
+
+        if(isset($compareData[$category_id])){
+            require_once (ROOT.'/views/user/compare_category_products.php');
         }
         else{
         }
         require_once ('/views/layouts/footer.php');
     }
 
+
+    public function actionCompare()
+    {
+        if (isset($_SESSION['compare_product_list'])) {
+            $compareData = unserialize($_SESSION['compare_product_list']);
+        }
+        require_once ('/views/layouts/header.php');
+        require_once ('/views/user/compare.php');
+        require_once ('/views/layouts/footer.php');
+    }
 
 
 

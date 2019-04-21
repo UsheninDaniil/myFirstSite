@@ -21,6 +21,7 @@
     '/cabinet' => 'user/cabinet',
     '/cart' => 'user/cart',
     '/compare' => 'user/compare',
+    '/compare_category/(.*)' => 'user/compareCategoryProducts',
 
     '/admin' => 'admin/cabinet',
     '/no_permission' => 'admin/NoPermission',
