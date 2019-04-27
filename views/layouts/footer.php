@@ -3,6 +3,8 @@
 
 
 <script src="/template/jquery-3.3.1.min.js"></script>
+<script src="/template/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+
 
 
 <!--Управление корзиной-->
@@ -151,10 +153,13 @@
         event.preventDefault();
         var remove_parameter_id = $(this).data("parameterId");
 
-        $.post("/admin/remove_selected_parameter/"+remove_parameter_id, {}, function (data) {
-                $(".parameters_list_table").html(data);
-            },"html"
-        );
+        if (confirm("Вы действительно хотите удалить параметер #remove_parameter_id ?")){
+            $.post("/admin/remove_selected_parameter/"+remove_parameter_id, {}, function (data) {
+                    $(".parameters_list_table").html(data);
+                },"html"
+            );
+        }
+
     });
 
     $(document).on('click', '.parameters_list_table .save_new_parameter', function (event)
@@ -258,6 +263,42 @@
 
 </script>
 
+
+<script>
+
+$( function() {
+
+    $("#accordion > div").accordion({
+        header: "h4",
+        collapsible: true,
+        heightStyle:"content",
+        icons: false
+
+    });
+} );
+
+</script>
+
+<script>
+
+    $(document).on('click', '.apply_category_filter', function (event)
+    {
+        event.preventDefault();
+
+        var category_id = $(this).data("categoryId");
+
+        var form = $('.parameter_values_for_category_filter');
+        var parameter_values_for_category_filter = form.serialize();
+
+        $.post("/apply_category_filter/"+ category_id, parameter_values_for_category_filter, function (data) {
+            $(".product_block").html(data);
+            }, "html"
+        );
+
+    });
+
+
+</script>
 
 </body>
 </html>

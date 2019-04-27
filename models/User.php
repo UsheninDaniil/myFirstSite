@@ -221,7 +221,7 @@ class User{
         $mysqli->query ("SET NAMES 'utf8'");
 
         $result = $mysqli->query ("SELECT product_id, COUNT(*) FROM parameter_values WHERE product_id IN (".implode(',',$product_list).") GROUP BY product_id ORDER BY 2 DESC LIMIT 1");
-        
+
         $result_array = $result->fetch_array();
 
         $product_id = $result_array['product_id'];

@@ -178,10 +178,15 @@ class UserController
     {
         if (isset($_SESSION['compare_product_list'])) {
             $compareData = unserialize($_SESSION['compare_product_list']);
+            $min_category_id = key($compareData);
+            foreach ($compareData as $category_id => $information){
+                if($category_id < $min_category_id){
+                    $min_category_id=$category_id;
+                }
+            }
+
+            header("Location: /compare_category/$min_category_id");
         }
-        require_once ('/views/layouts/header.php');
-        require_once ('/views/user/compare.php');
-        require_once ('/views/layouts/footer.php');
     }
 
 

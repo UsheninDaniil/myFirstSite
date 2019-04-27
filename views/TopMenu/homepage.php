@@ -1,29 +1,24 @@
-<?php
-if (isset($_SESSION['compare_product_list'])) {
-    $compareData = unserialize($_SESSION['compare_product_list']);  // тут хранятся айди товаров, добавленных в сравнение
-    print_r($compareData);
-}
-?>
 
 <h2 class="headline">Главная страница</h2>
 
 <div class="side_menu">
     <h2 class="headline">Каталог</h2>
 
-    <!-- разбирает двумерный массив $categoryList по элментам, то есть переменная $categoryItem будет по порядку использоваться для хранения асоциативных массивов-->
+    <div style="border-top: 1px solid lightgray;">
+
     <?php foreach ($categoryList as $categoryItem) : ?>
 
     <div class="category_field">
 
-        <div class="name">
-            <a href="/category/<?= $categoryItem['id']; ?>">
+            <a href="/category/<?= $categoryItem['id']; ?>" class="category_name">
                 <?php echo $categoryItem['name']; ?>
             </a>
-        </div>
 
     </div>
 
     <?php endforeach; ?>
+
+    </div>
 
 </div>
 
@@ -41,17 +36,21 @@ if (isset($_SESSION['compare_product_list'])) {
 
             <?php
             $product_id =$productItem['id'];
-            if (file_exists(ROOT."/images/$product_id.jpg")) {
-                $path = "/images/$product_id.jpg";
+            if (file_exists(ROOT."/images/small_product_images/$product_id.jpg")) {
+                $path = "/images/small_product_images/$product_id.jpg";
             }
             else {
-                $path = "/images/no_photo.png";
+                $path = "/images/small_product_images/no_photo.png";
             }
             ?>
+
+            <div>
 
             <a href="/product/<?= $productItem['id']; ?>" >
                 <img src= "<?php echo $path ?>" alt="photo" class="product_photo" />
             </a>
+
+            </div>
 
             <a href="/product/<?= $productItem['id']; ?>" class="product-name">
                 <?php echo $productItem['name']; ?>

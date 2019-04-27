@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <link rel="stylesheet" href="/template/bootstrap/css/bootstrap.css">
     <link rel="stylesheet" href="/template/swiper-4.4.6/dist/css/swiper.min.css">
+    <link rel="stylesheet" href="/template/jquery-ui-1.12.1.custom/jquery-ui.min.css">
 
     <link rel="stylesheet" href="/template/css/main.css">
     <style>

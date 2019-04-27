@@ -15,26 +15,6 @@ Class ProductController
         $product_info=Product::get_product_by_id($product_id);
         $product_parameters_info=Product::get_product_parameters_by_id($product_id);
 
-
-        if(isset($_POST["add_to_cart"])) {
-
-            $cart_product_list = [];
-
-            if (isset($_SESSION['cart_product_list'])) {
-                $cartData = unserialize($_SESSION['cart_product_list']);
-            } else {
-                $cartData = [];
-            }
-
-            if (isset($cartData[$product_id])) {
-                $cartData[$product_id]++;
-            } else {
-                $cartData[$product_id] = 1;
-            }
-
-            $_SESSION['cart_product_list'] = serialize($cartData);
-        }
-
         $categoryList = Category::get_category_list();
 
         $category_id = Category::get_category_id_by_product_id($product_id);

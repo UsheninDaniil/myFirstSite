@@ -35,7 +35,31 @@ class AdminProductController
                 if (is_uploaded_file($_FILES["image"]["tmp_name"])) {
                     // Если загружалось, переместим его в нужную папке, дадим новое имя $photo
                     move_uploaded_file($_FILES["image"]["tmp_name"], $_SERVER['DOCUMENT_ROOT'] . "/images/$product_id.jpg");
-                    echo "Фото загружено";
+                    echo "<br />Фото загружено<br />";
+
+                    $filename = $_SERVER['DOCUMENT_ROOT'] . "/images/$product_id.jpg";
+
+                    // задание максимальной высоты
+                    $height = 200;
+
+                    // тип содержимого
+                    header('Content-Type: image/jpeg');
+
+                    // получение новых размеров
+                    list($width_orig, $height_orig) = getimagesize($filename);
+
+                    $ratio_orig = $width_orig/$height_orig;
+
+                    $width = $height*$ratio_orig;
+
+                    // ресэмплирование
+                    $image_p = imagecreatetruecolor($width, $height);
+                    $image = imagecreatefromjpeg($filename);
+                    imagecopyresampled($image_p, $image, 0, 0, 0, 0, $width, $height, $width_orig, $height_orig);
+
+                    // вывод
+                    imagejpeg($image_p, $_SERVER['DOCUMENT_ROOT'] . "/images/small_product_images/$product_id.jpg", 100);
+
                 }
 
                 print_r($_POST);

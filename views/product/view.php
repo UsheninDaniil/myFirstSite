@@ -21,21 +21,57 @@
 
         <div class="view_name_and_price_block">
 
-            <div class="view_product_name"><?php echo $product_info['name'] ;?></div>
+            <div class="view_product_name"><a href="/product/<?=$product_id?>"><?php echo $product_info['name'] ;?></a></div>
             <div class="view_price"><?php echo $product_info['price'] ?></div>
 
-            <form name = "cart" action="" method ="post"><br />
-                <input type = "submit" name ="add_to_cart" value="Добавить в корзину"><br />
-            </form>
+            <a href="#" data-id="<?php echo $product_info['id']; ?>" class="add-to-cart">
+                В корзину <span class="glyphicon glyphicon-shopping-cart"></span>
+
+                <span class="check-in-the-cart<?php echo $product_info['id']; ?>">
+                    <?php
+                    if (isset($_SESSION['cart_product_list'])){
+                        $cartData = unserialize($_SESSION['cart_product_list']);
+                        if (isset($cartData[$product_info['id']])){
+                            echo "<span class=\"glyphicon glyphicon-check\"></span>";
+                        }
+                    }
+                    ?>
+                </span>
+
+            </a>
+
+            <a href="#" data-id="<?php echo $product_info['id']; ?>" class="add-to-compare">
+                Сравнить <span class="glyphicon glyphicon-stats"></span>
+
+                <span class="check-in-the-compare<?=$product_id?>">
+                    <?php
+                    if (isset($_SESSION['compare_product_list'])){
+                        $compareData = unserialize($_SESSION['compare_product_list']);  // тут хранятся айди товаров, добавленных в сравнение
+
+                        foreach ($compareData as $compare_category_products){
+                            if(in_array ($product_id, $compare_category_products)){
+                                echo "<span class='glyphicon glyphicon-check'></span>";
+                            }
+                        }
+                    }
+                    ?>
+                </span>
+            </a>
+
         </div>
 
-        <div class="view_product_description">
-            <table border="1" width="50%" cellpadding="5" class="product_list_table">
-                <tr>
-                    <th>Параметр</th>
-                    <th>Значение</th>
-                </tr>
 
+
+        <div class="view_product_description">
+
+
+            <table border="0" cellpadding="5" class="view_product_table">
+
+                <tr>
+                    <th colspan="2">
+                    <div style="text-align: center"><b>Характеристики</b></div>
+                    </th>
+                </tr>
                 <?php  foreach ($product_parameters_info as $parameter_name => $value):
                     ?>
                     <tr>

@@ -1,13 +1,46 @@
 <br /><br /><br />
 <div style="text-align: center">Сравнение товаров</div> <br />
 
+<?php
+$count_category_products = count($compareData[$category_id]);
+$colspan_amount = $count_category_products*2 + 1;
+?>
+
 <table border="1" width="50%" cellpadding="5" class="product_list_table">
+
+    <tr>
+        <td colspan="<?=$colspan_amount?>" >
+
+        <table border="1" width="100%" cellpadding="5" style=" border-collapse: collapse;">
+        <tr style="text-align: center">
+
+        <?php if(isset($compareData[1])):?>
+            <th <?php if($category_id==1){echo "bgcolor='LightBlue'";}?> ><a href="/compare_category/1">Компьютеры <?php echo"(".count($compareData[1]).")"; ?></a></th>
+        <?php endif;?>
+
+        <?php if(isset($compareData[2])):?>
+            <th <?php if($category_id==2){echo "bgcolor='LightBlue'";}?>><a href="/compare_category/2">Ноутбуки <?php echo"(".count($compareData[2]).")"; ?></a></th>
+        <?php endif;?>
+
+        <?php if(isset($compareData[3])):?>
+            <th <?php if($category_id==3){echo "bgcolor='LightBlue'";}?>><a href="/compare_category/3">Планшеты <?php echo"(".count($compareData[3]).")"; ?></a></th>
+        <?php endif;?>
+
+        <?php if(isset($compareData[4])):?>
+            <th <?php if($category_id==4){echo "bgcolor='LightBlue'";}?>><a href="/compare_category/4">Телефоны <?php echo"(".count($compareData[4]).")"; ?></a></th>
+        <?php endif;?>
+
+        </tr>
+        </table>
+
+        </td>
+    </tr>
 
     <tr>
         <th>Фото</th>
         <?php  foreach ($compare_product_list_of_selected_category as $id):
         $product_id = $id;
-        $path = "/images/"."$product_id.jpg";
+        $path = "/images/small_product_images/"."$product_id.jpg";
         ?>
         <th colspan="2">
             <img src= "<?php echo $path ?>" alt="photo" class="product_photo"  />

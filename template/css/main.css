@@ -63,8 +63,15 @@ ul.list-of-sections li {
     padding-bottom: 5px;
 }
 
-.category_field:hover{
-    background: gray;
+.category_field:hover
+{
+    background-color: black;
+}
+
+.category_field:hover a.category_name
+{
+    text-decoration: none;
+    color: white;
 }
 
 
@@ -96,7 +103,7 @@ ul.list-of-sections li {
     width: 50%;
     box-sizing: border-box;
     background: white;
-    padding: 20px;
+    padding: 50px;
     text-align: center;
 }
 
@@ -145,6 +152,13 @@ ul.list-of-sections li {
     width: 40%;
 }
 
+.view_product_table{
+   margin-left: 30%;
+   margin-right: 30%;
+   width: 40%;
+   text-align: left;
+}
+
 .parameter_list_table{
     text-align: center;
     margin-left: 40%;
@@ -186,6 +200,19 @@ a.add-to-cart{
 }
 
 a.add-to-cart:hover{
+    text-decoration: none;
+    color: white;
+    background-color: black;
+}
+
+a.apply_filter{
+    text-decoration: none;
+    color: #000;
+    padding: 10px;
+    display: inline-block;
+}
+
+a.apply_filter:hover{
     text-decoration: none;
     color: white;
     background-color: black;
@@ -265,3 +292,37 @@ a.go-back-to-admin-panel:hover{
 .glyphicon-pencil{
     color: green;
 }
+
+.ui-accordion-header,
+.ui-accordion-header-collapsed{
+    background:none;
+    border-radius: 0;
+    border-color: gray;
+    border: none;
+    box-shadow:none;
+    border-top: 1px solid lightgrey;
+}
+
+.ui-accordion-content{
+    border: none;
+}
+.ui-accordion .ui-accordion-header{
+    margin: 0;
+}
+
+.ui-accordion .ui-accordion-content {
+    padding: 0px;
+    padding-bottom: 10px;
+}
+
+:focus {
+    outline:0 !important;
+}
+
+
+
+
+
+
+
+
