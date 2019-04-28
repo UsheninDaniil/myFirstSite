@@ -89,8 +89,8 @@
             }, "html"
         );
 
-        $.post("/admin/edit_selected_category/"+category_id, {}, function (data) {
-                $(".replace").html(data);
+        $.post("/admin/reload_category_parameters_table/"+category_id, {}, function (data) {
+                $(".category_parameters_table").html(data);
             },"html"
         );
     });
@@ -106,8 +106,8 @@
             }, "html"
         );
 
-        $.post("/admin/edit_selected_category/"+category_id, {}, function (data) {
-                $(".replace").html(data);
+        $.post("/admin/reload_category_parameters_table/"+category_id, {}, function (data) {
+                $(".category_parameters_table").html(data);
             },"html"
         );
     });
@@ -124,8 +124,8 @@
             }, "html"
         );
 
-        $.post("/admin/edit_selected_category/"+category_id, {}, function (data) {
-                $(".replace").html(data);
+        $.post("/admin/reload_category_parameters_table/"+category_id, {}, function (data) {
+                $(".category_parameters_table").html(data);
             },"html"
         );
     });

@@ -4,6 +4,8 @@
 →
 <a href="/admin/edit_products" class="go-back-to-admin-panel"/><b>Управление товарами</b></a>
 
+<br /><br /><br />
+
 <table border="1" width="50%" cellpadding="5" class="product_list_table">
 
     <tr>

@@ -77,6 +77,28 @@ class Parameters
         return $parameter_name;
     }
 
+    public static function get_category_parameter_information_by_category_id_and_parameter_id($category_id, $parameter_id){
+        //создается новый объект $mysqli
+        $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
+        $mysqli->query ("SET NAMES 'utf8'");
+
+        //выбрать id и имя и отсортировать по возрастанию и положить в переменную $result
+        $result = $mysqli->query ("SELECT show_in_filter, sort_order FROM category_parameters WHERE  category_id = '$category_id' AND parameter_id = '$parameter_id' ");
+
+        $mysqli->close();
+
+        $result_array = $result->fetch_array();
+
+        $category_paramter_information=[];
+
+        $category_paramter_information['show_in_filter'] = $result_array['show_in_filter'];
+        $category_paramter_information['sort_order'] = $result_array['sort_order'];
+
+        return $category_paramter_information;
+    }
+
+
+
     public static function get_all_parameters(){
         //создается новый объект $mysqli
         $mysqli = new mysqli ("localhost", "root", "","myFirstSite");

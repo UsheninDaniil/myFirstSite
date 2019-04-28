@@ -1,35 +1,45 @@
-
-
-<div style='text-align: center'><br />Категория <a href='/category/<?=$category_id?>' class='edit-category-name' '><?=$category_name?></a>: <br /><br /></div>
-
+<div class="category_parameters_table">
 
 <table border='1' cellpadding='5' class='parameter_list_table' data-category-id='<?=$category_id?>' >
     <tr>
-        <th colspan='2'>Список параметров</th>
+        <th colspan='5'>Список параметров</th>
+    </tr>
+
+    <tr>
+        <th colspan='1'><b style="color: darkred">Название</b></th>
+        <th colspan='1'><b style="color: darkred">отображение в фильтре</b></th>
+        <th colspan='1'><b style="color: darkred">порядок сортировки</b></th>
+        <th colspan='2'><b style="color: darkred">действие</b></th>
     </tr>
 
     <?php
 
-    foreach ($parameters_list as $i => $parameter_id){
+    foreach ($category_parameters_list as $i => $parameter_id){
     $parameter_name = Parameters::get_parameter_name_by_parameter_id($parameter_id);
+    $category_parameters_information = Parameters::get_category_parameter_information_by_category_id_and_parameter_id($category_id, $parameter_id);
+    $show_in_filter = $category_parameters_information['show_in_filter'];
+    $sort_order = $category_parameters_information['sort_order'];
     echo "<tr>
         <th>$parameter_name</th>
+        <th>$show_in_filter</th>
+        <th>$sort_order</th>
         <th><a href='javascript:void(0);' class='remove_parameter_from_category' data-parameter-id='$parameter_id'><span class='glyphicon glyphicon-remove'></span></a></th>
+        <th><a href=''><span class='glyphicon glyphicon-pencil'></a> </th>
     </tr>";
     }
 
     ?>
 
-        <tr><th colspan='2'>
+        <tr><th colspan='5'>
             <a href='javascript:void(0);' class='load_existing_parameters_form'>Добавить существующий параметр <span class='glyphicon glyphicon-search'></span></a>
             <a href= "javascript:void(0);" class="hide_load_existing_parameters_form_button" id="hide_load_existing_parameters_form_button" style="display: none"><span class="glyphicon glyphicon-minus"></span></a>
 
             <div id="load_existing_parameters_form" style="display: none">
                 <form method='post' id ='save_parameters_list'>
                     <?php
-                        foreach ($existing_parameters_list as $parameter_item){
-                        $id = $parameter_item['id'];
-                        echo "<input type='checkbox' name='parameter_id[]'  value='$id' data-parameters-list='$id' class='save_parameters_list'>".$parameter_item['russian_name']."<br />";
+                        foreach ($not_category_parameters as $parameter_id){
+                        $russian_name = Parameters::get_parameter_name_by_parameter_id($parameter_id);
+                        echo "<input type='checkbox' name='parameter_id[]'  value='$parameter_id' data-parameters-list='$parameter_id' class='save_parameters_list'>".$russian_name."<br />";
                         }
                     ?>
                 </form>
@@ -40,7 +50,7 @@
         </th></tr>
 
 
-        <th colspan='2'>
+        <th colspan='5'>
             <a href='javascript:void(0);' class='load_new_parameter_form'>Создать новый параметр <span class='glyphicon glyphicon-pencil'></span></a>
             <a href= "javascript:void(0);" class="hide_load_new_parameter_form_button" id="hide_load_new_parameter_form_button" style="display: none"><span class="glyphicon glyphicon-minus"></span></a>
 
@@ -59,4 +69,8 @@
             </div>
 
             <div class='check_save_new_parameter_button'></div>
-        </th></tr></table>
+        </th></tr>
+
+</table>
+
+</div>

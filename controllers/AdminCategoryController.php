@@ -10,7 +10,7 @@ class AdminCategoryController
         $parameters_list = Parameters::get_category_parameters_list(1);
 
         require_once ('/views/layouts/header.php');
-        require_once (ROOT.'/views/admin/category/edit_category_view.php');
+        require_once (ROOT.'/views/admin/category/edit_categories_view.php');
         require_once ('/views/layouts/footer.php');
     }
 
@@ -25,11 +25,8 @@ class AdminCategoryController
             $category_id =$segments[3];
         }
         $category_name = Category::get_category_name_by_id($category_id);
-        $parameters_list = Parameters::get_category_parameters_list($category_id);
+        $category_parameters_list = Parameters::get_category_parameters_list($category_id);
         $existing_parameters_list = Parameters::get_all_parameters();
-
-        echo "<br />Список параметров категории <b>до</b> проверки на существование:<br />";
-        print_r($parameters_list);
 
         $existing_id_parameters_list=[];
 
@@ -38,10 +35,44 @@ class AdminCategoryController
             array_push($existing_id_parameters_list, $id);
         }
 
-        $parameters_list = array_intersect($parameters_list, $existing_id_parameters_list);
+        $category_parameters_list = array_intersect($category_parameters_list, $existing_id_parameters_list);
 
-        echo "<br /><br />Список параметров категории <b>после</b> проверки на существование:<br />";
-        print_r($parameters_list);
+        $not_category_parameters = array_diff($existing_id_parameters_list, $category_parameters_list);
+
+        require_once ('/views/layouts/header.php');
+        require_once (ROOT.'/views/admin/category/edit_selected_category.php');
+        require_once (ROOT. '/views/admin/category/category_parameters_table.php');
+
+        echo "
+        <div class=\"remove_info\"></div>
+        ";
+
+        require_once ('/views/layouts/footer.php');
+    }
+
+    public function actionReloadCategoryParametersTable(){
+        require_once (ROOT. '/models/Parameters.php');
+        require_once (ROOT. '/models/Category.php');
+
+        $uri=$_SERVER['REQUEST_URI'];
+        $segments = explode('/',$uri);
+        if(isset($segments[3])){
+            $category_id =$segments[3];
+        }
+        $category_name = Category::get_category_name_by_id($category_id);
+        $category_parameters_list = Parameters::get_category_parameters_list($category_id);
+        $existing_parameters_list = Parameters::get_all_parameters();
+
+        $existing_id_parameters_list=[];
+
+        foreach ($existing_parameters_list as $parameter_item){
+            $id = $parameter_item['id'];
+            array_push($existing_id_parameters_list, $id);
+        }
+
+        $category_parameters_list = array_intersect($category_parameters_list, $existing_id_parameters_list);
+
+        $not_category_parameters = array_diff($existing_id_parameters_list, $category_parameters_list);
 
         require_once (ROOT. '/views/admin/category/category_parameters_table.php');
     }

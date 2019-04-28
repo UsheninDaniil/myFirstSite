@@ -38,6 +38,7 @@
 //    Управление категориями в панеле администратора
     '/admin/edit_category' => 'adminCategory/editCategoryView',
     '/admin/edit_selected_category/[0-9]{0,4}' => 'adminCategory/editSelectedCategory',
+    '/admin/reload_category_parameters_table/[0-9]{0,4}' => 'adminCategory/reloadCategoryParametersTable',
     '/admin/save_new_parameter_to_category/(.*)' => 'adminCategory/saveNewParameterToCategory',
     '/admin/remove_parameter_from_category/(.*)/(.*)'=> 'adminCategory/removeParameterFromCategory',
     '/admin/save_selected_existing_parameters_to_category/(.*)'=> 'adminCategory/saveSelectedExistingParametersToCategory',

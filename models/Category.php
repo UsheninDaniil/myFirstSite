@@ -9,7 +9,7 @@ Class Category{
         $mysqli->query ("SET NAMES 'utf8'");
 
         //выбрать id и имя и отсортировать по возрастанию и положить в переменную $result
-        $result = $mysqli->query ("SELECT id, name FROM category WHERE  status = '1' ORDER BY sort_order, name ASC");
+        $result = $mysqli->query ("SELECT id, name, sort_order FROM category WHERE  status = '1' ORDER BY sort_order, name ASC");
 
         $i = 0;
         $categoryList = array();
@@ -18,6 +18,7 @@ Class Category{
             $row = $result->fetch_array();
             $categoryList[$i]['id'] = $row['id'];
             $categoryList[$i]['name'] = $row['name'];
+            $categoryList[$i]['sort_order'] = $row['sort_order'];
             $i++;
         }
         $mysqli->close();

@@ -36,35 +36,43 @@ $colspan_amount = $count_category_products*2 + 1;
         </td>
     </tr>
 
+    <?php
+    $width_of_parameter_name_column = 20;
+    $column_count = count($compare_product_list_of_selected_category);
+    $width_of_parameter_value_column = (100-$width_of_parameter_name_column)/$column_count;
+    $width_of_parameter_value_column = floor($width_of_parameter_value_column);
+    echo $width_of_parameter_value_column;
+    ?>
+
     <tr>
-        <th>Фото</th>
+        <th width="<?=$width_of_parameter_name_column?>">Фото</th>
         <?php  foreach ($compare_product_list_of_selected_category as $id):
         $product_id = $id;
         $path = "/images/small_product_images/"."$product_id.jpg";
         ?>
-        <th colspan="2">
+        <th colspan="2" width="<?=$width_of_parameter_value_column ?>">
             <img src= "<?php echo $path ?>" alt="photo" class="product_photo"  />
         </th>
             <?php endforeach;?>
     </tr>
 
     <tr>
-        <th>Название товара</th>
+        <th width="<?=$width_of_parameter_name_column?>">Название товара</th>
         <?php  foreach ($compare_product_list_of_selected_category as $id):
             $product_info=Product::get_product_by_id($id);
         ?>
-        <th colspan="2">
+        <th colspan="2" width="<?=$width_of_parameter_value_column?>">
             <a href="/product/<?php echo $product_info['id'];?>"><?php echo $product_info['name'];?></a>
         </th>
         <?php endforeach;?>
     </tr>
 
     <tr>
-        <th>Цена</th>
+        <th width="<?=$width_of_parameter_name_column?>">Цена</th>
         <?php  foreach ($compare_product_list_of_selected_category as $id):
             $product_info=Product::get_product_by_id($id);
             ?>
-            <th colspan="2">
+            <th colspan="2" width="<?=$width_of_parameter_value_column?>">
                 <?php echo $product_info['price'];?>
             </th>
         <?php endforeach;?>
@@ -83,7 +91,7 @@ $colspan_amount = $count_category_products*2 + 1;
     ?>
 
     <tr>
-        <th>
+        <th width="<?=$width_of_parameter_name_column?>">
             <?php echo $parameter_name?>
         </th>
 
@@ -92,7 +100,7 @@ $colspan_amount = $count_category_products*2 + 1;
         $product_parameters_values=Product::get_product_parameters_by_id($product_id);
         ?>
 
-        <th colspan="2">
+        <th colspan="2" width="<?=$width_of_parameter_value_column?>">
             <?php
             if(isset($product_parameters_values[$parameter_name])){
             echo $product_parameters_values[$parameter_name];}
