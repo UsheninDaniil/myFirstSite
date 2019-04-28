@@ -51,8 +51,7 @@
     '/admin/load_parameters_table' => 'adminParameter/loadParametersTable',
 
     '/product/[0-9]{0,4}' => 'product/view',
-    '/category/[0-9]{0,4}' => 'category/view',
-    '/apply_category_filter/(.*)' => 'category/applyCategoryFilter'
+    '/category/(.*)' => 'category/view'
         
 
 );

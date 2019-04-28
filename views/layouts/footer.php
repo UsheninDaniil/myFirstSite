@@ -279,27 +279,6 @@ $( function() {
 
 </script>
 
-<script>
-
-    $(document).on('click', '.apply_category_filter', function (event)
-    {
-        event.preventDefault();
-
-        var category_id = $(this).data("categoryId");
-
-        var form = $('.parameter_values_for_category_filter');
-        var parameter_values_for_category_filter = form.serialize();
-
-        $.post("/apply_category_filter/"+ category_id, parameter_values_for_category_filter, function (data) {
-            $(".product_block").html(data);
-            }, "html"
-        );
-
-    });
-
-
-</script>
-
 </body>
 </html>
 

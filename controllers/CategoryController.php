@@ -47,112 +47,90 @@ Class CategoryController{
             }
         }
 
-        require_once ('/views/layouts/header.php');
-        require_once (ROOT.'/views/category/category_view.php');
-        require_once ('/views/layouts/footer.php');
-    }
+        if(!empty ($_GET)){
 
-    public function actionApplyCategoryFilter(){
+            require_once (ROOT. '/models/Category.php');
 
-        require_once (ROOT. '/models/Category.php');
+            $uri=$_SERVER['REQUEST_URI'];
+            $segments = explode('/',$uri);
+            $category_id=$segments[2];
 
-        $uri=$_SERVER['REQUEST_URI'];
-        $segments = explode('/',$uri);
-        $category_id=$segments[2];
+            $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
+            $mysqli->query ("SET NAMES 'utf8'");
 
-        $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
-        $mysqli->query ("SET NAMES 'utf8'");
+            $united_request = "";
 
-        $united_request = "";
+            $total_amount = count($_POST);
+            $counter = 0;
 
-        $total_amount = count($_POST);
-        $counter = 0;
+            foreach ($_GET as $parameter_id => $parameter_values_array){
 
-        if(!empty ($_POST)){
+                $category_id = $mysqli->real_escape_string($category_id);
+                $parameter_id = $mysqli->real_escape_string($parameter_id);
+//              $parameter_values_array = $mysqli->real_escape_string($parameter_values_array);
 
-        foreach ($_POST as $parameter_id => $parameter_values_array){
+                $counter = $counter+1;
 
-            $category_id = $mysqli->real_escape_string($category_id);
-            $parameter_id = $mysqli->real_escape_string($parameter_id);
-//            $parameter_values_array = $mysqli->real_escape_string($parameter_values_array);
+                $request_first_part = "
+                SELECT `product_id` FROM `parameter_values` 
+                INNER JOIN `category_parameters` ON parameter_values.parameter_id = category_parameters.parameter_id 
+                INNER JOIN product ON product.id = parameter_values.product_id 
+                WHERE product.category_id = '$category_id'
+                ";
 
-            $counter = $counter+1;
-
-            $request_first_part = "
-            SELECT `product_id` FROM `parameter_values` 
-            INNER JOIN `category_parameters` ON parameter_values.parameter_id = category_parameters.parameter_id 
-            INNER JOIN product ON product.id = parameter_values.product_id 
-            WHERE product.category_id = '$category_id'
-            ";
-
-            $request_second_part = "
+                $request_second_part = "
                 AND parameter_values.product_id IN (
                 SELECT `product_id` FROM `parameter_values`
                 WHERE parameter_values.parameter_id = '$parameter_id' 
                 AND parameter_values.value IN ('".implode("','",$parameter_values_array)."') )
                 ";
 
-            $request_third_part = "
+                $request_third_part = "
                 GROUP BY product_id
-            ";
+                ";
 
-            if(strlen ($united_request)< 1){
-                $united_request = $united_request.$request_first_part.$request_second_part;
+                if(strlen ($united_request)< 1){
+                    $united_request = $united_request.$request_first_part.$request_second_part;
+                }
+                else{
+                    $united_request = $united_request.$request_second_part;
+                }
+
+                if($counter == $total_amount){
+                    $united_request = $united_request.$request_third_part;
+                }
+
+            }
+
+            $result = $mysqli->query ($united_request);
+
+            if ($result->num_rows >0){
+
+                $i = 0;
+                $product_list_after_filter = [];
+
+                while ($i < $result->num_rows){
+                    $row = $result->fetch_array();
+                    array_push($product_list_after_filter, $row['product_id']);
+                    $i++;
+                }
+
+                $mysqli->close();
+
+                $product_list_after_filter_unique= array_unique($product_list_after_filter);
+
+                $productList = Category::get_main_product_information_after_category_filter_by_product_list($product_list_after_filter_unique);
+
             }
             else{
-                $united_request = $united_request.$request_second_part;
+                $productList = [];
             }
-
-            if($counter == $total_amount){
-                $united_request = $united_request.$request_third_part;
-            }
-
         }
 
-        $result = $mysqli->query ($united_request);
-
-        if ($result->num_rows >0){
-
-            $i = 0;
-            $product_list_after_filter = [];
-
-            while ($i < $result->num_rows){
-                $row = $result->fetch_array();
-                array_push($product_list_after_filter, $row['product_id']);
-                $i++;
-            }
-
-            $mysqli->close();
-
-            $product_list_after_filter_unique= array_unique($product_list_after_filter);
-
-            $productList = Category::get_main_product_information_after_category_filter_by_product_list($product_list_after_filter_unique);
-
-            require_once(ROOT. '/views/category/category_products_table.php');
-
-            echo "<br /><br /> $united_request <br />";
-
-            echo "<br />Список товаров, которые подходят:<br />";
-            print_r($product_list_after_filter);
-
-            echo "<br /><br />Список товаров, которые подходят, после удаления повторений:<br />";
-            print_r($product_list_after_filter_unique);
-
-        }
-        else{
-            $productList = [];
-            require_once(ROOT. '/views/category/category_products_table.php');
-            echo "<br /><br /> $united_request <br />";
-        }
-
-        }
-        else{
-            $productList = [];
-            require_once(ROOT. '/views/category/category_products_table.php');
-        }
-
+        require_once ('/views/layouts/header.php');
+        require_once (ROOT.'/views/category/category_view.php');
+        require_once ('/views/layouts/footer.php');
     }
-
 
 }
 

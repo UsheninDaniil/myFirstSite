@@ -1,3 +1,7 @@
+<?php
+
+
+?>
 
 <h2 class="headline">Главная страница</h2>
 
@@ -26,6 +30,9 @@
 
         <div id="accordion">
 
+            <form method="get" id="category_parameters_filter"  action="">
+            </form>
+
         <?php
         $category_parameters_list = Parameters::get_category_parameters_list_for_category_filter($category_id);
         foreach ($category_parameters_list as $parameter_id):
@@ -40,15 +47,25 @@
             <?php
             $most_popular_parameter_values_list = Parameters::get_most_popular_parameter_values_by_category_id_and_parameter_id($category_id, $parameter_id);
             ?>
-                <form method="post" class="parameter_values_for_category_filter" name="category_parameters_filter">
-                    <?php foreach ($most_popular_parameter_values_list as $element):
 
+                    <?php foreach ($most_popular_parameter_values_list as $element):
                         $value = $element['value'];
                         $count = $element['count'];
                     ?>
-                    <input type="checkbox" name='<?php echo $parameter_id ?>[]' value="<?=$value?>" ><?php echo $value." (".$count.")";?><br />
+                    <input type="checkbox" name='<?php echo $parameter_id ?>[]' value="<?=$value?>" form='category_parameters_filter'
+
+                        <?php
+                        if(!empty($_GET)){
+                            if(isset($_GET["$parameter_id"])){
+                                $parameter_values_list = $_GET["$parameter_id"];
+                                if (in_array($value, $parameter_values_list))
+                                echo "checked";
+                            }
+                        }
+                        ?>
+                    >
+                        <?php echo $value." (".$count.")";?><br />
                     <?php endforeach;?>
-                </form>
 
         </div>
 
@@ -59,7 +76,9 @@
         </div>
 
         <div style="border-top: 1px solid lightgrey; padding-bottom: 10px; padding-top: 10px">
-            <a href="#" data-category-id="<?php echo $category_id; ?>" class="apply_category_filter">Применить <span class="glyphicon glyphicon-ok"></span> </a>
+
+            <input type='submit' form='category_parameters_filter' value="Применить">
+
         </div>
     </div>
 
@@ -143,14 +162,23 @@
             </div>
 
         <?php endforeach; ?>
-
-
-
+        
     </div>
 
-    <div class="jquery_information"></div>
+    <?php
+    if(isset($united_request)){
+        echo "<br /><b style='color: darkred'>Запрос:</b><br /> $united_request <br />";
+    }
+
+    if(!empty($_GET)){
+        echo "<br /><b style='color: darkred'>Содержимое GET:</b><br />";
+        print_r($_GET);
+    }
+    ?>
 
 </div>
+
+
 
 
 
