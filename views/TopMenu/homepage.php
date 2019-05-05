@@ -44,10 +44,10 @@
             }
             ?>
 
-            <div>
+            <div >
 
             <a href="/product/<?= $productItem['id']; ?>" >
-                <img src= "<?php echo $path ?>" alt="photo" class="product_photo" />
+                <img src= "<?php echo $path ?>" alt="photo" class="product_photo" >
             </a>
 
             </div>
@@ -58,14 +58,14 @@
             <div class="price"> <?php echo $productItem['price'].' грн'; ?></div>
 
             <a href="#" data-id="<?php echo $productItem['id']; ?>" class="add-to-cart">
-                В корзину <span class="glyphicon glyphicon-shopping-cart"></span>
+                В корзину <i class="fas fa-shopping-cart"></i>
 
                 <span class="check-in-the-cart<?php echo $productItem['id']; ?>">
                     <?php
                     if (isset($_SESSION['cart_product_list'])){
                         $cartData = unserialize($_SESSION['cart_product_list']);
                         if (isset($cartData[$productItem['id']])){
-                            echo "<span class=\"glyphicon glyphicon-check\"></span>";
+                            echo "<i class='far fa-check-square'></i>";
                         }
                     }
                     ?>
@@ -75,7 +75,7 @@
 
             <div>
             <a href="#" data-id="<?php echo $productItem['id']; ?>" class="add-to-compare">
-                Сравнить <span class="glyphicon glyphicon-stats"></span>
+                Сравнить <i class="fas fa-balance-scale"></i>
 
                 <span class="check-in-the-compare<?=$product_id?>">
                     <?php
@@ -84,7 +84,7 @@
 
                         foreach ($compareData as $compare_category_products){
                             if(in_array ($product_id, $compare_category_products)){
-                                echo "<span class='glyphicon glyphicon-check'></span>";
+                                echo "<i class='far fa-check-square'></i>";
                             }
                         }
                     }

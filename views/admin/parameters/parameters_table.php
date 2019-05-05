@@ -20,8 +20,8 @@
                 <td><?= $parameter['name'] ?></td>
                 <td><?= $parameter['russian_name'] ?></td>
                 <td><?= $parameter['unit'] ?></td>
-                <td><a href="javascript:void(0);" class="remove_selected_parameter" data-parameter-id="<?= $parameter['id']?>"><span class="glyphicon glyphicon-remove"></span></a></td>
-                <td><a href="/admin/edit_selected_parameter/<?= $parameter['id']?>"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                <td><a href="javascript:void(0);" class="remove_selected_parameter" data-parameter-id="<?= $parameter['id']?>"><i class="fas fa-trash-alt"></i></a></td>
+                <td><a href="/admin/edit_selected_parameter/<?= $parameter['id']?>" ><i class="far fa-edit"></i></a></td>
             </tr>
 
         <?php endforeach; ?>
@@ -29,7 +29,7 @@
         <tr>
             <th colspan="6">
                 <a href="javascript:void(0);" class='load_new_parameter_form_2'>Создать новый параметр</a>
-                <a href= "javascript:void(0);" class="hide_load_new_parameter_form_button_2" id="hide_load_new_parameter_form_button_2" style="display: none"><span class="glyphicon glyphicon-minus"></span></a>
+                <a href= "javascript:void(0);" class="hide_load_new_parameter_form_button_2" id="hide_load_new_parameter_form_button_2" style="display: none"><i class="fas fa-minus"></i></a>
 
                 <div id="load_new_parameter_form_2" style="display: none">
 
@@ -42,7 +42,7 @@
                         <input type="text" name="parameter_unit" /><br />
                     </form>
 
-                    <a href= "javascript:void(0);" class="save_new_parameter" >Создать <span class="glyphicon glyphicon-ok"></span></a>
+                    <a href= "javascript:void(0);" class="save_new_parameter" >Создать <i class="fas fa-check"></i></a>
 
                 </div>
             </th>

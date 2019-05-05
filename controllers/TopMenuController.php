@@ -59,12 +59,6 @@ class TopMenuController
             }
         }
 
-
-
-
-
-
-
         require_once ('/views/layouts/header.php');
         require_once (ROOT.'/views/TopMenu/homepage.php');
         require_once ('/views/layouts/footer.php');

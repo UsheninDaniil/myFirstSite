@@ -7,8 +7,6 @@ class AdminCategoryController
     public function actionEditCategoryView()
     {
         require_once (ROOT. '/models/Parameters.php');
-        $parameters_list = Parameters::get_category_parameters_list(1);
-
         require_once ('/views/layouts/header.php');
         require_once (ROOT.'/views/admin/category/edit_categories_view.php');
         require_once ('/views/layouts/footer.php');
@@ -151,5 +149,66 @@ class AdminCategoryController
 
         print_r($uri);
         AdminCategory::delete_parameters_from_category($category_id,$parameter_id);
+    }
+
+    public function actionChangeTheSortOrderOfCategories(){
+
+        if(isset($_POST['category_id_list'])){
+            echo "Содержимое POST:<br />";
+            print_r($_POST);
+
+            $i = 1;
+
+            foreach ($_POST['category_id_list'] as $category_id){
+                echo "<br />category id $category_id = sort order $i ";
+
+                $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
+                $mysqli->query ("SET NAMES 'utf8'");
+
+                $mysqli->query("UPDATE category SET `sort_order` = '$i' WHERE id = '$category_id'");
+
+                $mysqli->close();
+
+                $i = $i + 1;
+            }
+        }
+    }
+
+    public function actionUpdateCategoryNameUsingEditable(){
+
+        $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
+        $mysqli->query ("SET NAMES 'utf8'");
+
+        if(isset($_POST['name']) AND ($_POST['name']=="category_name")){
+            $new_category_name = $_POST['value'];
+            $category_id = $_POST['pk'];
+            $sql = "UPDATE category SET `name` = '$new_category_name' WHERE id='$category_id'";
+            print_r($sql);
+            $mysqli->query($sql);
+        }
+
+        $mysqli->close();
+
+        print_r($_POST);
+
+    }
+
+    public function actionUpdateCategoryStatusUsingEditable(){
+
+        $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
+        $mysqli->query ("SET NAMES 'utf8'");
+
+        if(isset($_POST['name']) AND ($_POST['name']=="category_status")){
+            $new_category_status = $_POST['value'];
+            $category_id = $_POST['pk'];
+            $sql = "UPDATE category SET `status` = '$new_category_status' WHERE id='$category_id'";
+            print_r($sql);
+            $mysqli->query($sql);
+        }
+
+        $mysqli->close();
+
+        print_r($_POST);
+
     }
 }

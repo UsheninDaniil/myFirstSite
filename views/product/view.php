@@ -25,14 +25,14 @@
             <div class="view_price"><?php echo $product_info['price'] ?></div>
 
             <a href="#" data-id="<?php echo $product_info['id']; ?>" class="add-to-cart">
-                В корзину <span class="glyphicon glyphicon-shopping-cart"></span>
+                В корзину <i class="fas fa-shopping-cart"></i>
 
                 <span class="check-in-the-cart<?php echo $product_info['id']; ?>">
                     <?php
                     if (isset($_SESSION['cart_product_list'])){
                         $cartData = unserialize($_SESSION['cart_product_list']);
                         if (isset($cartData[$product_info['id']])){
-                            echo "<span class=\"glyphicon glyphicon-check\"></span>";
+                            echo "<i class='far fa-check-square'></i>";
                         }
                     }
                     ?>
@@ -41,7 +41,7 @@
             </a>
 
             <a href="#" data-id="<?php echo $product_info['id']; ?>" class="add-to-compare">
-                Сравнить <span class="glyphicon glyphicon-stats"></span>
+                Сравнить <i class="fas fa-balance-scale"></i>
 
                 <span class="check-in-the-compare<?=$product_id?>">
                     <?php
@@ -50,7 +50,7 @@
 
                         foreach ($compareData as $compare_category_products){
                             if(in_array ($product_id, $compare_category_products)){
-                                echo "<span class='glyphicon glyphicon-check'></span>";
+                                echo "<i class='far fa-check-square'></i>";
                             }
                         }
                     }

@@ -20,19 +20,28 @@
     $show_in_filter = $category_parameters_information['show_in_filter'];
     $sort_order = $category_parameters_information['sort_order'];
     echo "<tr>
-        <th>$parameter_name</th>
-        <th>$show_in_filter</th>
+        <th>$parameter_name</th>";
+        if($show_in_filter == 1){
+            echo"<th>Да</th>";
+        } elseif ($show_in_filter == 0){
+            echo"<th>Нет</th>";
+        } else{
+            echo"<th></th>";
+        }
+
+    echo "
         <th>$sort_order</th>
-        <th><a href='javascript:void(0);' class='remove_parameter_from_category' data-parameter-id='$parameter_id'><span class='glyphicon glyphicon-remove'></span></a></th>
-        <th><a href=''><span class='glyphicon glyphicon-pencil'></a> </th>
+        <th><a href='javascript:void(0);' class='remove_parameter_from_category' data-parameter-id='$parameter_id'><i class='fas fa-trash-alt'></i></a></th>
+        <th><a href=''><i class=\"far fa-edit\"></i></a> </th>
     </tr>";
+
     }
 
     ?>
 
         <tr><th colspan='5'>
-            <a href='javascript:void(0);' class='load_existing_parameters_form'>Добавить существующий параметр <span class='glyphicon glyphicon-search'></span></a>
-            <a href= "javascript:void(0);" class="hide_load_existing_parameters_form_button" id="hide_load_existing_parameters_form_button" style="display: none"><span class="glyphicon glyphicon-minus"></span></a>
+            <a href='javascript:void(0);' class='load_existing_parameters_form'>Добавить существующий параметр <i class="fas fa-search"></i></a>
+            <a href= "javascript:void(0);" class="hide_load_existing_parameters_form_button" id="hide_load_existing_parameters_form_button" style="display: none"><i class="fas fa-minus"></i></a>
 
             <div id="load_existing_parameters_form" style="display: none">
                 <form method='post' id ='save_parameters_list'>
@@ -43,7 +52,7 @@
                         }
                     ?>
                 </form>
-                <a href='javascript:void(0);' class='save_selected_existing_parameters_to_category'>Добавить <span class="glyphicon glyphicon-ok"></span></a>
+                <a href='javascript:void(0);' class='save_selected_existing_parameters_to_category'>Добавить <i class="fas fa-check"></i></a>
             </div>
 
             <div class='check_save_existing_parameters_button'></div>
@@ -51,8 +60,8 @@
 
 
         <th colspan='5'>
-            <a href='javascript:void(0);' class='load_new_parameter_form'>Создать новый параметр <span class='glyphicon glyphicon-pencil'></span></a>
-            <a href= "javascript:void(0);" class="hide_load_new_parameter_form_button" id="hide_load_new_parameter_form_button" style="display: none"><span class="glyphicon glyphicon-minus"></span></a>
+            <a href='javascript:void(0);' class='load_new_parameter_form'>Создать новый параметр <i class="far fa-edit"></i></a>
+            <a href= "javascript:void(0);" class="hide_load_new_parameter_form_button" id="hide_load_new_parameter_form_button" style="display: none"><i class="fas fa-minus"></i></a>
 
             <div id="load_new_parameter_form" style="display: none">
 
@@ -64,7 +73,7 @@
                 <br /><label>Единица измерения:</label><br />
                 <input type="text" name="parameter_unit" /><br />
             </form>
-                <a href= "javascript:void(0);" class="save_new_parameter_to_category" >Создать <span class="glyphicon glyphicon-ok"></span></a>
+                <a href= "javascript:void(0);" class="save_new_parameter_to_category" >Создать <i class="fas fa-check"></i></a>
 
             </div>
 

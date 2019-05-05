@@ -42,6 +42,9 @@
     '/admin/save_new_parameter_to_category/(.*)' => 'adminCategory/saveNewParameterToCategory',
     '/admin/remove_parameter_from_category/(.*)/(.*)'=> 'adminCategory/removeParameterFromCategory',
     '/admin/save_selected_existing_parameters_to_category/(.*)'=> 'adminCategory/saveSelectedExistingParametersToCategory',
+    '/admin/change_the_sort_order_of_categories' => 'adminCategory/changeTheSortOrderOfCategories',
+    '/admin/update_category_name_using_editable' => 'adminCategory/updateCategoryNameUsingEditable',
+    '/admin/update_category_status_using_editable' => 'adminCategory/updateCategoryStatusUsingEditable',
 
 //    Управление параметрами в панеле администратора
     '/admin/edit_parameters' => 'adminParameter/editParametersView',
@@ -52,7 +55,9 @@
     '/admin/load_parameters_table' => 'adminParameter/loadParametersTable',
 
     '/product/[0-9]{0,4}' => 'product/view',
-    '/category/(.*)' => 'category/view'
+    '/category/(.*)' => 'category/view',
+
+    '/search/(.*)' => 'search/viewSearchResult'
         
 
 );

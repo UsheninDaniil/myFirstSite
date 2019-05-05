@@ -67,7 +67,7 @@
         <label><?=$parameter_russian_name;?><br /></label>
 
         <input type="text" name="dynamic_parameters[<?=$parameter_id?>]" value="<?=$value?>">
-        <a href="javascript:void(0);" class="remove_additional_parameter" data-parameter-id="<?=$parameter_id?>"><span class="glyphicon glyphicon-remove"></span></a><br />
+        <a href="javascript:void(0);" class="remove_additional_parameter" data-parameter-id="<?=$parameter_id?>"><i class="fas fa-trash-alt"></i></a><br />
 
         <?php endforeach;?>
 
@@ -75,8 +75,8 @@
 
     </div><br />
 
-    <a href='javascript:void(0);' id="load_existing_parameter">Добавить существующий параметр <span class='glyphicon glyphicon-search'></span></a>
-    <a href= "javascript:void(0);" class="hide_button" style="display: none" ><span class="glyphicon glyphicon-minus"></span></a>
+    <a href='javascript:void(0);' id="load_existing_parameter">Добавить существующий параметр <i class="fas fa-search"></i></a>
+    <a href= "javascript:void(0);" class="hide_button" style="display: none" ><i class="fas fa-minus"></i></a>
 
     <div class="existing_parameters_form" style="display: none">
 
@@ -88,7 +88,7 @@
             }
             ?>
 
-        <a href='javascript:void(0);' id ='add_selected_parameters'>Добавить <span class="glyphicon glyphicon-ok"></span></a>
+        <a href='javascript:void(0);' id ='add_selected_parameters'>Добавить <i class="fas fa-check"></i></a>
 
     </div>
     </div>

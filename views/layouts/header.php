@@ -2,11 +2,16 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="/template/bootstrap/css/bootstrap.css">
+
+    <link rel="stylesheet" href="/template/fontawesome-free-5.8.1-web/css/all.min.css" >
+
+    <link rel="stylesheet" href="/template/bootstrap-editable/css/bootstrap-editable.css" >
+    <link rel="stylesheet" href="/template/bootstrap-4.3.1-dist/css/bootstrap.min.css">
+
     <link rel="stylesheet" href="/template/swiper-4.4.6/dist/css/swiper.min.css">
     <link rel="stylesheet" href="/template/jquery-ui-1.12.1.custom/jquery-ui.min.css">
 
-    <link rel="stylesheet" href="/template/css/main.css">
+    <link rel="stylesheet" href="/template/css/main.css?v=<?php echo uniqid()?>">
     <style>
     </style>
 
@@ -58,6 +63,13 @@
                         ?>
                     </a></li>
             </ul>
+        </div>
+
+        <div class="search">
+            <form action="/search/" method="get">
+                <p><input type="search" name="text" placeholder="Поиск по сайту">
+                    <input type="submit" value="Найти"></p>
+            </form>
         </div>
     </div>
 
