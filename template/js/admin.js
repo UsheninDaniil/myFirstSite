@@ -243,7 +243,8 @@ $( function() {
         name: 'category_name',
         type: 'text',
         url: '/admin/update_category_name_using_editable',
-        title: 'Enter username'
+        title: 'Enter username',
+        // original-title:'Enter username'
     });
 
     $('#sortable_categories_list_table .category_status').editable({

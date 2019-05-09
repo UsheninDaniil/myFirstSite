@@ -14,8 +14,6 @@ class SearchController
             $search_query = $_GET['text'];
         }
 
-        echo $search_query;
-
         require_once (ROOT. '/models/Category.php');
         require_once (ROOT. '/models/Product.php');
         require_once (ROOT. '/models/User.php');

@@ -13,20 +13,22 @@ print_r($_POST);
 <br /><br /><br />
 
 
-<table border='1' cellpadding='5' class='parameter_list_table' id="sortable_categories_list_table" style="table-layout:fixed;">
-    <col width="14%">
-    <col width="28%">
-    <col width="14%">
-    <col width="28%">
-    <col width="14%">
+
+<table border='1' cellpadding='5' class='parameter_list_table' id="sortable_categories_list_table" >
+<!--    style="table-layout:fixed"-->
+<!--    <col width="12%">-->
+<!--    <col width="25%">-->
+<!--    <col width="12%">-->
+<!--    <col width="25%">-->
+<!--    <col width="25%">-->
     <thead>
     <tr>
         <th colspan="5">Список категорий</th>
     </tr>
 
     <?php
-    $narrow_column_count = 3;
-    $wide_column_count = 2;
+    $narrow_column_count = 2;
+    $wide_column_count = 3;
 
     $narrow_column_width= 100/($narrow_column_count + $wide_column_count*2);
     $wide_column_width = $narrow_column_width*2;
@@ -40,11 +42,11 @@ print_r($_POST);
     ?>
 
     <tr>
-        <th><b style="color: darkred">id</b></th>
-        <th><b style="color: darkred">Название</b></th>
-        <th><b style="color: darkred">Порядок сортировки</b></th>
-        <th><b style="color: darkred">Статус</b></th>
-        <th><b style="color: darkred">Список параметров</b></th>
+        <th width="<?=$narrow_column_width?>%"><b style="color: darkred">id</b></th>
+        <th width="<?=$wide_column_width?>%"><b style="color: darkred">Название</b></th>
+        <th width="<?=$narrow_column_width?>%"><b style="color: darkred">Порядок сортировки</b></th>
+        <th width="<?=$wide_column_width?>%"><b style="color: darkred">Статус</b></th>
+        <th width="<?=$wide_column_width?>%"><b style="color: darkred">Список параметров</b></th>
     </tr>
     </thead>
     <tbody>
@@ -58,9 +60,10 @@ print_r($_POST);
 
         <tr data-category-id="<?=$category_id?>" style="cursor: move">
             <th><?php echo $category_id ?></th>
-            <th><a href="#" class="category_name" data-pk="<?=$category_id ?>"> <?=$category_name ?></a></th>
-            <th id="sort_order"><?php echo $sort_order ?></th>
-            <th><a href="#" class="category_status" data-pk="<?=$category_id ?>" data-source="{'1': 'отображается', '0': 'не отображается'}"><?= $status?></a></th>
+            <th><a href="#" class="category_name" data-pk="<?=$category_id ?>" > <?=$category_name ?></a></th>
+            <th id="sort_order"><?=$sort_order?></th>
+            <th>
+                <a href="#" class="category_status" data-pk="<?=$category_id ?>" data-source="{'1': 'отображается', '0': 'не отображается'}"><?php echo  ($status == 1)? "отображается" : "не отображается"; ?></a></th>
             <th><a href="/admin/edit_selected_category/<?=$category_id?>">настроить</a> </th>
         </tr>
 
@@ -72,4 +75,6 @@ print_r($_POST);
 <div class="information"></div>
 
 <div class="editable_information"></div>
+
+
 

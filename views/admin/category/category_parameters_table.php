@@ -1,6 +1,7 @@
 <div class="category_parameters_table">
 
-<table border='1' cellpadding='5' class='parameter_list_table' data-category-id='<?=$category_id?>' >
+<table border='1' cellpadding='5' class='parameter_list_table' data-category-id='<?=$category_id?>'>
+
     <tr>
         <th colspan='5'>Список параметров</th>
     </tr>

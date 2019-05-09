@@ -1,4 +1,4 @@
-<br /><br /><br />
+<br />
 <div style="text-align: center">Сравнение товаров</div> <br />
 
 <?php
@@ -41,7 +41,6 @@ $colspan_amount = $count_category_products*2 + 1;
     $column_count = count($compare_product_list_of_selected_category);
     $width_of_parameter_value_column = (100-$width_of_parameter_name_column)/$column_count;
     $width_of_parameter_value_column = floor($width_of_parameter_value_column);
-    echo $width_of_parameter_value_column;
     ?>
 
     <tr>

@@ -1,9 +1,4 @@
-<?php
-
-
-?>
-
-<h2 class="headline">Главная страница</h2>
+<br />
 
 <div class="side_menu">
     <h2 class="headline">Каталог</h2>
