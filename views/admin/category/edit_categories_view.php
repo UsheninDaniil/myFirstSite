@@ -42,11 +42,11 @@ print_r($_POST);
     ?>
 
     <tr>
-        <th width="<?=$narrow_column_width?>%"><b style="color: darkred">id</b></th>
-        <th width="<?=$wide_column_width?>%"><b style="color: darkred">Название</b></th>
-        <th width="<?=$narrow_column_width?>%"><b style="color: darkred">Порядок сортировки</b></th>
-        <th width="<?=$wide_column_width?>%"><b style="color: darkred">Статус</b></th>
-        <th width="<?=$wide_column_width?>%"><b style="color: darkred">Список параметров</b></th>
+        <th><b style="color: darkred; width: <?=$narrow_column_width?>%">id</b></th>
+        <th><b style="color: darkred; width: <?=$wide_column_width?>%">Название</b></th>
+        <th><b style="color: darkred; width: <?=$narrow_column_width?>%">Сортировка</b></th>
+        <th><b style="color: darkred; width: <?=$wide_column_width?>%">Статус</b></th>
+        <th><b style="color: darkred; width: <?=$wide_column_width?>%">Параметры</b></th>
     </tr>
     </thead>
     <tbody>
@@ -59,12 +59,13 @@ print_r($_POST);
         ?>
 
         <tr data-category-id="<?=$category_id?>" style="cursor: move">
-            <th><?php echo $category_id ?></th>
-            <th><a href="#" class="category_name" data-pk="<?=$category_id ?>" > <?=$category_name ?></a></th>
-            <th id="sort_order"><?=$sort_order?></th>
-            <th>
+            <th style="width:<?=$narrow_column_width?>%"><?php echo $category_id ?></th>
+
+            <th style="width:<?=$wide_column_width?>%" class="cell_with_category_name"><a href="#" class="category_name" data-pk="<?=$category_id ?>" > <?=$category_name ?></a></th>
+            <th style="width:<?=$narrow_column_width?>%" id="sort_order"><?=$sort_order?></th>
+            <th style="width:<?=$wide_column_width?>%">
                 <a href="#" class="category_status" data-pk="<?=$category_id ?>" data-source="{'1': 'отображается', '0': 'не отображается'}"><?php echo  ($status == 1)? "отображается" : "не отображается"; ?></a></th>
-            <th><a href="/admin/edit_selected_category/<?=$category_id?>">настроить</a> </th>
+            <th style="width:<?=$wide_column_width?>%"><a href="/admin/edit_selected_category/<?=$category_id?>">настроить</a> </th>
         </tr>
 
     <?php endforeach;?>
@@ -72,7 +73,12 @@ print_r($_POST);
     </tbody>
 </table>
 
-<div class="information"></div>
+<div id="information" class="editable-input">
+    <form>
+        <input type="text" class="form-control form-control-sm" style="padding-right: 24px;" value="информация">
+    </form>
+
+</div>
 
 <div class="editable_information"></div>
 

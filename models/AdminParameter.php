@@ -6,7 +6,10 @@
  * Time: 15:21
  */
 
-class AdminParameter
+
+
+
+class AdminParameter extends DatabaseConnect
 {
     public static function RemoveSelectedParameter($parameter_id)
     {

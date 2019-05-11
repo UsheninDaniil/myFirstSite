@@ -10,6 +10,7 @@ class AdminProductController
 
         require_once ('/views/layouts/header.php');
         require_once (ROOT.'/views/admin/product/edit_products_view.php');
+        require_once (ROOT.'/views/admin/product/products_table.php');
         require_once ('/views/layouts/footer.php');
     }
 
@@ -257,9 +258,43 @@ class AdminProductController
             echo "<br /><label>$parameter_russian_name</label><br />";
             echo "<input type='text' name='category_parameters[$parameter_id]'>";
         }
+    }
 
 
+    public function actionApplyMultiSelectFilterForProductList(){
 
+        include_once('/models/Product.php');
+
+        if(!empty($_POST['category_list'])) {
+
+            $category_list = $_POST['category_list'];
+
+            $mysqli = new mysqli ("localhost", "root", "", "myFirstSite");
+            $mysqli->query("SET NAMES 'utf8'");
+
+//        $result = $mysqli->query ("SELECT * FROM product WHERE  category_id  IN (".implode(',',$category_list).") ORDER BY id, name ASC");
+
+            $result = $mysqli->query("SELECT * FROM product WHERE  category_id  IN (".implode(',',$category_list).") ORDER BY id, name ASC");
+
+            $i = 0;
+            $productList = array();
+
+            while ($i < $result->num_rows) {
+                $row = $result->fetch_array();
+                $productList[$i]['id'] = $row['id'];
+                $productList[$i]['name'] = $row['name'];
+                $productList[$i]['price'] = $row['price'];
+                $productList[$i]['status'] = $row['status'];
+                $i++;
+            }
+            $mysqli->close();
+
+        }
+        else{
+            $productList = Product::get_product_list();
+        }
+
+        require_once (ROOT.'/views/admin/product/products_table.php');
 
     }
 

@@ -6,30 +6,16 @@
 
 <br /><br /><br />
 
-<table border="1" width="50%" cellpadding="5" class="product_list_table">
+<form id="category_multiselect_form">
 
-    <tr>
-        <th>Id</th>
-        <th>Название</th>
-        <th>Цена</th>
-        <th colspan="2">Действие</th>
-    </tr>
+<select name="category_list[]" multiple="multiple" size="5" class="category_multiselect">
 
-    <?php foreach ($productList as $product) : ?>
+        <option value="1" >Компьютеры</option>
+        <option value="2" >Ноутбуки</option>
+        <option value="3" >Планшеты</option>
+        <option value="4" >Телефоны</option>
 
-        <tr>
-            <td><?= $product['id'] ?></td>
-            <td><a href="/product/<?= $product['id']?> "> <?= $product['name'] ?></a></td>
-            <td><?= $product['price'] ?></td>
-            <td><a href="/admin/delete_product/<?= $product['id']?>"><i class="fas fa-trash-alt"></i></a></td>
-            <td><a href="/admin/edit_product/<?= $product['id']?>"><i class="far fa-edit"></i></a></td>
+</select>
 
-        </tr>
+</form>
 
-    <?php endforeach; ?>
-
-    <tr>
-        <td colspan="5"><a href="/admin/add_product">Добавить товар</a></td>
-    </tr>
-
-</table>

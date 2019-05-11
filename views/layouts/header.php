@@ -7,13 +7,14 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-
-
     <link rel="stylesheet" href="/template/bootstrap4-editable/css/bootstrap-editable.css" >
     <link rel="stylesheet" href="/template/bootstrap-4.3.1-dist/css/bootstrap.min.css">
 
     <link rel="stylesheet" href="/template/swiper-4.4.6/dist/css/swiper.min.css">
     <link rel="stylesheet" href="/template/jquery-ui-1.12.1.custom/jquery-ui.min.css">
+
+    <link rel="stylesheet" href="/template/jQuery-UI-Multiple-Select-Widget/css/jquery.multiselect.css">
+    <link rel="stylesheet" href="/template/jQuery-UI-Multiple-Select-Widget/css/jquery.multiselect.filter.css">
 
     <link rel="stylesheet" href="/template/css/main.css?v=<?php echo uniqid()?>">
     <style>
@@ -22,6 +23,9 @@
 
 </head>
 <body>
+
+<div class="wrapper">
+    <div class="content">
 
     <div class="header">
         <div class="top-menu" >

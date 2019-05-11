@@ -107,43 +107,80 @@
 
 
 
+<div class="pagination_buttons" style="text-align: center">
+
+<?php
+
+// Проверяем нужны ли стрелки назад
+if ($page != 1) {
+        $pervpage = '<a href= ./page=1><<</a> 
+                     <a href= ./page=' . ($page - 1) . '><</a> ';
+    } else{
+        $pervpage = '';
+    }
+// Проверяем нужны ли стрелки вперед
+if ($page != $total) {
+        $nextpage = ' <a href= ./page='. ($page + 1) .'>></a> 
+                      <a href= ./page=' .$total. '>>></a>';
+    } else {
+        $nextpage = '';
+    }
+
+// Находим две ближайшие станицы с обоих краев, если они есть
+if($page - 2 > 0) {$page2left = ' <a href= ./page='. ($page - 2) .'>'. ($page - 2) .'</a> | ';} else {$page2left = '';};
+if($page - 1 > 0) {$page1left = '<a href= ./page='. ($page - 1) .'>'. ($page - 1) .'</a> | ';} else {$page1left = '';};
+if($page + 2 <= $total) {$page2right = ' | <a href= ./page='. ($page + 2) .'>'. ($page + 2) .'</a>';} else {$page2right ='';};
+if($page + 1 <= $total) {$page1right = ' | <a href= ./page='. ($page + 1) .'>'. ($page + 1) .'</a>';} else {$page1right ='';};
+
+// Вывод меню
+echo $pervpage.$page2left.$page1left.'<b>'.$page.'</b>'.$page1right.$page2right.$nextpage;
+
+?>
 
 
-<!-- Swiper -->
-<div class="swiper-container">
-    <div class="swiper-wrapper">
-        <?php foreach ($productList as $productItem) : ?>
-        <div class="swiper-slide">
-            <?php
-            $product_id =$productItem['id'];
-            $path = "/images/"."$product_id.jpg";
-            ?>
-            <div><img src= "<?php echo $path ?>" alt="photo" class="product_photo" /></div>
-            <div>
-                <a href="/product/<?= $productItem['id']; ?>">
-                    <?php echo $productItem['name']; ?>
-                </a>
-            </div>
-            <div class="price"> <?php echo $productItem['price'].' грн'; ?></div>
-            <div>
-                <form name = "cart" action="" method ="post"><br />
-                    <input type="hidden" name="add_to_cart_product_id" value="<?= $productItem['id'] ?>">
-                    <input type = "submit" name ="add_to_cart" value="Добавить в корзину"><br />
-                </form>
-            </div>
-        </div>
-        <?php endforeach; ?>
-    </div>
-    <!-- Add Arrows -->
-    <div class="swiper-button-next"></div>
-    <div class="swiper-button-prev"></div>
 </div>
 
+
+
+
+
+
+
+
+
+
+
+
+<!--<div class="swiper-container">-->
+<!--    <div class="swiper-wrapper">-->
+<!--        --><?php //foreach ($productList as $productItem) : ?>
+<!--        <div class="swiper-slide">-->
+<!--            --><?php
+//            $product_id =$productItem['id'];
+//            $path = "/images/small_product_images/"."$product_id.jpg";
+//            ?>
+<!--            <div><img src= "--><?php //echo $path ?><!--" alt="photo" class="product_photo" /></div>-->
+<!--            <div>-->
+<!--                <a href="/product/--><?//= $productItem['id']; ?><!--">-->
+<!--                    --><?php //echo $productItem['name']; ?>
+<!--                </a>-->
+<!--            </div>-->
+<!--            <div class="price"> --><?php //echo $productItem['price'].' грн'; ?><!--</div>-->
+<!--            <div>-->
+<!--                <form name = "cart" action="" method ="post"><br />-->
+<!--                    <input type="hidden" name="add_to_cart_product_id" value="--><?//= $productItem['id'] ?><!--">-->
+<!--                    <input type = "submit" name ="add_to_cart" value="Добавить в корзину"><br />-->
+<!--                </form>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        --><?php //endforeach; ?>
+<!--    </div>-->
+<!--    <div class="swiper-button-next"></div>-->
+<!--    <div class="swiper-button-prev"></div>-->
+<!--</div>-->
+
 <!-- Swiper JS -->
-<!--<script src="../dist/js/swiper.min.js"></script>-->
 <script src="../template/swiper-4.4.6/dist/js/swiper.min.js"></script>
-
-
 
 <!-- Initialize Swiper -->
 <script>

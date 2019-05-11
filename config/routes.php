@@ -10,6 +10,7 @@
     'product/add_compare/([0-9]+)' => 'product/add_compare/',
 
     '/$' => 'TopMenu/homepage',
+    '/page=(.*)' => 'TopMenu/homepage',
 
     '/about' => 'TopMenu/about',
     '/contact' => 'TopMenu/contact',
@@ -34,6 +35,7 @@
     '/load_selected_parameters_to_additional_product_parameters' => 'adminProduct/loadSelectedParametersList',
     '/admin/delete_additional_parameter_from_edit_product/(.*)/(.*)' => 'adminProduct/deleteAdditionalParameter',
     '/admin/load_category_parameters_to_add_product/(.*)' => 'adminProduct/loadCategoryParameters',
+    '/admin/apply_multi_select_filter_for_product_list' => 'adminProduct/applyMultiSelectFilterForProductList',
 
 //    Управление категориями в панеле администратора
     '/admin/edit_category' => 'adminCategory/editCategoryView',

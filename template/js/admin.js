@@ -227,6 +227,7 @@ function load_category_parameters() {
 }
 
 
+
 $( function() {
 
     $("#accordion > div").accordion({
@@ -239,12 +240,22 @@ $( function() {
     //turn to inline mode
     $.fn.editable.defaults.mode = 'inline'; // popup default
 
+
+    $('#sortable_categories_list_table .category_name').on('shown', function(e, editable) {
+        changeEditableInputWidth();
+    });
+
     $('#sortable_categories_list_table .category_name').editable({
         name: 'category_name',
         type: 'text',
         url: '/admin/update_category_name_using_editable',
         title: 'Enter username',
         // original-title:'Enter username'
+
+    });
+
+    $('#sortable_categories_list_table .category_status').on('shown', function(e, editable) {
+        changeEditableInputWidth();
     });
 
     $('#sortable_categories_list_table .category_status').editable({
@@ -252,8 +263,6 @@ $( function() {
         type: 'select',
         url: '/admin/update_category_status_using_editable',
     });
-
-
 
 } );
 
@@ -304,6 +313,51 @@ root.sortable({
 });
 
 
+function changeEditableInputWidth(){
+    document.getElementById('information').style.border = '1px solid red';
+    document.getElementById('information').style.border = '1px solid red';
 
+    var width = $(".cell_with_category_name").eq(0).outerWidth();
+
+    var new_width = width - 67 - 7 - 10 - 14;
+
+    $('.form-control-sm').width(new_width-34);
+
+    console.log(width);
+    console.log(new_width);
+}
+
+
+
+
+
+$(function(){
+    $(".category_multiselect").multiselect({
+        header: false,
+        noneSelectedText: 'Выберите категории',
+        selectedText: 'Выберите категории',
+    });
+
+});
+
+
+
+function applyMultiSelectFilterForProductList(){
+
+    var form = $('#category_multiselect_form');
+    var category_list = form.serialize();
+
+    $.post("/admin/apply_multi_select_filter_for_product_list", category_list, function (data) {
+            $("#products_table").html(data);
+        }, "html"
+    );
+}
+
+
+
+$(".category_multiselect").on("multiselectclose", function(event, ui){
+    applyMultiSelectFilterForProductList();
+    console.log("закрыто");
+});
 
 
