@@ -1,10 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Даня
- * Date: 02.05.2019
- * Time: 22:58
- */
+
+include_once ('/models/DatabaseConnect.php');
 
 class SearchController
 {

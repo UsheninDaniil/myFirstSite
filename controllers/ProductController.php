@@ -1,10 +1,9 @@
 <?php
 
-
+include_once ('/models/DatabaseConnect.php');
 
 Class ProductController
 {
-
 
     public function actionView(){
 
@@ -59,7 +58,7 @@ Class ProductController
         }
 
         $_SESSION['cart_product_amount']=$cart_product_amount;
-        echo "Корзина ($cart_product_amount)";
+        echo "<i class=\"fas fa-shopping-cart\"></i> Корзина ($cart_product_amount)";
     }
 
     public function actionAdd_compare(){
@@ -101,7 +100,7 @@ Class ProductController
         }
 
         $_SESSION['compare_product_amount']=$compare_product_amount;
-        echo "Сравнение ($compare_product_amount)";
+        echo "<i class=\"fas fa-balance-scale\"></i> Сравнение ($compare_product_amount)";
     }
 
 }

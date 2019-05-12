@@ -1,6 +1,7 @@
 <?php
 require_once(ROOT. '/models/Admin.php');
 require_once(ROOT. '/models/AdminProduct.php');
+include_once ('/models/DatabaseConnect.php');
 
 class AdminProductController
 {
@@ -190,7 +191,7 @@ class AdminProductController
         }
 
         require_once ('/views/layouts/header.php');
-        require_once (ROOT.'/views/admin/product/edit_product.php');
+        require_once (ROOT.'/views/admin/product/edit_selected_product.php');
         require_once ('/views/layouts/footer.php');
     }
 
@@ -287,7 +288,7 @@ class AdminProductController
                 $productList[$i]['status'] = $row['status'];
                 $i++;
             }
-            $mysqli->close();
+            DatabaseConnect::disconnect_database($mysqli);
 
         }
         else{

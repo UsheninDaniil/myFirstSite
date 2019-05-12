@@ -1,14 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Даня
- * Date: 11.05.2019
- * Time: 22:39
- */
-
-
-
-
 
 class DatabaseConnect
 {
@@ -22,3 +12,18 @@ class DatabaseConnect
         $mysqli->close();
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+?>

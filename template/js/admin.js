@@ -354,7 +354,6 @@ function applyMultiSelectFilterForProductList(){
 }
 
 
-
 $(".category_multiselect").on("multiselectclose", function(event, ui){
     applyMultiSelectFilterForProductList();
     console.log("закрыто");

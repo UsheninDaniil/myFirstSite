@@ -1,6 +1,7 @@
 <?php
 require_once(ROOT. '/models/Admin.php');
 require_once(ROOT. '/models/AdminParameter.php');
+include_once ('/models/DatabaseConnect.php');
 
 class AdminParameterController
 {

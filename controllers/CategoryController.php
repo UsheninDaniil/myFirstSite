@@ -1,6 +1,5 @@
 <?php
-
-
+include_once ('/models/DatabaseConnect.php');
 
 Class CategoryController{
 
@@ -55,8 +54,7 @@ Class CategoryController{
             $segments = explode('/',$uri);
             $category_id=$segments[2];
 
-            $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
-            $mysqli->query ("SET NAMES 'utf8'");
+            $mysqli = DatabaseConnect::connect_to_database();
 
             $united_request = "";
 
@@ -115,7 +113,7 @@ Class CategoryController{
                     $i++;
                 }
 
-                $mysqli->close();
+                DatabaseConnect::disconnect_database($mysqli);
 
                 $product_list_after_filter_unique= array_unique($product_list_after_filter);
 

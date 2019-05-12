@@ -1,14 +1,13 @@
 <?php
 
-Class Product{
+include_once ('/models/DatabaseConnect.php');
 
+class Product extends DatabaseConnect
+{
     public static function get_product_list()
     {
-        //создается новый объект $mysqli
-        $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
-        $mysqli->query ("SET NAMES 'utf8'");
+        $mysqli = parent::connect_to_database();
 
-        //выбрать все и отсортировать по возрастанию и положить в переменную $result
         $result = $mysqli->query ("SELECT * FROM product WHERE  status = '1' ORDER BY id, name ASC");
 
         $i = 0;
@@ -22,18 +21,16 @@ Class Product{
             $productList[$i]['status'] = $row['status'];
             $i++;
         }
-        $mysqli->close();
 
+        parent::disconnect_database($mysqli);
         return $productList;
     }
 
+
     public static function get_product_list_by_category_id($category_id)
     {
-        //создается новый объект $mysqli
-        $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
-        $mysqli->query ("SET NAMES 'utf8'");
+        $mysqli = parent::connect_to_database();
 
-        //выбрать все и отсортировать по возрастанию и положить в переменную $result
         $result = $mysqli->query ("SELECT * FROM product WHERE  category_id = '$category_id' ORDER BY id, name ASC");
 
         $i = 0;
@@ -47,10 +44,11 @@ Class Product{
             $productList[$i]['status'] = $row['status'];
             $i++;
         }
-        $mysqli->close();
 
+        parent::disconnect_database($mysqli);
         return $productList;
     }
+
 
     public static function get_product_id(){
         $uri=$_SERVER['REQUEST_URI'];
@@ -58,6 +56,7 @@ Class Product{
         $product_id=$segments[2];
         return $product_id;
     }
+
 
     public static function get_product_parameters_by_id($id = []){
 
@@ -71,11 +70,8 @@ Class Product{
 
         $product_id=(int)$product_id;
 
-        //создается новый объект $mysqli
-        $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
-        $mysqli->query ("SET NAMES 'utf8'");
+        $mysqli = parent::connect_to_database();
 
-        //выбрать все и отсортировать по возрастанию и положить в переменную $result
         $result = $mysqli->query ("SELECT parameter_id,value FROM parameter_values WHERE  product_id ='$product_id'");
 
         $i = 0;
@@ -90,34 +86,30 @@ Class Product{
             $i++;
         }
 
-        $mysqli->close();
-
+        parent::disconnect_database($mysqli);
         return $ParameterValuesList;
     }
 
+
     public static function get_parameter_name_by_parameter_id($parameter_id){
 
-        //создается новый объект $mysqli
-        $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
-        $mysqli->query ("SET NAMES 'utf8'");
+        $mysqli = parent::connect_to_database();
 
-        //выбрать все и отсортировать по возрастанию и положить в переменную $result
         $result = $mysqli->query ("SELECT russian_name FROM parameters_list WHERE  id ='$parameter_id'");
 
         $row = $result->fetch_array();
 
         $parameter_name=$row['russian_name'];
 
+        parent::disconnect_database($mysqli);
         return $parameter_name;
     }
 
-    public static function get_product_by_id($product_id)
-    {
-        //создается новый объект $mysqli
-        $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
-        $mysqli->query ("SET NAMES 'utf8'");
 
-        //выбрать все и отсортировать по возрастанию и положить в переменную $result
+    public static function get_product_by_id($product_id){
+
+        $mysqli = parent::connect_to_database();
+
         $result = $mysqli->query ("SELECT * FROM product WHERE  id = '$product_id'");
 
             $row = $result->fetch_array();
@@ -128,14 +120,14 @@ Class Product{
             $productInfo['status'] = $row['status'];
             $productInfo['category_id'] = $row['category_id'];
 
-        $mysqli->close();
-
+        parent::disconnect_database($mysqli);
         return $productInfo;
     }
 
+
     public static function get_compare_parameters_list_by_product_list($product_list){
-        $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
-        $mysqli->query ("SET NAMES 'utf8'");
+
+        $mysqli = parent::connect_to_database();
 
         $result = $mysqli->query ("SELECT parameter_id FROM parameter_values WHERE product_id IN (".implode(',',$product_list).") GROUP BY parameter_id");
 
@@ -149,8 +141,7 @@ Class Product{
             $i++;
         }
 
-        $mysqli->close();
-
+        parent::disconnect_database($mysqli);
         return $parameters_list;
     }
 }

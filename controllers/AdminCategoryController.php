@@ -1,6 +1,7 @@
 <?php
 require_once(ROOT. '/models/Admin.php');
 require_once(ROOT. '/models/AdminCategory.php');
+include_once ('/models/DatabaseConnect.php');
 
 class AdminCategoryController
 {
@@ -162,12 +163,11 @@ class AdminCategoryController
             foreach ($_POST['category_id_list'] as $category_id){
                 echo "<br />category id $category_id = sort order $i ";
 
-                $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
-                $mysqli->query ("SET NAMES 'utf8'");
+                $mysqli = DatabaseConnect::connect_to_database();
 
                 $mysqli->query("UPDATE category SET `sort_order` = '$i' WHERE id = '$category_id'");
 
-                $mysqli->close();
+                DatabaseConnect::disconnect_database($mysqli);
 
                 $i = $i + 1;
             }
@@ -176,8 +176,7 @@ class AdminCategoryController
 
     public function actionUpdateCategoryNameUsingEditable(){
 
-        $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
-        $mysqli->query ("SET NAMES 'utf8'");
+        $mysqli = DatabaseConnect::connect_to_database();
 
         if(isset($_POST['name']) AND ($_POST['name']=="category_name")){
             $new_category_name = $_POST['value'];
@@ -187,7 +186,7 @@ class AdminCategoryController
             $mysqli->query($sql);
         }
 
-        $mysqli->close();
+        DatabaseConnect::disconnect_database($mysqli);
 
         print_r($_POST);
 
@@ -195,8 +194,7 @@ class AdminCategoryController
 
     public function actionUpdateCategoryStatusUsingEditable(){
 
-        $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
-        $mysqli->query ("SET NAMES 'utf8'");
+        $mysqli = DatabaseConnect::connect_to_database();
 
         if(isset($_POST['name']) AND ($_POST['name']=="category_status")){
             $new_category_status = $_POST['value'];
@@ -206,7 +204,7 @@ class AdminCategoryController
             $mysqli->query($sql);
         }
 
-        $mysqli->close();
+        DatabaseConnect::disconnect_database($mysqli);
 
         print_r($_POST);
 

@@ -1,5 +1,7 @@
 <?php
 
+include_once ('/models/DatabaseConnect.php');
+
 class TopMenuController
 {
 
@@ -31,9 +33,7 @@ class TopMenuController
         require_once (ROOT. '/models/User.php');
         $categoryList = Category::get_category_list();
 
-
-        $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
-        $mysqli->query ("SET NAMES 'utf8'");
+        $mysqli = DatabaseConnect::connect_to_database();
 
         // Переменная хранит число сообщений выводимых на станице
         $num = 6;

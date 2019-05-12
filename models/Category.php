@@ -1,14 +1,13 @@
 <?php
 
-Class Category{
+include_once ('/models/DatabaseConnect.php');
 
+class Category extends DatabaseConnect
+{
     public static function get_category_list(){
 
-        //создается новый объект $mysqli
-        $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
-        $mysqli->query ("SET NAMES 'utf8'");
+        $mysqli = parent::connect_to_database();
 
-        //выбрать id и имя и отсортировать по возрастанию и положить в переменную $result
         $result = $mysqli->query ("SELECT id, name, sort_order, status FROM category WHERE  status = '1' ORDER BY sort_order, name ASC");
 
         $i = 0;
@@ -22,51 +21,42 @@ Class Category{
             $categoryList[$i]['status'] = $row['status'];
             $i++;
         }
-        $mysqli->close();
+        parent::disconnect_database($mysqli);
         return $categoryList;
     }
 
     public static function  get_category_name_by_id($category_id){
 
-        //создается новый объект $mysqli
-        $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
-        $mysqli->query ("SET NAMES 'utf8'");
+        $mysqli = parent::connect_to_database();
 
-        //выбрать все и отсортировать по возрастанию и положить в переменную $result
         $result = $mysqli->query ("SELECT * FROM category WHERE  id ='$category_id'");
 
         $row = $result->fetch_array();
 
         $category_name = ucfirst($row['name']);
 
-        $mysqli->close();
+        parent::disconnect_database($mysqli);
         return $category_name;
     }
 
     public  static function get_category_id_by_product_id($product_id){
 
-        //создается новый объект $mysqli
-        $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
-        $mysqli->query ("SET NAMES 'utf8'");
+        $mysqli = parent::connect_to_database();
 
-        //выбрать все и отсортировать по возрастанию и положить в переменную $result
         $result = $mysqli->query ("SELECT * FROM product WHERE  id ='$product_id'");
 
         $row = $result->fetch_array();
 
         $category_id = $row['category_id'];
 
-        $mysqli->close();
-
+        parent::disconnect_database($mysqli);
         return $category_id;
     }
 
     public static function get_main_product_information_after_category_filter_by_product_list($product_list_after_filter){
-        //создается новый объект $mysqli
-        $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
-        $mysqli->query ("SET NAMES 'utf8'");
 
-        //выбрать все и отсортировать по возрастанию и положить в переменную $result
+        $mysqli = parent::connect_to_database();
+
         $result = $mysqli->query ("SELECT * FROM product WHERE  status = '1' AND id IN (".implode(',',$product_list_after_filter).") ORDER BY id, name ASC");
 
         $i = 0;
@@ -80,8 +70,8 @@ Class Category{
             $productList[$i]['status'] = $row['status'];
             $i++;
         }
-        $mysqli->close();
 
+        parent::disconnect_database($mysqli);
         return $productList;
     }
 

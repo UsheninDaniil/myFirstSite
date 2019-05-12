@@ -1,22 +1,14 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Даня
- * Date: 02.05.2019
- * Time: 23:32
- */
 
-class Search
+include_once ('/models/DatabaseConnect.php');
+
+class Search extends DatabaseConnect
 {
     public static function get_product_list_for_search($search_query){
-        //создается новый объект $mysqli
-        $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
-        $mysqli->query ("SET NAMES 'utf8'");
 
-        //выбрать все и отсортировать по возрастанию и положить в переменную $result
+        $mysqli = parent::connect_to_database();
+
         $result = $mysqli->query ("SELECT * FROM product WHERE  name LIKE '%$search_query%' ORDER BY id, name ASC");
-
-        $mysqli->close();
 
         $i = 0;
         $product_list = array();
@@ -30,6 +22,7 @@ class Search
             $i++;
         }
 
+        parent::disconnect_database($mysqli);
         return $product_list;
     }
 }

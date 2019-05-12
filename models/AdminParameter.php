@@ -1,43 +1,33 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Даня
- * Date: 12.04.2019
- * Time: 15:21
- */
 
-
-
+include_once ('/models/DatabaseConnect.php');
 
 class AdminParameter extends DatabaseConnect
 {
     public static function RemoveSelectedParameter($parameter_id)
     {
-        $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
-        $mysqli->query ("SET NAMES 'utf8'");
+        $mysqli = parent::connect_to_database();
 
         $mysqli->query ("DELETE FROM `parameters_list` WHERE `id`='$parameter_id' ");
         $mysqli->query ("DELETE FROM `category_parameters` WHERE `parameter_id`='$parameter_id' ");
         $mysqli->query ("DELETE FROM `parameter_values` WHERE `parameter_id`='$parameter_id' ");
 
-        $mysqli->close();
+        parent::disconnect_database($mysqli);
     }
 
 
     public static function save_new_parameter($parameter_name, $parameter_russian_name, $parameter_unit)
     {
-        $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
-        $mysqli->query ("SET NAMES 'utf8'");
+        $mysqli = parent::connect_to_database();
 
         $mysqli->query ("INSERT INTO `myFirstSite`.`parameters_list` (`name`,`russian_name`, `unit`) VALUES ('$parameter_name ', '$parameter_russian_name', '$parameter_unit')");
 
-        $mysqli->close();
+        parent::disconnect_database($mysqli);
     }
 
     public static function get_parameter_information_by_parameter_id($parameter_id)
     {
-        $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
-        $mysqli->query ("SET NAMES 'utf8'");
+        $mysqli = parent::connect_to_database();
 
         $result = $mysqli->query ("SELECT * FROM `myFirstSite`.`parameters_list` WHERE `id`='$parameter_id'");
 
@@ -49,26 +39,24 @@ class AdminParameter extends DatabaseConnect
         $parameter_information['russian_name']=$result_array['russian_name'];
         $parameter_information['unit']=$result_array['unit'];
 
-        $mysqli->close();
+        parent::disconnect_database($mysqli);
 
         return $parameter_information;
     }
 
     public static function update_parameter_information_by_parameter_id($parameter_id, $name, $russian_name, $unit){
 
-        $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
-        $mysqli->query ("SET NAMES 'utf8'");
+        $mysqli = parent::connect_to_database();
 
         $mysqli->query("UPDATE parameters_list SET `name` = '$name', `russian_name`='$russian_name', `unit`='$unit' WHERE id = '$parameter_id'");
 
-        $mysqli->close();
+        parent::disconnect_database($mysqli);
     }
 
 
     public static function get_parameter_value_by_product_id_and_parameter_id($product_id, $parameter_id)
     {
-        $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
-        $mysqli->query ("SET NAMES 'utf8'");
+        $mysqli = parent::connect_to_database();
 
         $result = $mysqli->query ("SELECT value FROM `myFirstSite`.`parameter_values` WHERE `product_id`='$product_id' AND `parameter_id`='$parameter_id' ");
 
@@ -76,15 +64,14 @@ class AdminParameter extends DatabaseConnect
 
         $parameter_value=$result_array['value'];
 
-        $mysqli->close();
+        parent::disconnect_database($mysqli);
 
         return $parameter_value;
     }
 
     public static function get_specified_parameters_by_product_id($product_id)
     {
-        $mysqli = new mysqli ("localhost", "root", "","myFirstSite");
-        $mysqli->query ("SET NAMES 'utf8'");
+        $mysqli = parent::connect_to_database();
 
         $result = $mysqli->query ("SELECT * FROM `myFirstSite`.`parameter_values` WHERE `product_id`='$product_id' ");
 
@@ -97,7 +84,7 @@ class AdminParameter extends DatabaseConnect
             $i++;
         }
 
-        $mysqli->close();
+        parent::disconnect_database($mysqli);
 
         return $specified_parameters_list;
     }
