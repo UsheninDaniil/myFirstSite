@@ -1,7 +1,7 @@
 <?php
 require_once(ROOT. '/models/Admin.php');
 require_once(ROOT. '/models/AdminCategory.php');
-include_once ('/models/DatabaseConnect.php');
+require_once ('/models/DatabaseConnect.php');
 
 class AdminCategoryController
 {

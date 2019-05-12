@@ -1,7 +1,7 @@
 <?php
 
-include_once ('/models/DatabaseConnect.php');
-include_once ('/models/User.php');
+require_once ('/models/DatabaseConnect.php');
+require_once ('/models/User.php');
 
 class UserController
 {

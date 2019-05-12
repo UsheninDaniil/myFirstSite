@@ -1,6 +1,6 @@
 <?php
 
-include_once ('/models/DatabaseConnect.php');
+require_once ('/models/DatabaseConnect.php');
 
 class TopMenuController
 {
@@ -31,12 +31,14 @@ class TopMenuController
         require_once (ROOT. '/models/Category.php');
         require_once (ROOT. '/models/Product.php');
         require_once (ROOT. '/models/User.php');
+        require_once (ROOT. '/components/Pagination.php');
+
         $categoryList = Category::get_category_list();
 
         $mysqli = DatabaseConnect::connect_to_database();
 
         // Переменная хранит число сообщений выводимых на станице
-        $num = 6;
+        $num = 1;
         // Извлекаем из URL текущую страницу
         $uri=$_SERVER['REQUEST_URI'];
         $segments = explode('/',$uri);
@@ -76,35 +78,11 @@ class TopMenuController
             $i++;
         }
 
-//            $productList = Product::get_product_list();
+        $pagination = new Pagination();
 
-
-        if(isset($_POST["add_to_cart"])) {
-
-            if (User::action_check_authorization()==true) {
-
-                $product_id = $_POST["add_to_cart_product_id"];
-
-                $cart_product_list = [];
-
-                if (isset($_SESSION['cart_product_list'])) {
-                    $cartData = unserialize($_SESSION['cart_product_list']);
-                } else {
-                    $cartData = [];
-                }
-
-                if (isset($cartData[$product_id])) {
-                    $cartData[$product_id]++;
-                } else {
-                    $cartData[$product_id] = 1;
-                }
-
-                $_SESSION['cart_product_list'] = serialize($cartData);
-            }
-            else {
-                header("Location: /login");
-            }
-        }
+        $total_count = $total;
+        $currentPageNumber = $page;
+        $limit = $num;
 
         require_once ('/views/layouts/header.php');
         require_once (ROOT.'/views/TopMenu/homepage.php');

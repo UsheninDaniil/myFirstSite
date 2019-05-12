@@ -1,5 +1,5 @@
 <?php
-include_once ('/models/DatabaseConnect.php');
+require_once ('/models/DatabaseConnect.php');
 
 Class CategoryController{
 
