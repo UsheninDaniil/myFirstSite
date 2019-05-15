@@ -17,89 +17,74 @@ class Pagination
     public function build_pagination($total_count, $currentPageNumber, $limit){
 
         echo '<div class="pagination_buttons">';
-        // Проверяем нужны ли стрелки назад
-        if ($currentPageNumber != 1) {
-            $pervpage = '<a href= /page=' . ($currentPageNumber - 1) . ' class="page-link"><</a> ';
-            $firstpage = '<a href= /page=1 class="page-link"><<</a> ';
-            } else{
-                $pervpage = '';
-                $firstpage = '';
+
+        $limit = 4;
+
+        if(($limit%2)==1){
+            $limit = $limit -1;
+        }
+
+            if ($currentPageNumber <= $limit/2){
+                $page_left_amount = $currentPageNumber - 1;
+                $page_right_amount = $limit - $page_left_amount;
             }
-        // Проверяем нужны ли стрелки вперед
-        if ($currentPageNumber != $total_count) {
-                $nextpage = ' <a href= /page='. ($currentPageNumber + 1) .' class="page-link">></a> ';
-                $lastpage = ' <a href= /page='. $total_count .' class="page-link">>></a> ';
-            } else {
-                $nextpage = '';
-                $lastpage = '';
+            elseif (($total_count - $currentPageNumber) < $limit/2){
+                $page_right_amount = $total_count - $currentPageNumber;
+                $page_left_amount = $limit - $page_right_amount;
             }
+            else{
+                $page_right_amount = $limit/2;
+                $page_left_amount = $limit/2;
+            };
 
-        // Находим две ближайшие станицы с обоих краев, если они есть
-        if($currentPageNumber - 2 > 0) {
-            $page2left = ' <a href= /page='. ($currentPageNumber - 2) .' class="page-link">'. ($currentPageNumber - 2) .'</a> ';
-        } else {
-            $page2left = '';};
+        echo "Количество ссылок справа $page_right_amount<br />";
+        echo "Количество ссылок слева $page_left_amount<br />";
 
-        if($currentPageNumber - 1 > 0) {
-            $page1left = '<a href= /page='. ($currentPageNumber - 1) .' class="page-link">'. ($currentPageNumber - 1) .'</a> ';
-        } else {
-            $page1left = '';};
+        if(($currentPageNumber - $page_left_amount) > 1){
+            $first_page = '<a href= /page=1 class="page-link">1</a> ';
+            $left_ellipsis = '<a href="" class="page-link">...</a>';
+        } else{
+            $first_page = '<a href= /page=1 class="page-link" style="visibility: hidden">1</a> ';
+            $left_ellipsis = '<a href="" class="page-link" style="visibility: hidden">...</a>';
+        }
 
-        if($currentPageNumber + 2 <= $total_count) {
-            $page2right = '<a href= /page='. ($currentPageNumber + 2) .' class="page-link">'. ($currentPageNumber + 2) .'</a>';
-        } else {
-            $page2right ='';};
+        if(($total_count - $currentPageNumber - $page_right_amount) >= 1){
+            $last_page = " <a href='/page=".$total_count."' class='page-link'>".$total_count."</a>";
+            $right_ellipsis = '<a href="" class="page-link">...</a>';
+        } else{
+            $last_page = " <a href='/page=".$total_count."' class='page-link' style='visibility: hidden'>".$total_count."</a>";
+            $right_ellipsis = '<a href="" class="page-link" style="visibility: hidden">...</a>';
+        }
 
-        if($currentPageNumber + 1 <= $total_count) {
-            $page1right = '<a href= /page='. ($currentPageNumber + 1) .' class="page-link">'. ($currentPageNumber + 1) .'</a>';
-        } else {
-            $page1right ='';};
+        echo '<ul class="pagination justify-content-center">';
 
+        echo "<li class='page-item'>$first_page</li>";
+        echo "<li class='page-item'>$left_ellipsis</li>";
 
+        for ($i = 1; $i <= $page_left_amount; $i++){
+            $page_number = $currentPageNumber - $page_left_amount - 1 + $i;
+            if($page_number>=1){
+                $page_link = '<li class="page-item"><a href= /page='.$page_number.' class="page-link">'. $page_number .'</a></li>';
+                echo $page_link;
+            }
+        }
 
-        $currentPage = '<a href= /page='. $currentPageNumber .' class="page-link">'. $currentPageNumber .'</a>';
+        $currentPage = '<li class="page-item active"><a href= /page='. $currentPageNumber .' class="page-link">'. $currentPageNumber .'</a></li>';
 
+        echo $currentPage;
 
+        for ($i = 1; $i <= $page_right_amount; $i++){
+            $page_number = $currentPageNumber + $i;
+            if($page_number<=$total_count){
+            $page_link = '<li class="page-item"><a href= /page='.$page_number.' class="page-link">'. $page_number .'</a></li>';
+            echo $page_link;
+            }
+        }
 
-        echo '
-        
-       <ul class="pagination justify-content-center">
-       
-            <li class="page-item">
-                '.$firstpage.'
-            </li>
-            <li class="page-item">
-                '.$pervpage.'
-            </li>
-            <li class="page-item">
-                '.$page2left.'
-            </li>
-            <li class="page-item">
-                '.$page1left.'
-            </li>
-            <li class="page-item active">
-                '.$currentPage.'
-            </li>
-            <li class="page-item">
-                '.$page1right.'
-            </li>
-            <li class="page-item">
-                '.$page2right.'
-            </li>
-            <li class="page-item">
-                '.$nextpage.'
-            </li>
-            <li class="page-item">
-                '.$lastpage.'
-            </li>
-       </ul>
-        
-        ';
+        echo "<li class='page-item'>$right_ellipsis</li>";
+        echo "<li class='page-item'>$last_page</li>";
 
-
-
-
-
+        echo '</ul>';
 
         echo '</div>';
 

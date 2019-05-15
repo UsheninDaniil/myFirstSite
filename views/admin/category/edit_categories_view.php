@@ -64,7 +64,22 @@ print_r($_POST);
             <th style="width:<?=$wide_column_width?>%" class="cell_with_category_name"><a href="#" class="category_name" data-pk="<?=$category_id ?>" > <?=$category_name ?></a></th>
             <th style="width:<?=$narrow_column_width?>%" id="sort_order"><?=$sort_order?></th>
             <th style="width:<?=$wide_column_width?>%">
-                <a href="#" class="category_status" data-pk="<?=$category_id ?>" data-source="{'1': 'отображается', '0': 'не отображается'}"><?php echo  ($status == 1)? "отображается" : "не отображается"; ?></a></th>
+
+<!--                <a href="#" class="category_status" data-pk="--><?//=$category_id ?><!--" data-source="{'1': 'отображается', '0': 'не отображается'}">--><?php //echo  ($status == 1)? "отображается" : "не отображается"; ?><!--</a>-->
+
+              <?php if ($status=1){
+
+
+                  echo '<button class="btn btn-primary btn-sm" style="background-color: salmon; color: white"><i class="fas fa-eye"></i></button>';
+
+                  echo '<button class="btn btn-primary btn-sm" style="background-color: dodgerblue; color: white"><i class="fas fa-eye-slash"></i></button>';
+              }
+              else{
+                  echo '<i class="fas fa-eye-slash" style="color: red"></i>';
+              }
+              ?>
+
+            </th>
             <th style="width:<?=$wide_column_width?>%"><a href="/admin/edit_selected_category/<?=$category_id?>">настроить</a> </th>
         </tr>
 
