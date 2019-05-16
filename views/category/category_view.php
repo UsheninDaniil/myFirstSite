@@ -168,14 +168,27 @@
     if(!empty($_GET)){
         echo "<br /><b style='color: darkred'>Содержимое GET:</b><br />";
         print_r($_GET);
+        echo "<br />";
     }
+
+    if(!empty($get_parameters_request)) {
+        echo "<br /><b style='color: darkred'>get_parameters</b> запрос <br /> $get_parameters_request <br />";
+    }
+
+    if(!empty($get_elements_request)) {
+        echo "<br /><b style='color: darkred'>get_elements_request</b><br /> $get_elements_request <br />";
+    }
+
+
     ?>
 
 </div>
 
 
 
-
+<?php
+echo $pagination->build_pagination($total_count, $current_page_number, $limit);
+?>
 
 
 

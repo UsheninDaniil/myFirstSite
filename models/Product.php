@@ -27,11 +27,11 @@ class Product extends DatabaseConnect
     }
 
 
-    public static function get_product_list_by_category_id($category_id)
+    public static function get_product_list_by_category_id($category_id, $start, $num)
     {
         $mysqli = parent::connect_to_database();
 
-        $result = $mysqli->query ("SELECT * FROM product WHERE  category_id = '$category_id' ORDER BY id, name ASC");
+        $result = $mysqli->query ("SELECT * FROM product WHERE  category_id = '$category_id' ORDER BY id, name ASC LIMIT $start, $num");
 
         $i = 0;
         $productList = array();

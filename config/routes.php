@@ -58,6 +58,7 @@
 
     '/product/[0-9]{0,4}' => 'product/view',
     '/category/(.*)' => 'category/view',
+    '/category/(.*)/page=(.*)' => 'category/view',
 
     '/search/(.*)' => 'search/viewSearchResult'
         

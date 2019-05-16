@@ -9,15 +9,34 @@ Class CategoryController{
         require_once (ROOT. '/models/Product.php');
         require_once (ROOT. '/models/User.php');
         require_once (ROOT. '/models/Parameters.php');
-        $categoryList = Category::get_category_list();
+        require_once (ROOT. '/components/Pagination.php');
 
+        $categoryList = Category::get_category_list();
 
         $uri=$_SERVER['REQUEST_URI'];
         $segments = explode('/',$uri);
         $category_id=$segments[2];
-        $productList = Product::get_product_list_by_category_id($category_id);
 
         $category_name = Category::get_category_name_by_id($category_id);
+
+
+        $pagination = new Pagination();
+
+        $index_of_page_in_url = 3;
+        $amount_of_elements_on_page = 1;
+        $get_parameters_request = "SELECT COUNT(*) FROM product WHERE  category_id = '$category_id'";
+
+        $result_parameters = $pagination->get_pagination_parameters($index_of_page_in_url, $amount_of_elements_on_page, $get_parameters_request);
+
+        $current_page_number = $result_parameters['current_page_number'];
+        $total_count = $result_parameters['total_count'] ;
+        $start = $result_parameters['start'] ;
+
+        $get_elements_request = "SELECT * FROM product WHERE  category_id = '$category_id' ORDER BY id, name ASC LIMIT $start, $amount_of_elements_on_page";
+
+        $productList = $pagination->get_pagination_elements($start, $amount_of_elements_on_page, $get_elements_request);
+
+        $limit = 4;
 
         if(isset($_POST["add_to_cart"])) {
 
@@ -58,14 +77,13 @@ Class CategoryController{
 
             $united_request = "";
 
-            $total_amount = count($_POST);
+            $total_amount = count($_GET);
             $counter = 0;
 
             foreach ($_GET as $parameter_id => $parameter_values_array){
 
                 $category_id = $mysqli->real_escape_string($category_id);
                 $parameter_id = $mysqli->real_escape_string($parameter_id);
-//              $parameter_values_array = $mysqli->real_escape_string($parameter_values_array);
 
                 $counter = $counter+1;
 
@@ -77,8 +95,7 @@ Class CategoryController{
                 ";
 
                 $request_second_part = "
-                AND parameter_values.product_id IN (
-                SELECT `product_id` FROM `parameter_values`
+                AND parameter_values.product_id IN (SELECT `product_id` FROM `parameter_values`
                 WHERE parameter_values.parameter_id = '$parameter_id' 
                 AND parameter_values.value IN ('".implode("','",$parameter_values_array)."') )
                 ";
@@ -100,30 +117,34 @@ Class CategoryController{
 
             }
 
-            $result = $mysqli->query ($united_request);
+            $index_of_page_in_url = 3;
+            $amount_of_elements_on_page = 1;
+            $get_parameters_request = preg_replace('~\(SELECT `product_id`~', '(SELECT COUNT(*)', $united_request);
 
-            if ($result->num_rows >0){
+            $result_parameters = $pagination->get_pagination_parameters($index_of_page_in_url, $amount_of_elements_on_page, $get_parameters_request);
 
-                $i = 0;
-                $product_list_after_filter = [];
+            $current_page_number = $result_parameters['current_page_number'];
+            $total_count = $result_parameters['total_count'] ;
+            $start = $result_parameters['start'] ;
 
-                while ($i < $result->num_rows){
-                    $row = $result->fetch_array();
-                    array_push($product_list_after_filter, $row['product_id']);
-                    $i++;
-                }
+            $get_elements_request = "$united_request LIMIT $start, $amount_of_elements_on_page";
 
-                DatabaseConnect::disconnect_database($mysqli);
+            $result = $pagination->get_pagination_elements($start, $amount_of_elements_on_page, $get_elements_request);
 
-                $product_list_after_filter_unique= array_unique($product_list_after_filter);
+            $product_id_list_after_filter = array();
 
-                $productList = Category::get_main_product_information_after_category_filter_by_product_list($product_list_after_filter_unique);
-
+            foreach ($result as $row){
+                $product_id = $row['product_id'];
+                array_push($product_id_list_after_filter,$product_id);
             }
-            else{
-                $productList = [];
-            }
+
+            $productList=array();
+
+            $productList = Category::get_main_product_information_after_category_filter_by_product_list($product_id_list_after_filter);
+
+            $limit = 4;
         }
+
 
         require_once ('/views/layouts/header.php');
         require_once (ROOT.'/views/category/category_view.php');

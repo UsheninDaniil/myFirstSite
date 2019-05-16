@@ -53,11 +53,11 @@ class Category extends DatabaseConnect
         return $category_id;
     }
 
-    public static function get_main_product_information_after_category_filter_by_product_list($product_list_after_filter){
+    public static function get_main_product_information_after_category_filter_by_product_list($product_id_list_after_filter){
 
         $mysqli = parent::connect_to_database();
 
-        $result = $mysqli->query ("SELECT * FROM product WHERE  status = '1' AND id IN (".implode(',',$product_list_after_filter).") ORDER BY id, name ASC");
+        $result = $mysqli->query ("SELECT * FROM product WHERE  status = '1' AND id IN (".implode(',',$product_id_list_after_filter).") ORDER BY id, name ASC");
 
         $i = 0;
         $productList = array();

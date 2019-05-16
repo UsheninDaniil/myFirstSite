@@ -108,7 +108,7 @@
 
 
 <?php
-echo $pagination->build_pagination($total_count, $currentPageNumber, $limit);
+echo $pagination->build_pagination($total_count, $current_page_number, $limit);
 ?>
 
 

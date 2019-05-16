@@ -36,7 +36,7 @@ class Router
         foreach ($this->routes as $uriPattern => $path) {
 
             // Дабавляю в шаблон знак $, который в регулярном выражении означает конец строки
-            $uriPattern=$uriPattern.'$';
+            $uriPattern='^'.$uriPattern.'$';
 
             // Сравниваем адресную строку из массива ($uriPattern) и нашу адресную строку($uri)
             if (preg_match("~$uriPattern~",$uri)){
