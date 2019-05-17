@@ -12,53 +12,58 @@ class Pagination
     public function __construct(){
     }
 
-    public function get_pagination_parameters($index_of_page_in_url, $amount_of_elements_on_page, $get_parameters_request){
+    public function get_pagination_parameters($index_of_page_in_url, $amount_of_elements_on_page, $get_total_elements_amount_request){
+
         $mysqli = DatabaseConnect::connect_to_database();
 
-        // Извлекаем из URL текущую страницу
-        $uri_with_parameters=$_SERVER['REQUEST_URI'];
-
-        $uri_parts = explode('?', $_SERVER['REQUEST_URI'], 2);
-
+        // Получаем адресную строку без get параметров
+        $uri_with_parameters = $_SERVER['REQUEST_URI'];
+        $uri_parts = explode('?', $uri_with_parameters, 2);
         $uri_without_parameters = $uri_parts[0];
-        if(isset($uri_parts[1])){
-            $get_parameters = $uri_parts[1];
-        } else{
-            $get_parameters = '';
-        }
 
         $segments = explode('/',$uri_without_parameters);
 
+        // Получаем строку с номером текущей страницы, если он указан в адресной строке
         if(isset($segments[$index_of_page_in_url])){
             $current_page_number='/'.$segments[$index_of_page_in_url];}
         else{
             $current_page_number='';
         }
 
+        // Получаем номер страницы из этой строки
         $current_page_number = str_replace('/page=', '', $current_page_number);
 
-        // Определяем общее число сообщений в базе данных
-        $result = $mysqli->query("$get_parameters_request");
-        $posts = $result->fetch_row();
-        $posts=$posts[0];
+        // Определяем общее число элементов в базе данных
+        $result = $mysqli->query("$get_total_elements_amount_request");
+        $total_elements_amount = $result->fetch_row();
+        $total_elements_amount=$total_elements_amount[0];
+
         // Находим общее число страниц
-        $total_count = intval(($posts - 1) / $amount_of_elements_on_page) + 1;
+        $total_count = ceil(($total_elements_amount / $amount_of_elements_on_page));
+
         // Определяем начало сообщений для текущей страницы
         $current_page_number = intval($current_page_number);
-        // Если значение $current_page_number меньше единицы или отрицательно
-        // переходим на первую страницу
-        // А если слишком большое, то переходим на последнюю
-        if(empty($current_page_number) or $current_page_number < 0) $current_page_number = 1;
-        if($current_page_number > $total_count) $current_page_number = $total_count;
-        // Вычисляем начиная к какого номера
-        // следует выводить сообщения
+
+        // Если значение $current_page_number меньше единицы или отрицательно, то переходим на первую страницу
+        if(empty($current_page_number) or $current_page_number < 0){
+            $current_page_number = 1;
+        }
+
+        // Если значение $current_page_number слишком большое, то переходим на последнюю
+        if($current_page_number > $total_count){
+            $current_page_number = $total_count;
+        }
+
+        // Вычисляем начиная к какого номера следует выводить сообщения
         $start = $current_page_number * $amount_of_elements_on_page - $amount_of_elements_on_page;
+        if($start < 0){
+            $start = 0;
+        };
 
         $result_parameters = array();
         $result_parameters['current_page_number'] = $current_page_number ;
         $result_parameters['total_count'] = $total_count ;
         $result_parameters['start'] = $start ;
-
 
         return $result_parameters;
     }
@@ -67,25 +72,24 @@ class Pagination
 
         $mysqli = DatabaseConnect::connect_to_database();
 
-        // Выбираем $amount_of_elements_on_page сообщений начиная с номера $start
-        $result = $mysqli->query("$get_elements_request");
+        // Выбираем заданное количество элементов из базы данных, начиная с номера $start
+        $result = $mysqli->query("$get_elements_request LIMIT $start, $amount_of_elements_on_page");
 
         $i = 0;
-        $product_list = array();
+        $elements_list = array();
 
         while ($i < $result->num_rows) {
-
-            $row = $result->fetch_array();
-            $product_list[$i] = $row;
-
+            $row = $result->fetch_array(MYSQLI_ASSOC);
+            array_push($elements_list, $row);
             $i++;
         }
 
-        return $product_list;
-
+        return $elements_list;
     }
 
     public function build_pagination($total_count, $current_page_number, $limit){
+
+        if($current_page_number > 0){
 
         echo '<div class="pagination_buttons">';
 
@@ -106,12 +110,9 @@ class Pagination
                 $page_left_amount = $limit/2;
             };
 
-
         $currentURI = rtrim($_SERVER['REQUEST_URI'],'/');
 
         $uri_parts = explode('?', $_SERVER['REQUEST_URI'], 2);
-
-
 
         $uri_without_parameters = $uri_parts[0];
         $uri_without_parameters = rtrim($uri_without_parameters,'/');
@@ -123,9 +124,6 @@ class Pagination
         }
 
         $newUri = preg_replace('~/page=[0-9]{0,999}+~', '', $uri_without_parameters);
-
-        echo "Количество ссылок справа $page_right_amount<br />";
-        echo "Количество ссылок слева $page_left_amount<br />";
 
         if(($current_page_number - $page_left_amount) > 1){
             $first_page = "<a href= '$newUri/page=1/$get_parameters' class='page-link'>1</a> ";
@@ -172,9 +170,8 @@ class Pagination
         echo "<li class='page-item'>$last_page</li>";
 
         echo '</ul>';
-
         echo '</div>';
-
+        }
     }
 
 

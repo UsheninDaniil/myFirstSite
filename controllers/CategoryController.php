@@ -19,20 +19,19 @@ Class CategoryController{
 
         $category_name = Category::get_category_name_by_id($category_id);
 
-
         $pagination = new Pagination();
 
         $index_of_page_in_url = 3;
         $amount_of_elements_on_page = 1;
-        $get_parameters_request = "SELECT COUNT(*) FROM product WHERE  category_id = '$category_id'";
+        $get_total_elements_amount_request = "SELECT COUNT(*) FROM product WHERE  category_id = '$category_id'";
 
-        $result_parameters = $pagination->get_pagination_parameters($index_of_page_in_url, $amount_of_elements_on_page, $get_parameters_request);
+        $result_parameters = $pagination->get_pagination_parameters($index_of_page_in_url, $amount_of_elements_on_page, $get_total_elements_amount_request);
 
         $current_page_number = $result_parameters['current_page_number'];
         $total_count = $result_parameters['total_count'] ;
         $start = $result_parameters['start'] ;
 
-        $get_elements_request = "SELECT * FROM product WHERE  category_id = '$category_id' ORDER BY id, name ASC LIMIT $start, $amount_of_elements_on_page";
+        $get_elements_request = "SELECT * FROM product WHERE  category_id = '$category_id' ORDER BY id, name ASC";
 
         $productList = $pagination->get_pagination_elements($start, $amount_of_elements_on_page, $get_elements_request);
 
@@ -119,15 +118,15 @@ Class CategoryController{
 
             $index_of_page_in_url = 3;
             $amount_of_elements_on_page = 1;
-            $get_parameters_request = preg_replace('~\(SELECT `product_id`~', '(SELECT COUNT(*)', $united_request);
+            $get_total_elements_amount_request = 'SELECT COUNT(*) FROM('.$united_request.') tmp';
 
-            $result_parameters = $pagination->get_pagination_parameters($index_of_page_in_url, $amount_of_elements_on_page, $get_parameters_request);
+            $result_parameters = $pagination->get_pagination_parameters($index_of_page_in_url, $amount_of_elements_on_page, $get_total_elements_amount_request);
 
             $current_page_number = $result_parameters['current_page_number'];
             $total_count = $result_parameters['total_count'] ;
             $start = $result_parameters['start'] ;
 
-            $get_elements_request = "$united_request LIMIT $start, $amount_of_elements_on_page";
+            $get_elements_request = $united_request;
 
             $result = $pagination->get_pagination_elements($start, $amount_of_elements_on_page, $get_elements_request);
 
@@ -140,17 +139,17 @@ Class CategoryController{
 
             $productList=array();
 
-            $productList = Category::get_main_product_information_after_category_filter_by_product_list($product_id_list_after_filter);
+            if(!empty($product_id_list_after_filter)){
+                $productList = Category::get_main_product_information_after_category_filter_by_product_list($product_id_list_after_filter);
+            }
 
             $limit = 4;
         }
-
 
         require_once ('/views/layouts/header.php');
         require_once (ROOT.'/views/category/category_view.php');
         require_once ('/views/layouts/footer.php');
     }
-
 }
 
 

@@ -38,16 +38,16 @@ class TopMenuController
         $pagination = new Pagination();
 
         $index_of_page_in_url = 1;
-        $amount_of_elements_on_page = 2;
-        $get_parameters_request = "SELECT COUNT(*) FROM product";
+        $amount_of_elements_on_page = 1;
+        $get_total_elements_amount_request = "SELECT COUNT(*) FROM product";
 
-        $result_parameters = $pagination->get_pagination_parameters($index_of_page_in_url, $amount_of_elements_on_page, $get_parameters_request);
+        $result_parameters = $pagination->get_pagination_parameters($index_of_page_in_url, $amount_of_elements_on_page, $get_total_elements_amount_request);
 
         $current_page_number = $result_parameters['current_page_number'];
         $total_count = $result_parameters['total_count'] ;
         $start = $result_parameters['start'] ;
 
-        $get_elements_request = "SELECT * FROM product LIMIT $start, $amount_of_elements_on_page";
+        $get_elements_request = "SELECT * FROM product";
 
         $productList = $pagination->get_pagination_elements($start, $amount_of_elements_on_page, $get_elements_request);
 
