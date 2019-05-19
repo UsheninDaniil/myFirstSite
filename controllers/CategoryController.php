@@ -94,7 +94,8 @@ Class CategoryController{
                 ";
 
                 $request_second_part = "
-                AND parameter_values.product_id IN (SELECT `product_id` FROM `parameter_values`
+                AND parameter_values.product_id IN (
+                SELECT `product_id` FROM `parameter_values`
                 WHERE parameter_values.parameter_id = '$parameter_id' 
                 AND parameter_values.value IN ('".implode("','",$parameter_values_array)."') )
                 ";
@@ -118,7 +119,7 @@ Class CategoryController{
 
             $index_of_page_in_url = 3;
             $amount_of_elements_on_page = 1;
-            $get_total_elements_amount_request = 'SELECT COUNT(*) FROM('.$united_request.') tmp';
+            $get_total_elements_amount_request = "SELECT COUNT(*) FROM($united_request) tmp";
 
             $result_parameters = $pagination->get_pagination_parameters($index_of_page_in_url, $amount_of_elements_on_page, $get_total_elements_amount_request);
 

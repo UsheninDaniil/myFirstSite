@@ -7,7 +7,28 @@ class AdminProductController
 {
     public function actionEditProductsView(){
         include_once ('/models/Product.php');
-        $productList = Product::get_product_list();
+        include_once ('/models/Category.php');
+        require_once (ROOT. '/components/Pagination.php');
+
+        $category_list = Category::get_category_list();
+
+        $pagination = new Pagination();
+
+        $index_of_page_in_url = 3;
+        $amount_of_elements_on_page = 1;
+        $get_total_elements_amount_request = "SELECT COUNT(*) FROM product";
+
+        $result_parameters = $pagination->get_pagination_parameters($index_of_page_in_url, $amount_of_elements_on_page, $get_total_elements_amount_request);
+
+        $current_page_number = $result_parameters['current_page_number'];
+        $total_count = $result_parameters['total_count'] ;
+        $start = $result_parameters['start'] ;
+
+        $get_elements_request = "SELECT * FROM product";
+
+        $productList = $pagination->get_pagination_elements($start, $amount_of_elements_on_page, $get_elements_request);
+
+        $limit = 4;
 
         require_once ('/views/layouts/header.php');
         require_once (ROOT.'/views/admin/product/edit_products_view.php');
@@ -264,35 +285,70 @@ class AdminProductController
 
     public function actionApplyMultiSelectFilterForProductList(){
 
+//        echo "Содержимое POST <br />";
+//        print_r($_POST);
+//        echo "<br />";
+
         include_once('/models/Product.php');
+        require_once (ROOT. '/components/Pagination.php');
 
-        if(!empty($_POST['category_list'])) {
+        $united_request = '';
 
-            $category_list = $_POST['category_list'];
+        foreach ($_POST as $parameter_name => $parameter_values_array){
 
-            $mysqli = new mysqli ("localhost", "root", "", "myFirstSite");
-            $mysqli->query("SET NAMES 'utf8'");
+            if(!empty($parameter_values_array)){
 
-//        $result = $mysqli->query ("SELECT * FROM product WHERE  category_id  IN (".implode(',',$category_list).") ORDER BY id, name ASC");
+                $request_first_part = "SELECT * FROM product WHERE ";
+                $request_second_part = "$parameter_name  IN (".implode(',',$parameter_values_array).")";
 
-            $result = $mysqli->query("SELECT * FROM product WHERE  category_id  IN (".implode(',',$category_list).") ORDER BY id, name ASC");
-
-            $i = 0;
-            $productList = array();
-
-            while ($i < $result->num_rows) {
-                $row = $result->fetch_array();
-                $productList[$i]['id'] = $row['id'];
-                $productList[$i]['name'] = $row['name'];
-                $productList[$i]['price'] = $row['price'];
-                $productList[$i]['status'] = $row['status'];
-                $i++;
+                if(strlen ($united_request)< 1){
+                    $united_request = $united_request.$request_first_part.$request_second_part;
+                }
+                else{
+                    $united_request = $united_request.' AND '.$request_second_part;
+                }
             }
-            DatabaseConnect::disconnect_database($mysqli);
-
         }
-        else{
-            $productList = Product::get_product_list();
+
+        if(!empty($united_request)){
+
+            $pagination = new Pagination();
+
+            $index_of_page_in_url = 3;
+            $amount_of_elements_on_page = 1;
+            $get_total_elements_amount_request = "SELECT COUNT(*) FROM($united_request) tmp";
+
+            $result_parameters = $pagination->get_pagination_parameters($index_of_page_in_url, $amount_of_elements_on_page, $get_total_elements_amount_request);
+
+            $current_page_number = $result_parameters['current_page_number'];
+            $total_count = $result_parameters['total_count'] ;
+            $start = $result_parameters['start'] ;
+
+            $get_elements_request = "$united_request";
+
+            $productList = $pagination->get_pagination_elements($start, $amount_of_elements_on_page, $get_elements_request);
+
+            $limit = 4;
+
+        } else{
+
+            $pagination = new Pagination();
+
+            $index_of_page_in_url = 3;
+            $amount_of_elements_on_page = 1;
+            $get_total_elements_amount_request = "SELECT COUNT(*) FROM product";
+
+            $result_parameters = $pagination->get_pagination_parameters($index_of_page_in_url, $amount_of_elements_on_page, $get_total_elements_amount_request);
+
+            $current_page_number = $result_parameters['current_page_number'];
+            $total_count = $result_parameters['total_count'] ;
+            $start = $result_parameters['start'] ;
+
+            $get_elements_request = "SELECT * FROM product";
+
+            $productList = $pagination->get_pagination_elements($start, $amount_of_elements_on_page, $get_elements_request);
+
+            $limit = 4;
         }
 
         require_once (ROOT.'/views/admin/product/products_table.php');

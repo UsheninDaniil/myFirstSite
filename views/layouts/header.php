@@ -16,6 +16,11 @@
     <link rel="stylesheet" href="/template/jQuery-UI-Multiple-Select-Widget/css/jquery.multiselect.css">
     <link rel="stylesheet" href="/template/jQuery-UI-Multiple-Select-Widget/css/jquery.multiselect.filter.css">
 
+
+<!--    <link rel="stylesheet" href="/template/Tiny-Text-Field-Based-Tags-Input-Plugin-For-jQuery-Tagify/dist/tagify.css" >-->
+    <link href="/template/tagify-plugin-old-version/tagify.css" rel="stylesheet" type="text/css">
+    <link href="/template/tagify-plugin-old-version/jquerysctipttop.css" rel="stylesheet" type="text/css">
+
     <link rel="stylesheet" href="/template/css/main.css?v=<?php echo uniqid()?>">
     <style>
     </style>

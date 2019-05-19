@@ -458,13 +458,6 @@ div.header_category_list ul{
 
 
 
-
-
-
-
-
-
-
 .header_category_list ul {
     list-style: none;
     margin: 0;
@@ -578,8 +571,6 @@ ul.footer_ul{
 
 
 
-
-
 html,
 body {
     height: 100%;
@@ -602,8 +593,16 @@ body {
     padding: 0;
 }
 
-.pagination_buttons{
+tags {
+    border: 0;
+}
 
+tags div{
+    display: none;
+}
+
+tags span.input{
+    display: none;
 }
 
 

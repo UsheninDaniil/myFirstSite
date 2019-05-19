@@ -338,16 +338,22 @@ $(function(){
         selectedText: 'Выберите категории',
     });
 
+    $(".product_status").multiselect({
+        header: false,
+        noneSelectedText: 'Выберите статус',
+        selectedText: 'Выберите статус',
+    });
+
 });
 
 
 
 function applyMultiSelectFilterForProductList(){
 
-    var form = $('#category_multiselect_form');
-    var category_list = form.serialize();
+    var form = $('#admin_product_multiselect_form');
+    var filter_parameters = form.serialize();
 
-    $.post("/admin/apply_multi_select_filter_for_product_list", category_list, function (data) {
+    $.post("/admin/apply_multi_select_filter_for_product_list", filter_parameters, function (data) {
             $("#products_table").html(data);
         }, "html"
     );
@@ -358,5 +364,36 @@ $(".category_multiselect").on("multiselectclose", function(event, ui){
     applyMultiSelectFilterForProductList();
     console.log("закрыто");
 });
+
+$(".product_status").on("multiselectclose", function(event, ui){
+    applyMultiSelectFilterForProductList();
+    console.log("закрыто");
+});
+
+
+
+$(function() {
+    $('[name=tags]').tagify();
+    var input = document.querySelector('input[name=tags]'),
+        tagify = new Tagify(input);
+});
+
+
+
+$(function() {
+    $('[name=tags_2]').tagify();
+    var input = document.querySelector('textarea[name=tags_2]'),
+        tagify = new Tagify(input);
+});
+
+
+
+
+
+
+
+
+
+
 
 

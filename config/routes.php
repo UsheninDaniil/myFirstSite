@@ -29,6 +29,8 @@
 
 //    Управление товарами в панеле администратора
     '/admin/edit_products' => 'adminProduct/editProductsView',
+    '/admin/edit_products/page=(.*)' => 'adminProduct/editProductsView',
+
     '/admin/add_product' => 'adminProduct/addProduct',
     '/delete_product/[0-9]{0,4}' => 'adminProduct/deleteProduct',
     '/edit_product/[0-9]{0,4}' => 'adminProduct/editProduct',
