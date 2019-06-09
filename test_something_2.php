@@ -1,8 +1,11 @@
 <html>
 <head>
+    <meta charset="UTF-8">
     <link rel="stylesheet" href="/template/fontawesome-free-5.8.1-web/css/all.min.css" >
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="/test_something_2.css">
 
     <style>
 
@@ -76,7 +79,6 @@
 
 <?php
 
-
 if(!empty($_POST)){
     $image_names_to_upload = $_POST['image_names']; //в виде строки
     $image_names_to_upload = explode(", ", $image_names_to_upload);
@@ -101,16 +103,12 @@ if(!empty($_FILES)){
             echo "tmp_name = $tmp_name <br/>";
         }
     }
-
-
-
-
 }
-
 
 ?>
 
 <script src="/template/jquery-3.3.1.min.js"></script>
+
 
 <script>
     var inputElement = document.getElementById("input");
@@ -141,7 +139,7 @@ if(!empty($_FILES)){
             naturalHeight = null;
 
             var element = document.createElement("div");
-            element.className = "element";
+            element.className = "element draggable droppable";
 
             test = document.getElementById("test");
 
@@ -241,5 +239,22 @@ if(!empty($_FILES)){
     });
 
 </script>
+
+<script src="/test_something_2.js"></script>
+
+<script>
+    DragManager.onDragCancel = function(dragObject) {
+        dragObject.avatar.rollback();
+    };
+
+    DragManager.onDragEnd = function(dragObject, dropObject) {
+        // dragObject.elem.style.display = 'none';
+        // dragObject.avatar.apply_new_parameters();
+        dragObject.elem.apply_new_parameters();
+        // dropObject.elem_droppable.apply_new_parameters();
+    };
+</script>
+
+
 </body>
 </html>
