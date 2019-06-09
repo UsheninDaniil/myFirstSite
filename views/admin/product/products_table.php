@@ -1,43 +1,6 @@
 
 <div id="products_table">
 
-    <?php
-    $filter_tags = '';
-
-    foreach ($_POST as $parameter_name => $parameter_values_array){
-
-        foreach ($parameter_values_array as $parameter_value){
-
-            if($parameter_name == "category_id"){
-                include_once ('/models/Category.php');
-                $category_list = Category::get_category_list();
-                $row = $category_list[$parameter_value-1]['name'];
-            }
-
-            if($parameter_name == "status"){
-                if($parameter_value == 1){
-                    $row = "отображается";
-                } elseif ($parameter_value ==0){
-                    $row = "не отображается";
-                }
-            }
-
-            if(strlen($filter_tags)==0){
-                $filter_tags = $filter_tags.$row;
-            }
-            else{
-                $filter_tags = $filter_tags.','.$row;
-            }
-        }
-    }
-    ?>
-
-<input  name="tags" placeholder="текст" value="<?=$filter_tags?>">
-
-
-
-
-
 <table border="1" width="50%" cellpadding="5" class="product_list_table">
 
     <tr>

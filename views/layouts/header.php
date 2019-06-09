@@ -17,14 +17,13 @@
     <link rel="stylesheet" href="/template/jQuery-UI-Multiple-Select-Widget/css/jquery.multiselect.filter.css">
 
 
-<!--    <link rel="stylesheet" href="/template/Tiny-Text-Field-Based-Tags-Input-Plugin-For-jQuery-Tagify/dist/tagify.css" >-->
     <link href="/template/tagify-plugin-old-version/tagify.css" rel="stylesheet" type="text/css">
     <link href="/template/tagify-plugin-old-version/jquerysctipttop.css" rel="stylesheet" type="text/css">
 
     <link rel="stylesheet" href="/template/css/main.css?v=<?php echo uniqid()?>">
-    <style>
-    </style>
 
+    <link rel="stylesheet" href="/test_something/test.css?v=<?php echo uniqid()?>">
+    <script src="/test_something/test.js?v=<?php echo uniqid()?>" defer></script>
 
 </head>
 <body>
@@ -35,7 +34,7 @@
     <div class="header">
         <div class="top-menu" >
 
-            <div class="header_category_list" style="display: inline-block">
+            <div class="header_left_part" style="display: inline-block">
 
                     <ul class="topmenu">
                         <li>

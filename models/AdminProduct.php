@@ -58,6 +58,7 @@ class AdminProduct extends DatabaseConnect
         $mysqli->query ("DELETE FROM `parameter_values` WHERE `product_id`='$product_id' AND `parameter_id`='$parameter_id'");
 
         parent::disconnect_database($mysqli);
+
     }
 
     public static function delete_product($product_id){
@@ -77,6 +78,31 @@ class AdminProduct extends DatabaseConnect
         }
 
         parent::disconnect_database($mysqli);
+    }
+
+    public static function resize_and_save_product_photo($filename, $height_orig, $width_orig, $max_height, $max_width, $ratio_orig, $new_path){
+
+        if($height_orig>$max_height){
+            $height = $max_height;
+            $width = $height*$ratio_orig;
+        } else{
+            $height = $height_orig;
+            $width = $height*$ratio_orig;
+        }
+
+        // если получившаяся ширина больше максимальной - пропорционально уменьшить фотографию до допустимой ширины
+        if($width>$max_width){
+            $width = $max_width;
+            $height = $width/$ratio_orig;
+        }
+
+        // ресэмплирование
+        $image_p = imagecreatetruecolor($width, $height);
+        $image = imagecreatefromjpeg($filename);
+        imagecopyresampled($image_p, $image, 0, 0, 0, 0, $width, $height, $width_orig, $height_orig);
+
+        // сохранение
+        imagejpeg($image_p, $new_path, 100);
     }
 
 }

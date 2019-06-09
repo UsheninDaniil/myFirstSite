@@ -1,146 +1,236 @@
 <?php
-require_once(ROOT. '/models/Admin.php');
-require_once(ROOT. '/models/AdminProduct.php');
-require_once ('/models/DatabaseConnect.php');
+require_once(ROOT . '/models/Admin.php');
+require_once(ROOT . '/models/AdminProduct.php');
+require_once('/models/DatabaseConnect.php');
 
 class AdminProductController
 {
-    public function actionEditProductsView(){
-        include_once ('/models/Product.php');
-        include_once ('/models/Category.php');
-        require_once (ROOT. '/components/Pagination.php');
+    public function actionEditProductsView()
+    {
+        include_once('/models/Product.php');
+        include_once('/models/Category.php');
+        require_once(ROOT . '/components/Pagination.php');
 
         $category_list = Category::get_category_list();
 
-        $pagination = new Pagination();
+        if (!empty($_GET)) {
+            $get_parameters_array = $_GET;
+            if (isset($get_parameters_array['page'])) {
+                unset($get_parameters_array['page']);
+            }
+            $get_parameters_without_page = $get_parameters_array;
+        }
 
-        $index_of_page_in_url = 3;
-        $amount_of_elements_on_page = 1;
-        $get_total_elements_amount_request = "SELECT COUNT(*) FROM product";
+        $get_products_without_filter = false;
 
-        $result_parameters = $pagination->get_pagination_parameters($index_of_page_in_url, $amount_of_elements_on_page, $get_total_elements_amount_request);
+        if (!empty($get_parameters_without_page)) {
 
-        $current_page_number = $result_parameters['current_page_number'];
-        $total_count = $result_parameters['total_count'] ;
-        $start = $result_parameters['start'] ;
+            $united_request = '';
 
-        $get_elements_request = "SELECT * FROM product";
+            foreach ($get_parameters_without_page as $parameter_name => $parameter_values_array) {
 
-        $productList = $pagination->get_pagination_elements($start, $amount_of_elements_on_page, $get_elements_request);
+                if (!empty($parameter_values_array)) {
 
-        $limit = 4;
+                    $request_first_part = "SELECT * FROM product WHERE ";
+                    $request_second_part = "$parameter_name  IN (" . implode(',', $parameter_values_array) . ")";
 
-        require_once ('/views/layouts/header.php');
-        require_once (ROOT.'/views/admin/product/edit_products_view.php');
-        require_once (ROOT.'/views/admin/product/products_table.php');
-        require_once ('/views/layouts/footer.php');
+                    if (strlen($united_request) < 1) {
+                        $united_request = $united_request . $request_first_part . $request_second_part;
+                    } else {
+                        $united_request = $united_request . ' AND ' . $request_second_part;
+                    }
+                }
+            }
+
+            if (!empty($united_request)) {
+
+                $pagination = new Pagination();
+
+                if (isset($_GET['page'])) {
+                    $current_page_number = $_GET['page'];
+                } else {
+                    $current_page_number = 1;
+                }
+
+                $amount_of_elements_on_page = 1;
+                $get_total_elements_amount_request = "SELECT COUNT(*) FROM($united_request) tmp";
+
+                $result_parameters = $pagination->get_pagination_parameters($current_page_number, $amount_of_elements_on_page, $get_total_elements_amount_request);
+
+                $total_count = $result_parameters['total_count'];
+                $start = $result_parameters['start'];
+
+                $get_elements_request = "$united_request";
+
+                $productList = $pagination->get_pagination_elements($start, $amount_of_elements_on_page, $get_elements_request);
+
+                $limit = 4;
+
+            } else {
+                $get_products_without_filter = true;
+            }
+
+        } else {
+            $get_products_without_filter = true;
+        }
+
+        if ($get_products_without_filter == true) {
+
+            $pagination = new Pagination();
+
+            $amount_of_elements_on_page = 1;
+
+            if (isset($_GET['page'])) {
+                $current_page_number = $_GET['page'];
+            } else {
+                $current_page_number = 1;
+            }
+
+            $get_total_elements_amount_request = "SELECT COUNT(*) FROM product";
+
+            $result_parameters = $pagination->get_pagination_parameters($current_page_number, $amount_of_elements_on_page, $get_total_elements_amount_request);
+
+            $total_count = $result_parameters['total_count'];
+            $start = $result_parameters['start'];
+
+            $get_elements_request = "SELECT * FROM product";
+
+            $productList = $pagination->get_pagination_elements($start, $amount_of_elements_on_page, $get_elements_request);
+
+            $limit = 4;
+        }
+
+        if(empty($productList)){
+            $current_page_number = 0;
+        }
+
+        require_once('/views/layouts/header.php');
+        require_once(ROOT . '/views/admin/product/edit_products_view.php');
+        require_once(ROOT . '/views/admin/product/products_table.php');
+        require_once('/views/layouts/footer.php');
     }
 
     public function actionAddProduct()
     {
         $user_role = "user";
-        if(isset($_SESSION['user_id'])){
+        if (isset($_SESSION['user_id'])) {
             $user_id = $_SESSION['user_id'];
             $user_role = Admin::check_user_role($user_id);
         }
 
-        if($user_role == "admin"){
+        if ($user_role == "admin") {
 
-            if(isset($_POST["save_new_product"])){
+            if (isset($_POST["save_new_product"])) {
 
-                $product_information['product_name'] =  $_POST['product_name'];
+                $product_information['product_name'] = $_POST['product_name'];
                 $product_information['product_price'] = $_POST['product_price'];
                 $product_information['product_availability'] = $_POST['product_availability'];
                 $product_information['product_category'] = $_POST['product_category_id'];
 
                 $product_id = AdminProduct::add_new_product($product_information);
 
-                if (is_uploaded_file($_FILES["image"]["tmp_name"])) {
-                    // Если загружалось, переместим его в нужную папке, дадим новое имя $photo
-                    move_uploaded_file($_FILES["image"]["tmp_name"], $_SERVER['DOCUMENT_ROOT'] . "/images/$product_id.jpg");
-                    echo "<br />Фото загружено<br />";
+                $photo_number = 1;
 
-                    $filename = $_SERVER['DOCUMENT_ROOT'] . "/images/$product_id.jpg";
+                foreach ($_FILES["images"]["tmp_name"] as $tmp_name) {
 
-                    // задание максимальной высоты
-                    $height = 200;
+                    if (is_uploaded_file($tmp_name)) {
+                        // Если загружалось, переместим его в нужную папке, дадим новое имя $photo
+                        move_uploaded_file($tmp_name, $_SERVER['DOCUMENT_ROOT'] . "/images/large_images/id_{$product_id}_photo_{$photo_number}.jpg");
 
-                    // тип содержимого
-                    header('Content-Type: image/jpeg');
+                        $photo_name = "id_{$product_id}_photo_{$photo_number}.jpg";
 
-                    // получение новых размеров
-                    list($width_orig, $height_orig) = getimagesize($filename);
+                        $mysqli = DatabaseConnect::connect_to_database();
 
-                    $ratio_orig = $width_orig/$height_orig;
+                        $mysqli->query("INSERT INTO `myFirstSite`.`product_photos` (`product_id`,`photo_number`,`photo_name`) VALUES ('$product_id', '$photo_number', '$photo_name')");
 
-                    $width = $height*$ratio_orig;
+                        DatabaseConnect::disconnect_database($mysqli);
 
-                    // ресэмплирование
-                    $image_p = imagecreatetruecolor($width, $height);
-                    $image = imagecreatefromjpeg($filename);
-                    imagecopyresampled($image_p, $image, 0, 0, 0, 0, $width, $height, $width_orig, $height_orig);
+                        $filename = $_SERVER['DOCUMENT_ROOT'] . "/images/large_images/id_{$product_id}_photo_{$photo_number}.jpg";
 
-                    // вывод
-                    imagejpeg($image_p, $_SERVER['DOCUMENT_ROOT'] . "/images/small_product_images/$product_id.jpg", 100);
+                        // тип содержимого
+//                    header('Content-Type: image/jpeg');
+
+                        // получение новых размеров
+                        list($width_orig, $height_orig) = getimagesize($filename);
+
+                        $ratio_orig = $width_orig / $height_orig;
+
+                        // preview_image - отображается на главной странице и странице категории
+                        $max_height = 200;
+                        $max_width = $max_height * 1.5;
+                        $new_path = $_SERVER['DOCUMENT_ROOT'] . "/images/preview_images/id_{$product_id}_photo_{$photo_number}.jpg";
+                        AdminProduct::resize_and_save_product_photo($filename, $height_orig, $width_orig, $max_height, $max_width, $ratio_orig, $new_path);
+
+                        // middle_image - отображается на странице товара
+                        $max_height = 350;
+                        $max_width = $max_height * 1.5;
+                        $new_path = $_SERVER['DOCUMENT_ROOT'] . "/images/middle_images/id_{$product_id}_photo_{$photo_number}.jpg";
+                        AdminProduct::resize_and_save_product_photo($filename, $height_orig, $width_orig, $max_height, $max_width, $ratio_orig, $new_path);
+
+                        // small_image - отображается в слайдере на странице товара
+                        $max_height = 50;
+                        $max_width = $max_height * 1.5;
+                        $new_path = $_SERVER['DOCUMENT_ROOT'] . "/images/small_images/id_{$product_id}_photo_{$photo_number}.jpg";
+                        AdminProduct::resize_and_save_product_photo($filename, $height_orig, $width_orig, $max_height, $max_width, $ratio_orig, $new_path);
+
+                    }
+
+                    $photo_number = $photo_number + 1;
 
                 }
 
-                print_r($_POST);
-
-                if(isset($_POST["category_parameters"])){
-                    foreach ($_POST["category_parameters"] as $parameter_id => $parameter_value){
-                        if(!empty ($parameter_value)){
+                if (isset($_POST["category_parameters"])) {
+                    foreach ($_POST["category_parameters"] as $parameter_id => $parameter_value) {
+                        if (!empty ($parameter_value)) {
                             AdminProduct::save_parameter_value_by_product_id_and_parameter_id($product_id, $parameter_id, $parameter_value);
                         }
                     }
                 }
 
-                echo 'Создан файл с айди '.$product_id;
             }
 
-            require_once ('/views/layouts/header.php');
-            require_once (ROOT.'/views/admin/product/add_product.php');
-            require_once ('/views/layouts/footer.php');
-        }
-        else{
-            header ("Location: /no_permission");
+            require_once('/views/layouts/header.php');
+            require_once(ROOT . '/views/admin/product/add_product.php');
+            require_once('/views/layouts/footer.php');
+        } else {
+            header("Location: /no_permission");
         }
     }
 
     public function actionDeleteProduct()
     {
-        $uri=$_SERVER['REQUEST_URI'];
-        $segments = explode('/',$uri);
-        $product_id=$segments[3];
+        $uri = $_SERVER['REQUEST_URI'];
+        $segments = explode('/', $uri);
+        $product_id = $segments[3];
 
         require_once('/models/Product.php');
         require_once('/models/AdminProduct.php');
 
 
-        if (isset($_POST["delete_product"])){
+        if (isset($_POST["delete_product"])) {
 
             AdminProduct::delete_product($product_id);
 
             header("Location: /admin/edit_products");
         }
 
-        require_once ('/views/layouts/header.php');
-        require_once (ROOT.'/views/admin/product/delete_product.php');
-        require_once ('/views/layouts/footer.php');
+        require_once('/views/layouts/header.php');
+        require_once(ROOT . '/views/admin/product/delete_product.php');
+        require_once('/views/layouts/footer.php');
     }
 
     public function actionEditProduct()
     {
-        require_once (ROOT.'/models/Product.php');
-        require_once (ROOT.'/models/Category.php');
-        require_once (ROOT.'/models/Parameters.php');
-        require_once (ROOT.'/models/AdminParameter.php');
+        require_once(ROOT . '/models/Product.php');
+        require_once(ROOT . '/models/Category.php');
+        require_once(ROOT . '/models/Parameters.php');
+        require_once(ROOT . '/models/AdminParameter.php');
 
-        $uri=$_SERVER['REQUEST_URI'];
-        $segments = explode('/',$uri);
-        $product_id=$segments[3];
+        $uri = $_SERVER['REQUEST_URI'];
+        $segments = explode('/', $uri);
+        $product_id = $segments[3];
 
-        $product_information=Product::get_product_by_id($product_id);
+        $product_information = Product::get_product_by_id($product_id);
         $category_id = Category::get_category_id_by_product_id($product_id);
         $category_parameters_list = Parameters::get_category_parameters_list($category_id);
 
@@ -150,7 +240,7 @@ class AdminProductController
         $existing_parameters_information = Parameters::get_all_parameters();
         $existing_parameters_list = [];
 
-        foreach ($existing_parameters_information as $parameter_item){
+        foreach ($existing_parameters_information as $parameter_item) {
             $id = $parameter_item['id'];
             array_push($existing_parameters_list, $id);
         }
@@ -183,50 +273,51 @@ class AdminProductController
 //        echo "<br /><br />Содержимое <b>Post</b><br />";
 //        print_r($_POST);
 
-        if(isset($_POST["update_product_information"])){
+        if (isset($_POST["update_product_information"])) {
 
-            if (isset($_POST['product_name'], $_POST['product_price'], $_POST['availability'])){
+            if (isset($_POST['product_name'], $_POST['product_price'], $_POST['availability'])) {
                 $product_name = $_POST['product_name'];
                 $product_price = $_POST['product_price'];
                 $availability = $_POST['availability'];
                 AdminProduct::update_main_product_information_by_product_id($product_id, $product_name, $product_price, $availability);
             }
 
-            if (isset($_POST['dynamic_parameters'])){
+            if (isset($_POST['dynamic_parameters'])) {
 
-                foreach ($_POST['dynamic_parameters'] as $parameter_id => $parameter_value){
-                        AdminProduct::update_parameter_value_by_product_id_and_parameter_id($product_id, $parameter_id, $parameter_value);
+                foreach ($_POST['dynamic_parameters'] as $parameter_id => $parameter_value) {
+                    AdminProduct::update_parameter_value_by_product_id_and_parameter_id($product_id, $parameter_id, $parameter_value);
                 }
             }
 
-            if (isset($_POST['new_dynamic_parameters'])){
+            if (isset($_POST['new_dynamic_parameters'])) {
 
-                foreach ($_POST['new_dynamic_parameters'] as $parameter_id => $parameter_value){
-                    if(!empty ($parameter_value)){
+                foreach ($_POST['new_dynamic_parameters'] as $parameter_id => $parameter_value) {
+                    if (!empty ($parameter_value)) {
                         AdminProduct::save_parameter_value_by_product_id_and_parameter_id($product_id, $parameter_id, $parameter_value);
                     }
                 }
             }
 
-           header('Location: /admin/edit_products');
+            header('Location: /admin/edit_products');
         }
 
-        require_once ('/views/layouts/header.php');
-        require_once (ROOT.'/views/admin/product/edit_selected_product.php');
-        require_once ('/views/layouts/footer.php');
+        require_once('/views/layouts/header.php');
+        require_once(ROOT . '/views/admin/product/edit_selected_product.php');
+        require_once('/views/layouts/footer.php');
     }
 
-    public function actionLoadSelectedParametersList(){
+    public function actionLoadSelectedParametersList()
+    {
 
-        include_once ('/models/AdminParameter.php');
+        include_once('/models/AdminParameter.php');
 
         echo "<br />Список добавленных параметров:<br />";
 
-        if (isset($_POST['add_parameters_list'])){
+        if (isset($_POST['add_parameters_list'])) {
             $parameters_list = $_POST['add_parameters_list'];
         }
 
-        foreach ($parameters_list as $parameter_id){
+        foreach ($parameters_list as $parameter_id) {
             $parameter_information = AdminParameter::get_parameter_information_by_parameter_id($parameter_id);
             $parameter_russian_name = $parameter_information['russian_name'];
             $parameter_name = $parameter_information['name'];
@@ -236,23 +327,25 @@ class AdminProductController
         }
     }
 
-    public function actionDeleteAdditionalParameter(){
-        $uri=$_SERVER['REQUEST_URI'];
-        $segments = explode('/',$uri);
-        $product_id=$segments[3];
-        $parameter_id=$segments[4];
+    public function actionDeleteAdditionalParameter()
+    {
+        $uri = $_SERVER['REQUEST_URI'];
+        $segments = explode('/', $uri);
+        $product_id = $segments[3];
+        $parameter_id = $segments[4];
 
-        require_once ('/models/AdminProduct.php');
+        require_once('/models/AdminProduct.php');
         AdminProduct::delete_additional_parameter_from_product($product_id, $parameter_id);
     }
 
-    public function actionLoadCategoryParameters(){
-        include_once ('/models/Parameters.php');
-        include_once ('/models/AdminParameter.php');
+    public function actionLoadCategoryParameters()
+    {
+        include_once('/models/Parameters.php');
+        include_once('/models/AdminParameter.php');
 
-        $uri=$_SERVER['REQUEST_URI'];
-        $segments = explode('/',$uri);
-        $category_id=$segments[3];
+        $uri = $_SERVER['REQUEST_URI'];
+        $segments = explode('/', $uri);
+        $category_id = $segments[3];
 
         $category_parameters_list_after_checking = [];
 
@@ -260,7 +353,7 @@ class AdminProductController
         $existing_parameters = Parameters::get_all_parameters();
 
         $existing_parameters_list = [];
-        foreach ($existing_parameters as $parameter_information){
+        foreach ($existing_parameters as $parameter_information) {
             $parameter_id = $parameter_information['id'];
             array_push($existing_parameters_list, "$parameter_id");
         }
@@ -268,12 +361,12 @@ class AdminProductController
 //        echo "<br /><br />Список всех существующих параметров: <br />";
 //        print_r($existing_parameters_list);
 
-        $category_parameters_list_after_checking = array_intersect ($category_parameters_list, $existing_parameters_list);
+        $category_parameters_list_after_checking = array_intersect($category_parameters_list, $existing_parameters_list);
 
 //        echo "<br /><br />Список параметров категории после проверки: <br />";
 //        print_r($category_parameters_list_after_checking);
 
-        foreach ($category_parameters_list_after_checking as $parameter_id){
+        foreach ($category_parameters_list_after_checking as $parameter_id) {
             $parameter_information = AdminParameter::get_parameter_information_by_parameter_id($parameter_id);
             $parameter_name = $parameter_information['name'];
             $parameter_russian_name = $parameter_information['russian_name'];
@@ -282,77 +375,17 @@ class AdminProductController
         }
     }
 
-
-    public function actionApplyMultiSelectFilterForProductList(){
-
-//        echo "Содержимое POST <br />";
-//        print_r($_POST);
-//        echo "<br />";
-
-        include_once('/models/Product.php');
-        require_once (ROOT. '/components/Pagination.php');
-
-        $united_request = '';
-
-        foreach ($_POST as $parameter_name => $parameter_values_array){
-
-            if(!empty($parameter_values_array)){
-
-                $request_first_part = "SELECT * FROM product WHERE ";
-                $request_second_part = "$parameter_name  IN (".implode(',',$parameter_values_array).")";
-
-                if(strlen ($united_request)< 1){
-                    $united_request = $united_request.$request_first_part.$request_second_part;
-                }
-                else{
-                    $united_request = $united_request.' AND '.$request_second_part;
-                }
-            }
-        }
-
-        if(!empty($united_request)){
-
-            $pagination = new Pagination();
-
-            $index_of_page_in_url = 3;
-            $amount_of_elements_on_page = 1;
-            $get_total_elements_amount_request = "SELECT COUNT(*) FROM($united_request) tmp";
-
-            $result_parameters = $pagination->get_pagination_parameters($index_of_page_in_url, $amount_of_elements_on_page, $get_total_elements_amount_request);
-
-            $current_page_number = $result_parameters['current_page_number'];
-            $total_count = $result_parameters['total_count'] ;
-            $start = $result_parameters['start'] ;
-
-            $get_elements_request = "$united_request";
-
-            $productList = $pagination->get_pagination_elements($start, $amount_of_elements_on_page, $get_elements_request);
-
-            $limit = 4;
-
-        } else{
-
-            $pagination = new Pagination();
-
-            $index_of_page_in_url = 3;
-            $amount_of_elements_on_page = 1;
-            $get_total_elements_amount_request = "SELECT COUNT(*) FROM product";
-
-            $result_parameters = $pagination->get_pagination_parameters($index_of_page_in_url, $amount_of_elements_on_page, $get_total_elements_amount_request);
-
-            $current_page_number = $result_parameters['current_page_number'];
-            $total_count = $result_parameters['total_count'] ;
-            $start = $result_parameters['start'] ;
-
-            $get_elements_request = "SELECT * FROM product";
-
-            $productList = $pagination->get_pagination_elements($start, $amount_of_elements_on_page, $get_elements_request);
-
-            $limit = 4;
-        }
-
-        require_once (ROOT.'/views/admin/product/products_table.php');
-
-    }
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

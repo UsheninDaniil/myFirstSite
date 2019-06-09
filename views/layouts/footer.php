@@ -73,7 +73,6 @@
 <script src="/template/jQuery-UI-Multiple-Select-Widget/i18n/jquery.multiselect.ru.js"></script>
 <script src="/template/jQuery-UI-Multiple-Select-Widget/i18n/jquery.multiselect.filter.ru.js"></script>
 
-<!--<script src="/template/Tiny-Text-Field-Based-Tags-Input-Plugin-For-jQuery-Tagify/dist/jQuery.tagify.min.js"></script>-->
 <script src="/template/tagify-plugin-old-version/jQuery.tagify.js"></script>
 
 <script src="/template/js/main.js"></script>

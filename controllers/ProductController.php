@@ -18,7 +18,7 @@ Class ProductController
 
         $category_id = Category::get_category_id_by_product_id($product_id);
 
-        $productList = Product::get_product_list_by_category_id($category_id);
+        $productList = Product::get_product_list_by_category_id($category_id, 1, 10);
 
         require_once ('/views/layouts/header.php');
         require_once (ROOT.'/views/product/view.php');

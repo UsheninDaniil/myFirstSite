@@ -48,9 +48,43 @@ $categoryList = Category::get_category_list();
 <!--    <input type="hidden" name="MAX_FILE_SIZE" value="30000" />-->
 
     <br />Выберите изображение: <br />
-    <input name="image" type="file" /><br /><br />
+    <input name="images[]" type="file" multiple><br /><br />
+
+    <input type="file" id="files" name="files[]"  multiple />
+    <ul id="list"></ul>
+
+    <input type="file" id="files_2" name="files[]"  multiple />
+    <ul id="list_2"></ul>
 
     <input type = "submit" name ="save_new_product" value="Добавить товар "><br />
 
 </form>
 
+<script>
+    function showFile(e) {
+        var files = e.target.files;
+        for (var i = 0, f; f = files[i]; i++) {
+            if (!f.type.match('image.*')) continue;
+            var fr = new FileReader();
+            fr.onload = (function(theFile) {
+                return function(e) {
+                    var li = document.createElement('li');
+                    li.innerHTML = "<img src='" + e.target.result + "' />";
+                    document.getElementById('list').insertBefore(li, null);
+                };
+            })(f);
+
+            fr.readAsDataURL(f);
+        }
+    }
+    document.getElementById('files').addEventListener('change', showFile, false);
+</script>
+
+<script>
+    function showFile(e) {
+        var selectedFile = document.getElementById('files_2').files[0].name;
+        console.log('selectedFile:\n' + selectedFile);
+
+    }
+    document.getElementById('files_2').addEventListener('change', showFile, false);
+</script>

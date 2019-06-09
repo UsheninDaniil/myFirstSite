@@ -36,11 +36,11 @@
 
             <?php
             $product_id =$productItem['id'];
-            if (file_exists(ROOT."/images/small_product_images/$product_id.jpg")) {
-                $path = "/images/small_product_images/$product_id.jpg";
+            if (file_exists(ROOT."/images/preview_images/id_{$product_id}_photo_1.jpg")) {
+                $path = "/images/preview_images/id_{$product_id}_photo_1.jpg";
             }
             else {
-                $path = "/images/small_product_images/no_photo.png";
+                $path = "/images/no_photo.png";
             }
             ?>
 

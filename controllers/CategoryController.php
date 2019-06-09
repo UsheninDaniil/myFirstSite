@@ -21,13 +21,17 @@ Class CategoryController{
 
         $pagination = new Pagination();
 
-        $index_of_page_in_url = 3;
+        if(isset($_GET['page'])){
+            $current_page_number = $_GET['page'];
+        } else{
+            $current_page_number = 1;
+        }
+
         $amount_of_elements_on_page = 1;
         $get_total_elements_amount_request = "SELECT COUNT(*) FROM product WHERE  category_id = '$category_id'";
 
-        $result_parameters = $pagination->get_pagination_parameters($index_of_page_in_url, $amount_of_elements_on_page, $get_total_elements_amount_request);
+        $result_parameters = $pagination->get_pagination_parameters($current_page_number, $amount_of_elements_on_page, $get_total_elements_amount_request);
 
-        $current_page_number = $result_parameters['current_page_number'];
         $total_count = $result_parameters['total_count'] ;
         $start = $result_parameters['start'] ;
 
@@ -64,7 +68,17 @@ Class CategoryController{
             }
         }
 
-        if(!empty ($_GET)){
+        if(!empty($_GET)) {
+            $get_parameters_array = $_GET;
+            if(isset($get_parameters_array['page'])){
+                unset($get_parameters_array['page']);
+            }
+            $get_parameters_without_page = $get_parameters_array;
+        }
+
+
+
+        if(!empty ($get_parameters_without_page)){
 
             require_once (ROOT. '/models/Category.php');
 
@@ -76,10 +90,10 @@ Class CategoryController{
 
             $united_request = "";
 
-            $total_amount = count($_GET);
+            $total_amount = count($get_parameters_without_page);
             $counter = 0;
 
-            foreach ($_GET as $parameter_id => $parameter_values_array){
+            foreach ($get_parameters_without_page as $parameter_id => $parameter_values_array){
 
                 $category_id = $mysqli->real_escape_string($category_id);
                 $parameter_id = $mysqli->real_escape_string($parameter_id);
@@ -117,13 +131,17 @@ Class CategoryController{
 
             }
 
-            $index_of_page_in_url = 3;
+            if(isset($_GET['page'])){
+                $current_page_number = $_GET['page'];
+            } else{
+                $current_page_number = 1;
+            }
+
             $amount_of_elements_on_page = 1;
             $get_total_elements_amount_request = "SELECT COUNT(*) FROM($united_request) tmp";
 
-            $result_parameters = $pagination->get_pagination_parameters($index_of_page_in_url, $amount_of_elements_on_page, $get_total_elements_amount_request);
+            $result_parameters = $pagination->get_pagination_parameters($current_page_number, $amount_of_elements_on_page, $get_total_elements_amount_request);
 
-            $current_page_number = $result_parameters['current_page_number'];
             $total_count = $result_parameters['total_count'] ;
             $start = $result_parameters['start'] ;
 
@@ -145,6 +163,10 @@ Class CategoryController{
             }
 
             $limit = 4;
+        }
+
+        if(empty($productList)){
+            $current_page_number = 0;
         }
 
         require_once ('/views/layouts/header.php');

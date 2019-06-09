@@ -348,48 +348,40 @@ $(function(){
 
 
 
-function applyMultiSelectFilterForProductList(){
-
-    var form = $('#admin_product_multiselect_form');
-    var filter_parameters = form.serialize();
-
-    $.post("/admin/apply_multi_select_filter_for_product_list", filter_parameters, function (data) {
-            $("#products_table").html(data);
-        }, "html"
-    );
-}
-
-
-$(".category_multiselect").on("multiselectclose", function(event, ui){
-    applyMultiSelectFilterForProductList();
-    console.log("закрыто");
-});
-
-$(".product_status").on("multiselectclose", function(event, ui){
-    applyMultiSelectFilterForProductList();
-    console.log("закрыто");
-});
-
 
 
 $(function() {
     $('[name=tags]').tagify();
-    var input = document.querySelector('input[name=tags]'),
-        tagify = new Tagify(input);
+});
+
+$(document).on('click', 'tag x', function (e) {
+
+    var tag_name = $(this).next().text();
+    tag_name = $.trim(tag_name);
+    // alert(tag_name+"777");
+    console.log('tag_name \n' + tag_name);
+
+    // $("#select_category option:contains('ноутбуки')").removeAttr("selected");
+
+    $("#select_category option:contains('" + tag_name + "')").removeAttr("selected");
+
+    console.log("#select_category option:contains('" + tag_name + "')");
+
+    var form = $('#admin_product_multiselect_form');
+    var filter_parameters = form.serialize();
+
+    console.log('filter parameters \n' + filter_parameters);
+
+    document.location.href = "/admin/edit_products?" + filter_parameters;
 });
 
 
+function apply_filter_in_edit_products(){
+    var form = $('#admin_product_multiselect_form');
+    var filter_parameters = form.serialize();
 
-$(function() {
-    $('[name=tags_2]').tagify();
-    var input = document.querySelector('textarea[name=tags_2]'),
-        tagify = new Tagify(input);
-});
-
-
-
-
-
+    document.location.href = "/admin/edit_products?" + filter_parameters;
+}
 
 
 

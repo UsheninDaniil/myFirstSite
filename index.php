@@ -4,6 +4,9 @@ session_start();
 
 //Общие настройки
 ini_set('display_errors',1);   // включает отображание ошибок
+
+//ini_set('display_errors',0);   // выключает отображание ошибок
+
 error_reporting(E_ALL);                   // какие именно ошибки показывает
 
 //Подключение файлов системы
@@ -17,9 +20,6 @@ require_once (ROOT.'/components/Router.php');
 // Вызов Router
 $router = new Router();   // переменная $router стала объектом класса 'Router'
 $router->run();           // через стрлочку из объекта можно вызывать методы объекта или свойства(переменные)
-
-
-
 
 
 

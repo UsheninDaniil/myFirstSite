@@ -1,0 +1,62 @@
+#slider{
+    height: auto;
+    /*border: 2px solid black;*/
+    overflow: hidden;
+    /*margin-right: 30px;*/
+}
+
+#previous, #next{
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+#polosa{
+    display: flex;
+    flex-direction: column;
+    /*background: pink;*/
+    position: relative;
+    top: 0;
+    transition: all ease 0.5s;
+}
+
+#polosa .element{
+    display: flex;
+    align-items: center;
+    margin-left:  5px;
+    margin-right: 5px;
+    float: left;
+}
+
+#polosa .element img{
+    display:block;
+    margin:0 auto;
+}
+
+#slider_with_buttons{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: lightblue;
+}
+
+#product_photos{
+    display: flex;
+    /*margin-left: 20%;*/
+}
+
+#selected_photo_container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    background-color: pink;
+}
+
+#slider .element, ::after, ::before {
+     box-sizing: content-box;
+}
+
+#selected_photo_container{
+    padding: 20px;
+}
