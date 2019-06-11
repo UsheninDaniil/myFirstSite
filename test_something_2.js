@@ -63,6 +63,81 @@ var DragManager = new function() {
         dragObject.avatar.style.left = e.pageX - dragObject.shiftX + 'px';
         dragObject.avatar.style.top = e.pageY - dragObject.shiftY + 'px';
 
+
+        if(dropObject.last_droppable_element){
+            last_droppable_element = dropObject.last_droppable_element;
+        } else {
+            last_droppable_element = document.createElement("div");
+            last_droppable_element.innerHTML = 'last_droppable_element';
+        }
+
+        var elem_droppable = findDroppable(e);
+
+        if (elem_droppable) {
+
+            if(elem_droppable.innerHTML !== last_droppable_element.innerHTML) {
+
+                console.log('ветка 1 (droppable элементы не равны, создается новый element_outline)');
+                console.log("%c last_droppable_element", "color: green");
+                console.log(last_droppable_element);
+                console.log("%c last_droppable_element.nextSibling", "color: green");
+                console.log(last_droppable_element.nextSibling);
+                console.log("%c elem_droppable", "color: green");
+                console.log(elem_droppable);
+
+                var element_outline = document.createElement("div");
+                element_outline.className = "element shape";
+                element_outline.style.borderColor = "red";
+                element_outline.style.borderStyle = "dashed";
+
+                if(dropObject.last_droppable_element){
+
+                    if(dropObject.last_droppable_element.innerHTML === element_outline.innerHTML){
+                        console.log("ПОСЛЕДНИЙ droppable ЭЛЕМЕНТ = ОБРАЗ");
+
+                        last_droppable_element.style.backgroundColor = 'red';
+
+                        if(dropObject.last_droppable_element.nextSibling.innerHTML === elem_droppable.innerHTML){
+                            console.log('%c СДЕЛАН ШАГ ВПЕРЕД', 'color: red;');
+                            document.getElementById("images_container").insertBefore(element_outline, elem_droppable.nextSibling);
+                        } else {
+                            console.log('%c СДЕЛАН ШАГ НАЗАД', 'color: red;');
+                            document.getElementById("images_container").insertBefore(element_outline, elem_droppable);
+                        }
+
+                    } else {
+                        console.log("ПОСЛЕДНИЙ droppable ЭЛЕМЕНТ !!!= ОБРАЗ");
+                        document.getElementById("images_container").insertBefore(element_outline, elem_droppable);
+                    }
+
+                } else {
+                    document.getElementById("images_container").insertBefore(element_outline, elem_droppable);
+                }
+
+                if(!dropObject.last_droppable_element){
+                    dropObject.last_droppable_element = elem_droppable;
+                    dropObject.last_element_outline = element_outline;
+                } else {
+                    document.getElementById("images_container").removeChild(dropObject.last_element_outline);
+
+                    elem_droppable = document.getElementsByClassName('element shape')[0];
+
+                    dropObject.last_droppable_element = elem_droppable;
+                    dropObject.last_element_outline = element_outline;
+
+                    console.log('%c last_droppable_element', 'color: blue;');
+                    console.log(dropObject.last_droppable_element);
+
+                    console.log('%c ВОТ КАКОЙ СЛЕДУЮЩИЙ ЭЛЕМЕНТ У last_droppable_element', 'color: blue;');
+                    console.log(dropObject.last_droppable_element.nextSibling);
+                }
+
+            } else {
+                console.log('ветка 2 (droppable элементы равны)');
+            }
+        }
+
+
         return false;
     }
 
@@ -73,7 +148,11 @@ var DragManager = new function() {
 
         if (dragObject.elem) {
             dragObject.elem.classList.add('droppable');
+            if(dropObject.last_element_outline){
+                document.getElementById("images_container").removeChild(dropObject.last_element_outline);
+            }
         }
+
 
         photo_name_list = '';
 
@@ -125,11 +204,6 @@ var DragManager = new function() {
             zIndex: avatar.zIndex || ''
         };
 
-        console.log("old.parent");
-        console.log(old.parent);
-        console.log("old.nextSibling");
-        console.log(old.nextSibling);
-
         // функция для отмены переноса
         avatar.rollback = function() {
             old.parent.insertBefore(avatar, old.nextSibling);
@@ -140,6 +214,21 @@ var DragManager = new function() {
         };
 
         dropObject.old = old;
+
+
+        var element_outline = document.createElement("div");
+        element_outline.className = "element shape";
+        element_outline.style.borderColor = "red";
+        element_outline.style.borderStyle = "dashed";
+        document.getElementById("images_container").insertBefore(element_outline, old.nextSibling);
+        if(!dropObject.last_droppable_element){
+            dropObject.last_element_outline = element_outline;
+        } else {
+            document.getElementById("images_container").removeChild(dropObject.last_element_outline);
+            dropObject.last_element_outline = element_outline;
+        }
+
+        dropObject.last_droppable_element = element_outline;
 
         return avatar;
     }
@@ -161,39 +250,41 @@ var DragManager = new function() {
 
         // получить самый вложенный элемент под курсором мыши
         var elem = document.elementFromPoint(event.clientX, event.clientY);
+
+        if(dropObject.last_element_outline){
+            if(elem.innerHTML  === dropObject.last_element_outline.innerHTML){
+                elem.classList.add('droppable')
+            }
+        }
+
         elem_droppable = elem.closest('.droppable');
 
         // показать переносимый элемент обратно
         dragObject.avatar.style.visibility = 'visible';
         // dragObject.avatar.hidden = false;
 
-        var new_parameters = {
-            parent: elem_droppable.parentNode,
-            // nextSibling: elem_droppable.nextSibling,
-            nextSibling: elem_droppable,
-            position: elem_droppable.position || '',
-            left: elem_droppable.left || '',
-            top: elem_droppable.top || '',
-            zIndex: elem_droppable.zIndex || ''
-        };
+        if(elem_droppable){
+            var new_parameters = {
+                parent: elem_droppable.parentNode,
+                // nextSibling: elem_droppable.nextSibling,
+                nextSibling: elem_droppable,
+                position: elem_droppable.position || '',
+                left: elem_droppable.left || '',
+                top: elem_droppable.top || '',
+                zIndex: elem_droppable.zIndex || ''
+            };
+        }
 
-        dragObject.elem.apply_new_parameters = function() {
-            new_parameters.parent.insertBefore(dragObject.elem, new_parameters.nextSibling);
-            dragObject.elem.style.position = new_parameters.position;
-            dragObject.elem.style.left = new_parameters.left;
-            dragObject.elem.style.top = new_parameters.top;
-            dragObject.elem.style.zIndex = new_parameters.zIndex
-        };
-
-
-        console.log("elem");
-        console.log(elem);
-        console.log("elem_droppable");
-        console.log(elem_droppable);
-
-        console.log("dragObject.avatar");
-        console.log(dragObject.avatar);
-
+        if(new_parameters){
+            dragObject.elem.apply_new_parameters = function() {
+                new_parameters.parent.insertBefore(dragObject.elem, new_parameters.nextSibling);
+                dragObject.elem.style.position = new_parameters.position;
+                dragObject.elem.style.left = new_parameters.left;
+                dragObject.elem.style.top = new_parameters.top;
+                dragObject.elem.style.zIndex = new_parameters.zIndex
+            };
+        }
+        
         if (elem == null) {
             // такое возможно, если курсор мыши "вылетел" за границу окна
             return null;

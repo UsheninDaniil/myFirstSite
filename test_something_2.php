@@ -2,8 +2,8 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/template/fontawesome-free-5.8.1-web/css/all.min.css" >
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">-->
+<!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
 
     <link rel="stylesheet" href="/test_something_2.css">
 
@@ -12,7 +12,7 @@
         .element {
             width:120px;
             height:220px;
-            border: 1px solid black;
+            border: 2px solid black;
             display: flex;
             flex-direction: column;
             position: relative;
@@ -74,7 +74,7 @@
 </form>
 
 <div id="images_container">
-    <div id="test"></div>
+    <div id="test" class="droppable"></div>
 </div>
 
 <?php
