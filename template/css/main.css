@@ -611,7 +611,9 @@ tags span.input{
     border: 1px solid red;
 }
 
-
+.draggable {
+    cursor: pointer;
+}
 
 
 

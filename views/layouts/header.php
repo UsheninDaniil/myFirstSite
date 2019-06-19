@@ -3,27 +3,31 @@
 <head>
     <meta charset="utf-8">
 
-    <link rel="stylesheet" href="/template/fontawesome-free-5.8.1-web/css/all.min.css" >
+    <!--Сторонние файлы и плагины-->
+
+    <link rel="stylesheet" href="/template/third_party_files/fontawesome-free-5.8.1-web/css/all.min.css" >
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <link rel="stylesheet" href="/template/bootstrap4-editable/css/bootstrap-editable.css" >
-    <link rel="stylesheet" href="/template/bootstrap-4.3.1-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/template/third_party_files/bootstrap4-editable/css/bootstrap-editable.css" >
+    <link rel="stylesheet" href="/template/third_party_files/bootstrap-4.3.1-dist/css/bootstrap.min.css">
 
-    <link rel="stylesheet" href="/template/swiper-4.4.6/dist/css/swiper.min.css">
-    <link rel="stylesheet" href="/template/jquery-ui-1.12.1.custom/jquery-ui.min.css">
+    <link rel="stylesheet" href="/template/third_party_files/swiper-4.4.6/dist/css/swiper.min.css">
+    <link rel="stylesheet" href="/template/third_party_files/jquery-ui-1.12.1.custom/jquery-ui.min.css">
 
-    <link rel="stylesheet" href="/template/jQuery-UI-Multiple-Select-Widget/css/jquery.multiselect.css">
-    <link rel="stylesheet" href="/template/jQuery-UI-Multiple-Select-Widget/css/jquery.multiselect.filter.css">
+    <link rel="stylesheet" href="/template/third_party_files/jQuery-UI-Multiple-Select-Widget/css/jquery.multiselect.css">
+    <link rel="stylesheet" href="/template/third_party_files/jQuery-UI-Multiple-Select-Widget/css/jquery.multiselect.filter.css">
 
+    <link rel="stylesheet" href="/template/third_party_files/tagify-plugin-old-version/tagify.css">
+    <link rel="stylesheet" href="/template/third_party_files/tagify-plugin-old-version/jquerysctipttop.css">
 
-    <link href="/template/tagify-plugin-old-version/tagify.css" rel="stylesheet" type="text/css">
-    <link href="/template/tagify-plugin-old-version/jquerysctipttop.css" rel="stylesheet" type="text/css">
+    <!--Самописные файлы и плагины-->
+
+    <link rel="stylesheet" href="/template/css/images_preview.css">
 
     <link rel="stylesheet" href="/template/css/main.css?v=<?php echo uniqid()?>">
 
-    <link rel="stylesheet" href="/test_something/test.css?v=<?php echo uniqid()?>">
-    <script src="/test_something/test.js?v=<?php echo uniqid()?>" defer></script>
+    <link rel="stylesheet" href="/template/css/product_images_slider.css">
 
 </head>
 <body>

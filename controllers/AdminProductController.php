@@ -131,7 +131,31 @@ class AdminProductController
 
                 $photo_number = 1;
 
-                foreach ($_FILES["images"]["tmp_name"] as $tmp_name) {
+                $tmp_name_array_after_checking =[];
+
+                if(!empty($_POST)){
+                    $image_names_to_upload = $_POST['image_names']; //в виде строки
+                    $image_names_to_upload = explode(", ", $image_names_to_upload);
+                }
+
+                if(!empty($_FILES["images"])){
+
+                    $tmp_name_array = $_FILES["images"]["tmp_name"];
+                    $i = 0;
+
+                    foreach ($image_names_to_upload as $image_name_to_upload){
+
+                        if(in_array($image_name_to_upload, $_FILES["images"]["name"])){
+                            $key = array_search($image_name_to_upload, $_FILES["images"]["name"]);
+                            $name = $_FILES["images"]["name"][$key];
+                            $tmp_name = $_FILES["images"]["tmp_name"][$key];
+                            array_push($tmp_name_array_after_checking, $tmp_name);
+                            $i = $i + 1;
+                        }
+                    }
+                }
+
+                foreach ($tmp_name_array_after_checking as $tmp_name) {
 
                     if (is_uploaded_file($tmp_name)) {
                         // Если загружалось, переместим его в нужную папке, дадим новое имя $photo
@@ -174,9 +198,7 @@ class AdminProductController
                         AdminProduct::resize_and_save_product_photo($filename, $height_orig, $width_orig, $max_height, $max_width, $ratio_orig, $new_path);
 
                     }
-
                     $photo_number = $photo_number + 1;
-
                 }
 
                 if (isset($_POST["category_parameters"])) {
@@ -186,7 +208,6 @@ class AdminProductController
                         }
                     }
                 }
-
             }
 
             require_once('/views/layouts/header.php');

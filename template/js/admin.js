@@ -346,22 +346,17 @@ $(function(){
 
 });
 
-
-
-
-
 $(function() {
-    $('[name=tags]').tagify();
+    if($('[name=tags]').length>0){
+        $('[name=tags]').tagify();
+    }
 });
 
 $(document).on('click', 'tag x', function (e) {
 
     var tag_name = $(this).next().text();
     tag_name = $.trim(tag_name);
-    // alert(tag_name+"777");
     console.log('tag_name \n' + tag_name);
-
-    // $("#select_category option:contains('ноутбуки')").removeAttr("selected");
 
     $("#select_category option:contains('" + tag_name + "')").removeAttr("selected");
 

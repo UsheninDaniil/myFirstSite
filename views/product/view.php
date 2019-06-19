@@ -171,12 +171,8 @@ $slider_polosa_height = $element_height * $photo_amount + $padding_bottom;
 
     </div>
 
-
     <div class="view_product_description">
-
-
         <table border="0" cellpadding="5" class="view_product_table">
-
             <tr>
                 <th colspan="2">
                     <div style="text-align: center"><b>Характеристики</b></div>
@@ -189,12 +185,12 @@ $slider_polosa_height = $element_height * $photo_amount + $padding_bottom;
                     <th><?= $value ?></th>
                 </tr>
             <?php endforeach; ?>
-
         </table>
-
     </div>
 
 </div>
+
+<br/>
 
 <h2 style="text-align: center">Похожие товары</h2>
 
@@ -206,9 +202,9 @@ $slider_polosa_height = $element_height * $photo_amount + $padding_bottom;
                 <?php
                 $product_id = $productItem['id'];
                 $path = "/images/preview_images/id_{$product_id}_photo_1.jpg";
-                if(!file_exists($path)){
-                    $path = "/images/preview_images/no_photo.png";
-                }
+//                if(!file_exists($path)){
+//                    $path = "/images/preview_images/no_photo.png";
+//                }
                 ?>
                 <div><img src="<?php echo $path ?>" alt="photo" class="product_photo"/></div>
                 <div>
@@ -231,9 +227,8 @@ $slider_polosa_height = $element_height * $photo_amount + $padding_bottom;
     <div class="swiper-button-prev"></div>
 </div>
 
-<!-- Swiper JS -->
-<!--<script src="../dist/js/swiper.min.js"></script>-->
-<script src="../template/swiper-4.4.6/dist/js/swiper.min.js"></script>
+
+<script src="/template/third_party_files/swiper-4.4.6/dist/js/swiper.min.js"></script>
 
 
 <!-- Initialize Swiper -->

@@ -56,25 +56,63 @@
     </footer>
 </div>
 
+
+<?php
+
+$path= ROOT.'/config/assets_routes.php';
+$assets_routes = include($path);
+//print_r($assets_routes);
+
+$current_uri = $_SERVER['REQUEST_URI'];
+
+foreach ($assets_routes as $uri => $scripts_array){
+
+    $uri='^'.$uri;
+
+    if (preg_match("~$uri~",$current_uri)){
+
+        echo "<br/><b>uri шаблон = $uri</b>";
+
+        foreach ($scripts_array as $script_src){
+            echo $script_src;
+            echo "<br/>";
+            echo "<script src='$script_src'></script>";
+        }
+    }
+}
+
+?>
+
 </div>
 
 
-<script defer src="/template/fontawesome-free-5.8.1-web/js/all.min.js"></script>
 
-<script src="/template/jquery-3.3.1.min.js"></script>
-<script src="/template/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
 
-<script src="/template/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
-<script src="/template/popper.min.js"></script>
-<script src="/template/bootstrap4-editable/js/bootstrap-editable.js"></script>
 
-<script src="/template/jQuery-UI-Multiple-Select-Widget/src/jquery.multiselect.js"></script>
-<script src="/template/jQuery-UI-Multiple-Select-Widget/src/jquery.multiselect.filter.js"></script>
-<script src="/template/jQuery-UI-Multiple-Select-Widget/i18n/jquery.multiselect.ru.js"></script>
-<script src="/template/jQuery-UI-Multiple-Select-Widget/i18n/jquery.multiselect.filter.ru.js"></script>
 
-<script src="/template/tagify-plugin-old-version/jQuery.tagify.js"></script>
 
+
+
+<!--<script defer src="/template/third_party_files/fontawesome-free-5.8.1-web/js/all.min.js"></script>-->
+<!---->
+<!--<script src="/template/third_party_files/jquery-3.3.1.min.js"></script>-->
+<!--<script src="/template/third_party_files/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>-->
+<!---->
+<!--<script src="/template/third_party_files/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>-->
+<!--<script src="/template/third_party_files/popper.min.js"></script>-->
+<!--<script src="/template/third_party_files/bootstrap4-editable/js/bootstrap-editable.js"></script>-->
+<!---->
+<!--<script src="/template/third_party_files/jQuery-UI-Multiple-Select-Widget/src/jquery.multiselect.js"></script>-->
+<!--<script src="/template/third_party_files/jQuery-UI-Multiple-Select-Widget/src/jquery.multiselect.filter.js"></script>-->
+<!--<script src="/template/third_party_files/jQuery-UI-Multiple-Select-Widget/i18n/jquery.multiselect.ru.js"></script>-->
+<!--<script src="/template/third_party_files/jQuery-UI-Multiple-Select-Widget/i18n/jquery.multiselect.filter.ru.js"></script>-->
+<!---->
+<!--<script src="/template/third_party_files/tagify-plugin-old-version/jQuery.tagify.js"></script>-->
+<!---->
+<!--<script src="/template/js/drag_and_drop.js"></script>-->
+<!--<script src="/template/js/images_preview.js"></script>-->
+<!--<script src="/template/js/product_images_slider.js"></script>-->
+<!--<!---->-->
 <script src="/template/js/main.js"></script>
 <script src="/template/js/admin.js?v=<?php echo uniqid()?>"></script>
 

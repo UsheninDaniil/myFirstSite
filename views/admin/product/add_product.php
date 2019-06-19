@@ -1,7 +1,5 @@
 <?php
 
-
-
 require_once (ROOT. '/models/Category.php');
 $categoryList = Category::get_category_list();
 
@@ -16,7 +14,7 @@ $categoryList = Category::get_category_list();
 
 <h4>Добавить новый товар</h4>
 
-<form  enctype="multipart/form-data" name = "add_product" action="" method ="post" class="feedback">
+<form  enctype="multipart/form-data" name="add_product" id="add_product" action="" method ="post" class="feedback">
 
     <label>Название товара:</label><br />
     <input type="text" name="product_name" /><br />
@@ -41,50 +39,15 @@ $categoryList = Category::get_category_list();
         <?php endif;?>
     </select><br />
 
-    <div class="category_parameters_list" id="category_parameters_list">
-
-    </div>
-
-<!--    <input type="hidden" name="MAX_FILE_SIZE" value="30000" />-->
+    <div class="category_parameters_list" id="category_parameters_list"></div>
 
     <br />Выберите изображение: <br />
-    <input name="images[]" type="file" multiple><br /><br />
-
-    <input type="file" id="files" name="files[]"  multiple />
-    <ul id="list"></ul>
-
-    <input type="file" id="files_2" name="files[]"  multiple />
-    <ul id="list_2"></ul>
-
-    <input type = "submit" name ="save_new_product" value="Добавить товар "><br />
-
+    <input type="hidden" name="image_names" value="" id="image_names">
+    <input type="file" name="images[]" id="input" multiple onchange="handleFiles(this.files)">
 </form>
 
-<script>
-    function showFile(e) {
-        var files = e.target.files;
-        for (var i = 0, f; f = files[i]; i++) {
-            if (!f.type.match('image.*')) continue;
-            var fr = new FileReader();
-            fr.onload = (function(theFile) {
-                return function(e) {
-                    var li = document.createElement('li');
-                    li.innerHTML = "<img src='" + e.target.result + "' />";
-                    document.getElementById('list').insertBefore(li, null);
-                };
-            })(f);
+<div id="images_container">
+    <div id="test">&nbsp</div>
+</div>
 
-            fr.readAsDataURL(f);
-        }
-    }
-    document.getElementById('files').addEventListener('change', showFile, false);
-</script>
-
-<script>
-    function showFile(e) {
-        var selectedFile = document.getElementById('files_2').files[0].name;
-        console.log('selectedFile:\n' + selectedFile);
-
-    }
-    document.getElementById('files_2').addEventListener('change', showFile, false);
-</script>
+<input type = "submit" name ="save_new_product" value="Добавить товар" form="add_product"><br />
