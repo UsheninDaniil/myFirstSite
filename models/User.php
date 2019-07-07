@@ -138,32 +138,84 @@ class User extends DatabaseConnect
 
         $mysqli = parent::connect_to_database();
 
-        $result = $mysqli->query ("SELECT * FROM `myFirstSite`.`orders` WHERE user_id = '$user_id' ORDER BY id");
+        $result = $mysqli->query ("SELECT * FROM `orders`  WHERE user_id = '$user_id' ORDER BY id");
 
         $i = 0;
         $order_list = array();
 
         while ($i < $result->num_rows){
             $row = $result->fetch_array();
-            $order_list[$i]['description'] = $row['description'];
+            $order_list[$i]['id'] = $row['id'];
+            $order_list[$i]['user_id'] = $row['user_id'];
             $order_list[$i]['date'] = $row['date'];
             $order_list[$i]['time'] = $row['time'];
-            $order_list[$i]['id'] = $row['id'];
             $order_list[$i]['status'] = $row['status'];
             $i++;
         }
 
         parent::disconnect_database($mysqli);
         return $order_list;
+    }
 
+    public static function get_product_list_by_order_id_and_user_id($order_id, $user_id){
+
+        $mysqli = parent::connect_to_database();
+
+        $result = $mysqli->query ("SELECT * FROM `orders` INNER JOIN `orders_information` ON orders.id = orders_information.order_id WHERE user_id = '$user_id' AND order_id = '$order_id' ORDER BY orders.id");
+
+        $i = 0;
+        $product_list = array();
+
+        while ($i < $result->num_rows){
+            $row = $result->fetch_array();
+            $product_list[$i]['product_id'] = $row['product_id'];
+            $product_list[$i]['product_amount'] = $row['product_amount'];
+            $product_list[$i]['product_price'] = $row['product_price'];
+            $i++;
+        }
+
+        parent::disconnect_database($mysqli);
+        return $product_list;
     }
 
 
     public static function make_an_order($cartData,$user_id,$current_date,$current_time){
 
+        $cartData = unserialize($cartData);
+
+        echo "Содержимое cart_data";
+        print_r($cartData);
+
         $mysqli = parent::connect_to_database();
 
-        $mysqli->query ("INSERT INTO `myFirstSite`.`orders` (`description`,`user_id`,`date`,`time`,`status`) VALUES ('$cartData','$user_id','$current_date','$current_time','в обработке')");
+        $result = $mysqli->query ("SELECT MAX(`id`) AS order_id FROM `orders`");
+
+        if ($result !== false){
+            $row = $result->fetch_array();
+
+            echo "Содержимое row <br/>";
+            print_r($row);
+            $order_id = $row['order_id'];
+            $order_id = $order_id + 1;
+        } else {
+            $order_id = 1;
+        }
+
+        $mysqli->query ("INSERT INTO `myFirstSite`.`orders` (`id`,`user_id`,`date`,`time`,`status`) VALUES ('$order_id', '$user_id', '$current_date', '$current_time', 'в обработке')");
+
+
+        foreach ($cartData as $product_id => $product_amount){
+
+            echo "<br/>product_id = $product_id <br/>";
+            echo "product_amount = $product_amount <br/><br/>";
+
+            $mysqli->query ("INSERT INTO `myFirstSite`.`orders_information` (`order_id`,`product_id`,`product_amount`) VALUES ('$order_id', '$product_id', '$product_amount')");
+
+
+        }
+
+
+
 
         unset($_SESSION['cart_product_list']);
 

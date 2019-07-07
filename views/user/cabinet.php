@@ -39,71 +39,75 @@ $order_list=User::get_order_list_by_user_id($user_id);
 <?php
 if (!empty($order_list)): ?>
 
-<div style="text-align: center">Список заказов</div>
+<div style="text-align: center;">Список заказов</div>
 
-<table border="1" width="50%" cellpadding="5" class="product_list_table">
+
+<div style="display: flex; justify-content: center;">
+
+<table style="text-align: center;" border="1" cellpadding="5">
 
     <tr>
-        <th>id заказа</th>
-        <th>Дата</th>
-        <th>Время</th>
-        <th>Статус</th>
-        <th colspan="2">Содержимое</th>
+        <th rowspan="2">id</th>
+        <th rowspan="2">Дата</th>
+        <th rowspan="2">Время</th>
+        <th rowspan="2">Статус</th>
+        <th colspan="4">Товары</th>
+    </tr>
+
+    <tr>
+        <td>id</td>
+        <td>name</td>
+        <td>amount</td>
+        <td>price</td>
     </tr>
 
 
 <!--    Получает спиоок заказов    -->
-    <?php  foreach ($order_list as $order):?>
+<?php  foreach ($order_list as $order):?>
+    <tr>
+        <?php
+        $product_list = User::get_product_list_by_order_id_and_user_id($order['id'], $user_id);
+        $product_amount = count($product_list);
 
-                <?php
-                $list=unserialize($order['description']);
-                $amount_of_products_in_the_order = count($list);
-                ?>
+        $first_product_id = $product_list[0]['product_id'];
+        $product_information = Product::get_product_by_id($first_product_id);
+        $first_product_name = $product_information['name'];
+        $first_product_amount = $product_list[0]['product_amount'];
+        $first_product_price = $product_list[0]['product_price'];
 
-<!--    Получает список товаров в заказе-->
+        unset($product_list[0]);
+        ?>
 
-                    <tr>
-                    <td rowspan="<?= $amount_of_products_in_the_order?>"><?php echo $order['id']; ?></td>
-                    <td rowspan="<?= $amount_of_products_in_the_order?>"><?php echo $order['date']?></a></td>
-                    <td rowspan="<?= $amount_of_products_in_the_order?>"><?php echo $order['time']?></td>
-                    <td rowspan="<?= $amount_of_products_in_the_order?>"><?php echo $order['status']?></td>
-                    <td>
-                         <?php
-//                         print_r($list);
-                         $first_product_id = key($list);
-                         $first_product_amount = $list[$first_product_id];
-                         unset($list[$first_product_id]);
-                         $product_information = Product::get_product_by_id($first_product_id);
-                         $product_name = $product_information['name'];
-                         echo "<a href='/product/$first_product_id'>$product_name</a>";
-                         ;?>
-                    </td>
-                    <td>
-                        <?php
-                        echo "$first_product_amount шт.";
-                        ?>
-                    </td>
-                    </tr>
+        <td rowspan="<?=$product_amount?>"><?php echo $order['id']; ?></td>
+        <td rowspan="<?=$product_amount?>"><?php echo $order['date']?></a></td>
+        <td rowspan="<?=$product_amount?>"><?php echo $order['time']?></td>
+        <td rowspan="<?=$product_amount?>"><?php echo $order['status']?></td>
+        <td><?=$first_product_id ?></td>
+        <td><a href="/product/<?=$first_product_id?>"><?=$first_product_name ?></a></td>
+        <td><?=$first_product_amount." шт."?></td>
+        <td><?=$first_product_price. " грн" ?></td>
 
-                <?php foreach ($list as $product_id =>$amount):
-                    $product_information = Product::get_product_by_id($product_id);
-//                    print_r($product_information);
-                    $product_name = $product_information['name'];
-                ?>
+    </tr>
+        <!--    Получает список товаров в заказе-->
+        <?php foreach ($product_list as $product):
+        $product_id = $product['product_id'];
+        $product_information = Product::get_product_by_id($product_id);
+        $product_name = $product_information['name'];
+        $product_amount = $product['product_amount'];
+        $product_price = $product['product_price']; ?>
 
-                    <tr>
-                    <td>
-                        <?php
-                        echo "<a href='/product/$product_id'>$product_name</a>";?>
-                    </td>
-                        <td>
-                            <?php echo "$amount шт.";?>
-                        </td>
-                    </tr>
+        <tr>
+            <td><?=$product_id ?></td>
+            <td><a href="/product/<?=$product_id?>"><?=$product_name ?></a></td>
+            <td><?=$product_amount." шт."?></td>
+            <td><?=$product_price. " грн" ?></td>
+        </tr>
 
-                <?php endforeach;?>
+        <?php endforeach;?>
 
-    <?php endforeach;?>
+<?php endforeach;?>
 
 </table>
+
+</div>
 <?php endif;?>

@@ -27,8 +27,12 @@ class Pagination
 
         // Определяем общее число элементов в базе данных
         $result = $mysqli->query("$get_total_elements_amount_request");
-        $total_elements_amount = $result->fetch_row();
-        $total_elements_amount = $total_elements_amount[0];
+        if($result === false){
+            $total_elements_amount = 0;
+        } else{
+            $total_elements_amount = $result->fetch_row();
+            $total_elements_amount = $total_elements_amount[0];
+        }
 
         // Находим общее число страниц
         $total_count = ceil(($total_elements_amount / $amount_of_elements_on_page));

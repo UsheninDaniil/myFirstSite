@@ -37,7 +37,7 @@ class TopMenuController
 
         $pagination = new Pagination();
 
-        $amount_of_elements_on_page = 1;
+        $amount_of_elements_on_page = 3;
 
         if (isset($_GET['page'])) {
             $current_page_number = $_GET['page'];

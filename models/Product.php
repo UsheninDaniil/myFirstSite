@@ -144,6 +144,26 @@ class Product extends DatabaseConnect
         parent::disconnect_database($mysqli);
         return $parameters_list;
     }
+
+
+    public static function save_review($review_information){
+
+        $mysqli = parent::connect_to_database();
+
+        $product_id = $review_information['product_id'];
+        $user_id = $review_information['user_id'];
+        $text_review = $review_information['text_review'];
+        $rating = $review_information['rating'];
+        $date = $review_information['date'];
+        $time = $review_information['time'];
+
+        $mysqli->query ("INSERT INTO `product_reviews` (`product_id`, `user_id`, `review`, `rating`, `date`, `time`) VALUES ('$product_id', '$user_id', '$text_review', '$rating', '$date', '$time')");
+
+
+        parent::disconnect_database($mysqli);
+
+    }
+
 }
 
 

@@ -228,7 +228,13 @@ function load_category_parameters() {
 
 
 
+
+
+
+
 $( function() {
+
+    if($('#accordion  > div').length>0){
 
     $("#accordion > div").accordion({
         header: "h4",
@@ -240,6 +246,7 @@ $( function() {
     //turn to inline mode
     $.fn.editable.defaults.mode = 'inline'; // popup default
 
+    }
 
     $('#sortable_categories_list_table .category_name').on('shown', function(e, editable) {
         changeEditableInputWidth();
@@ -265,7 +272,6 @@ $( function() {
     });
 
 } );
-
 
 // Sortable categories table
 
@@ -356,9 +362,19 @@ $(document).on('click', 'tag x', function (e) {
 
     var tag_name = $(this).next().text();
     tag_name = $.trim(tag_name);
+
+    if((tag_name.indexOf('name')) !== -1){
+        $("#search_name").removeAttr("value");
+    }
+
+    if((tag_name.indexOf('id')) !== -1){
+        $("#search_id").removeAttr("value");
+    }
+
     console.log('tag_name \n' + tag_name);
 
     $("#select_category option:contains('" + tag_name + "')").removeAttr("selected");
+    $("#select_status option:contains('" + tag_name + "')").removeAttr("selected");
 
     console.log("#select_category option:contains('" + tag_name + "')");
 
@@ -379,7 +395,29 @@ function apply_filter_in_edit_products(){
 }
 
 
+function save_product_review(){
+    console.log("Вызвана функуия сохранения отзыва");
 
+    var text_review = document.getElementById("text_review").value;
+
+    var rating = document.querySelector('.rating_star_container').dataset.rating;
+
+    var product_id = document.querySelector('.rating_star_container').dataset.productId;
+
+    if(!rating){
+        rating = 1;
+    }
+
+    console.log('rating = ' + rating);
+
+    var review_information = {text_review: text_review, rating: rating, product_id:product_id};
+
+    $.post("/product/save_product_review" , review_information, function (data) {
+        document.location.href = "/product/"+product_id;
+        },"html"
+    );
+
+}
 
 
 

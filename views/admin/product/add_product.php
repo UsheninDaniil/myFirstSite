@@ -5,14 +5,20 @@ $categoryList = Category::get_category_list();
 
 ?>
 
-<br />
-<a href="/admin" class="go-back-to-admin-panel" /><b>Панель администратора</b></a>
-→
-<a href="/admin/edit_products" class="go-back-to-admin-panel"/><b>Управление товарами</b></a>
-→
-<a href="/admin/add_product" class="go-back-to-admin-panel"/><b>Добавление товара</b></a>
+<div class="container_with_breadcrumb">
 
-<h4>Добавить новый товар</h4>
+
+<div class="breadcrumb">
+    <a href="/admin" class="go-back-to-admin-panel" /><b>Панель администратора</b></a>
+    →
+    <a href="/admin/edit_products" class="go-back-to-admin-panel"/><b>Управление товарами</b></a>
+    →
+    <a href="/admin/add_product" class="go-back-to-admin-panel"/><b>Добавление товара</b></a>
+</div>
+
+<div class="add_new_product_main_container">
+
+<h4 style="text-align: center">Добавить новый товар</h4>
 
 <form  enctype="multipart/form-data" name="add_product" id="add_product" action="" method ="post" class="feedback">
 
@@ -50,4 +56,10 @@ $categoryList = Category::get_category_list();
     <div id="test">&nbsp</div>
 </div>
 
-<input type = "submit" name ="save_new_product" value="Добавить товар" form="add_product"><br />
+<div style="text-align: center">
+    <input type="submit" name ="save_new_product" value="Добавить товар" form="add_product"><br />
+</div>
+
+</div>
+
+</div>

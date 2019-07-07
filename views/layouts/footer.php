@@ -85,34 +85,6 @@ foreach ($assets_routes as $uri => $scripts_array){
 
 </div>
 
-
-
-
-
-
-
-
-
-<!--<script defer src="/template/third_party_files/fontawesome-free-5.8.1-web/js/all.min.js"></script>-->
-<!---->
-<!--<script src="/template/third_party_files/jquery-3.3.1.min.js"></script>-->
-<!--<script src="/template/third_party_files/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>-->
-<!---->
-<!--<script src="/template/third_party_files/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>-->
-<!--<script src="/template/third_party_files/popper.min.js"></script>-->
-<!--<script src="/template/third_party_files/bootstrap4-editable/js/bootstrap-editable.js"></script>-->
-<!---->
-<!--<script src="/template/third_party_files/jQuery-UI-Multiple-Select-Widget/src/jquery.multiselect.js"></script>-->
-<!--<script src="/template/third_party_files/jQuery-UI-Multiple-Select-Widget/src/jquery.multiselect.filter.js"></script>-->
-<!--<script src="/template/third_party_files/jQuery-UI-Multiple-Select-Widget/i18n/jquery.multiselect.ru.js"></script>-->
-<!--<script src="/template/third_party_files/jQuery-UI-Multiple-Select-Widget/i18n/jquery.multiselect.filter.ru.js"></script>-->
-<!---->
-<!--<script src="/template/third_party_files/tagify-plugin-old-version/jQuery.tagify.js"></script>-->
-<!---->
-<!--<script src="/template/js/drag_and_drop.js"></script>-->
-<!--<script src="/template/js/images_preview.js"></script>-->
-<!--<script src="/template/js/product_images_slider.js"></script>-->
-<!--<!---->-->
 <script src="/template/js/main.js"></script>
 <script src="/template/js/admin.js?v=<?php echo uniqid()?>"></script>
 

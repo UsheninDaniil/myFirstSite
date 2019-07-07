@@ -47,14 +47,13 @@ class UserController
 
     public function actionCabinet()
     {
-        if (User::action_check_authorization()==true) {
-            require_once('/views/layouts/header.php');
-            require_once(ROOT . '/views/user/cabinet.php');
-            require_once('/views/layouts/footer.php');
-        }
-        else {
+        if (User::action_check_authorization()==false) {
             header("Location: /login");
         }
+
+        require_once('/views/layouts/header.php');
+        require_once(ROOT . '/views/user/cabinet.php');
+        require_once('/views/layouts/footer.php');
     }
 
     public function actionCart()

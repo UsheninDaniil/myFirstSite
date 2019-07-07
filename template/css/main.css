@@ -332,40 +332,45 @@ a.go-back-to-admin-panel:hover{
 
 ul.header_main_information_list li{
     display: inline;
-
+    /*flex-grow: 1;*/
 }
 
 ul.header_main_information_list{
-    padding: 0px;
+    margin: 0;
+    padding: 0;
     display: flex;
-    /*-webkit-box-pack: justify;*/
-    /*-ms-flex-pack: justify;*/
-    justify-content: space-around;
-    /*-webkit-box-align: center;*/
-    /*-ms-flex-align: center;*/
-    /*align-items: center;*/
+    align-items: center;
 }
 
 div.header_left_part{
-    width: 20%;
+    border: 1px solid red;
+    display: flex;
+    justify-content: flex-start;
+    /*justify-content: center;*/
+    width: 25%;
     box-sizing: border-box;
-    padding-left: 1%;
 }
 
 div.header_main_information{
-    width: 28%;
-    padding: 5px;
+    border: 1px solid green;
+    display: flex;
+    justify-content: flex-start;
+    /*justify-content: center;*/
+    width: 25%;
+    /*padding: 5px;*/
     box-sizing: border-box;
 }
 
 div.top-menu{
-    padding: 10px;
+    display: flex;
+    padding: 1%;
 }
 
 
 div .header_search{
+    display: flex;
     width: 50%;
-    padding: 5px;
+    /*padding: 5px;*/
     box-sizing: border-box;
     border: 1px solid black;
 }
@@ -385,13 +390,13 @@ div .header_search input, div .header_search button {
     background: transparent;
 }
 div .header_search input {
-    width: 100%;
-    height: 30px;
-    padding-left: 15px;
+    /*width: 100%;*/
+    /*height: 30px;*/
+    /*padding-left: 15px;*/
 }
 div .header_search button {
-    height: 30px;
-    width: 30px;
+    /*height: 30px;*/
+    /*width: 30px;*/
     position: absolute;
     top: 0;
     right: 0;
@@ -400,13 +405,12 @@ div .header_search button {
 div .header_search button:before {
     content: "\f002";
     font-family: FontAwesome;
-    font-size: 16px;
+    /*font-size: 16px;*/
     color: black;
 }
 
 a.header_show_category_list{
     color: black;
-    font-size: x-large;
 }
 
 a.header_show_category_list:hover{
@@ -416,7 +420,6 @@ a.header_show_category_list:hover{
 
 a.header_go_to_homepage{
     color: black;
-    font-size: x-large;
 }
 
 a.header_go_to_homepage:hover{
@@ -441,15 +444,15 @@ div.header_left_part ul li{
 
 }
 
-div.header_left_part .topmenu{
-    padding: 0px;
+ul.topmenu{
+    padding: 0;
     display: flex;
     /*-webkit-box-pack: justify;*/
     /*-ms-flex-pack: justify;*/
     justify-content: space-around;
     /*-webkit-box-align: center;*/
     /*-ms-flex-align: center;*/
-    /*align-items: center;*/
+    align-items: center;
 }
 
 
@@ -464,36 +467,13 @@ div.header_left_part .topmenu{
     padding: 0;
 }
 .header_left_part .topmenu > li {
-    display: inline-block;
-    margin-right: 20px;
-    position: relative;
+    display: inline;
+    /*flex-grow: 1;*/
+    /*margin-right: 20px;*/
 }
 .header_left_part .topmenu > li:last-child {
     margin-right: 0;
 }
-.header_left_part a {
-    display: block;
-    padding: 10px 15px;
-    text-decoration: none;
-    outline: none;
-    font-family: 'Lora', serif;
-    transition: .5s linear;
-}
-
-.header_left_part .submenu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    z-index: 10;
-    -webkit-transition: 0.5s ease-in-out;
-    -moz-transition: 0.5s ease-in-out;
-    -o-transition: 0.5s ease-in-out;
-    transition: 0.5s ease-in-out;
-}
-
-
-
 
 .header_left_part ul {
     background: white;
@@ -614,6 +594,96 @@ tags span.input{
 .draggable {
     cursor: pointer;
 }
+
+
+.container_with_breadcrumb{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.breadcrumb{
+    margin-right: auto;
+    background-color: white;
+}
+
+.add_new_product_main_container{
+    margin-top: 10px;
+    padding: 20px;
+    width: 550px;
+    border: 1px solid black;
+}
+
+
+
+.scale__container--js {
+    text-align: center;
+}
+.scale--js {
+    display: inline-block;
+    transform-origin: 50% 0;
+    -webkit-font-smoothing: antialiased;
+    transform: translate3d(0, 0, 0);
+}
+
+pre{
+    margin: 0;
+}
+
+
+/*.input,*/
+.buffer {
+    /*font-family: Arial, Verdana, sans-serif;*/
+    /*font-size: 14px;*/
+    /*letter-spacing: 0.05em;*/
+}
+
+.input {
+    border: none;
+    /*min-width:200px;*/
+}
+
+.buffer {
+    position: absolute;
+    top: -1000px;
+    left: -1000px;
+    visibility: hidden;
+    white-space: nowrap;
+}
+
+
+.rating_star_container > *{
+    line-height: 1;
+    font-family: normal;
+}
+
+
+.rating_star_container {
+    display: inline-flex;
+}
+
+.fa-star.fas{
+    color: transparent;
+}
+
+.fa-star.far{
+    position: absolute;
+}
+
+.active_star > .fas{
+    color: Gold !important;
+}
+
+
+
+
+
+
+
+
+
 
 
 

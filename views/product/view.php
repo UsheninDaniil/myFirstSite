@@ -188,7 +188,57 @@ $slider_polosa_height = $element_height * $photo_amount + $padding_bottom;
         </table>
     </div>
 
+
+    <div class="review" style="margin:auto; text-align: center">
+        <h4>Отзыв</h4>
+
+        <form name="review_form" action="" method="post">
+            <textarea id="text_review"></textarea><br/>
+        </form>
+
+        <div class="rating_star_container" data-product-id="<?=$product_id?>">
+
+            <div data-rating="1" class="rating_star">
+                <i class="fa-star far"></i>
+                <i class="fa-star fas"></i>
+            </div>
+
+            <div data-rating="2" class="rating_star">
+                <i class="fa-star far"></i>
+                <i class="fa-star fas"></i>
+            </div>
+
+            <div data-rating="3" class="rating_star">
+                <i class="fa-star far"></i>
+                <i class="fa-star fas"></i>
+            </div>
+
+            <div data-rating="4" class="rating_star">
+                <i class="fa-star far"></i>
+                <i class="fa-star fas"></i>
+            </div>
+
+            <div data-rating="5" class="rating_star">
+                <i class="fa-star far"></i>
+                <i class="fa-star fas"></i>
+            </div>
+
+        </div>
+
+        <br/>
+
+        <input type="button" form="review_form" name ="save_review" value="Отправить" onclick="save_product_review()">
+
+    </div>
+
 </div>
+
+<br/>
+
+
+
+
+
 
 <br/>
 
@@ -242,3 +292,105 @@ $slider_polosa_height = $element_height * $photo_amount + $padding_bottom;
         },
     });
 </script>
+
+
+
+
+
+<script>
+
+    var rating_container = document.querySelector('.rating_star_container'),
+        ratingItem = document.querySelectorAll('.rating_star');
+
+
+    rating_container.onclick = function(e){
+        var target = e.target;
+
+        // console.log("click_target");
+        // console.log(target);
+
+        if(target.parentElement.classList.contains('rating_star')){
+            removeClass(ratingItem,'current-active');
+            target.parentElement.classList.add('active_star', 'current-active');
+
+            rating_container.dataset.rating = target.parentElement.dataset.rating;
+        }
+    };
+
+    rating_container.onmouseover = function(e) {
+        var target = e.target;
+
+        // console.log("mouseover_target");
+        // console.log(target);
+
+        if(target.parentElement.classList.contains('rating_star')){
+            removeClass(ratingItem,'active_star');
+
+            target.parentElement.classList.add('active_star');
+            mouseOverActiveClass(ratingItem);
+        }
+    };
+
+    rating_container.onmouseout = function(){
+        addClass(ratingItem,'active_star');
+        mouseOutActiveClas(ratingItem);
+    };
+
+    function removeClass(arr) {
+        for(var i = 0, iLen = arr.length; i <iLen; i ++) {
+            for(var j = 1; j < arguments.length; j ++) {
+                ratingItem[i].classList.remove(arguments[j]);
+            }
+        }
+    }
+    function addClass(arr) {
+        for(var i = 0, iLen = arr.length; i <iLen; i ++) {
+            for(var j = 1; j < arguments.length; j ++) {
+                ratingItem[i].classList.add(arguments[j]);
+            }
+        }
+    }
+
+    function mouseOverActiveClass(arr){
+        for(var i = 0, iLen = arr.length; i < iLen; i++) {
+            if(arr[i].classList.contains('active_star')){
+                break;
+            }else {
+                arr[i].classList.add('active_star');
+            }
+        }
+    }
+
+    function mouseOutActiveClas(arr){
+        for(var i = arr.length-1; i >=0; i--) {
+            if(arr[i].classList.contains('current-active')){
+                break;
+            }else {
+                arr[i].classList.remove('active_star');
+            }
+        }
+    }
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

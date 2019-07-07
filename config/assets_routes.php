@@ -6,7 +6,7 @@ return array(
     '/' => array(
                   0 => "/template/third_party_files/jquery-3.3.1.min.js",
                   1 => "/template/third_party_files/bootstrap-4.3.1-dist/js/bootstrap.min.js",
-                  2 => "/template/third_party_files/fontawesome-free-5.8.1-web/js/all.min.js",
+//                  2 => "/template/third_party_files/fontawesome-free-5.8.1-web/js/all.min.js",
                   ),
 
     '/admin/edit_products' => array(

@@ -11,6 +11,7 @@ Class ProductController
         require_once (ROOT. '/models/Category.php');
 
         $product_id=Product::get_product_id();
+
         $product_info=Product::get_product_by_id($product_id);
         $product_parameters_info=Product::get_product_parameters_by_id($product_id);
 
@@ -23,6 +24,37 @@ Class ProductController
         require_once ('/views/layouts/header.php');
         require_once (ROOT.'/views/product/view.php');
         require_once ('/views/layouts/footer.php');
+
+    }
+
+
+    public function actionSaveProductReview(){
+
+        require_once(ROOT. '/models/Product.php');
+
+        print_r($_POST);
+
+        if(isset($_POST)) {
+            $text_review = htmlspecialchars ($_POST["text_review"]);
+            $rating = htmlspecialchars ($_POST["rating"]);
+            $product_id = htmlspecialchars ($_POST["product_id"]);
+
+
+            if(isset($_SESSION["user_id"])){
+                $user_id = $_SESSION["user_id"];
+                $current_date = date("m.d.y");
+                $current_time = date("H:i");
+
+                $review_information['product_id'] = $product_id;
+                $review_information['user_id'] = $user_id;
+                $review_information['text_review'] = $text_review;
+                $review_information['rating'] = $rating;
+                $review_information['date'] = $current_date;
+                $review_information['time'] = $current_time;
+
+                Product::save_review($review_information);
+            }
+        }
 
     }
 

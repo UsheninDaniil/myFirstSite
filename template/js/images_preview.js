@@ -50,8 +50,8 @@ function handleFiles(files) {
 
         photo_information = element.getElementsByClassName('photo_information')[0];
         photo_information.innerHTML = "фото #" + photo_number +
-            "<br/>name = " + file.name +
-            "<br/>size = " + size + " MB " +
+            "<br/><pre><span class='photo_name'>name = " + file.name + "</pre></span>" +
+            "size = " + size + " MB " +
             "<br/><span class='photo_width'>width</span>" + " x " + "<span class='photo_height'>height</span>";
 
         photo_management = element.getElementsByClassName('photo_management')[0];

@@ -38,65 +38,65 @@
     <div class="header">
         <div class="top-menu" >
 
-            <div class="header_left_part" style="display: inline-block">
+            <div class="header_left_part" style="overflow: auto;">
 
-                    <ul class="topmenu">
+                    <ul class="topmenu scalable_text">
                         <li>
-                            <b><a href="" class="header_show_category_list"><i class="fas fa-list"></i> Каталог товаров </a></b>
+                            <div><pre><b><a href="" class="header_show_category_list"><i class="fas fa-list"></i> Каталог товаров </a></b></pre></div>
 
-                            <ul class="submenu">
-                                <li><a href="">Компьютеры</a></li>
-                                <li><a href="">Ноутбуки</a></li>
-                                <li><a href="">Планшеты</a></li>
-                                <li><a href="">Телефоны</a></li>
-                            </ul>
+<!--                            <ul class="submenu">-->
+<!--                                <li><a href="">Компьютеры</a></li>-->
+<!--                                <li><a href="">Ноутбуки</a></li>-->
+<!--                                <li><a href="">Планшеты</a></li>-->
+<!--                                <li><a href="">Телефоны</a></li>-->
+<!--                            </ul>-->
 
                         </li>
-                        <li><a href="/" class="header_go_to_homepage"><i class="fas fa-home"></i></a></li>
+                        <li>
+                            <div><pre><a href="/" class="header_go_to_homepage"><i class="fas fa-home"></i></a></pre></div>
+                        </li>
                     </ul>
-
-
-
 
             </div>
 
             <div class="header_search" style="display: inline-block">
                 <form class="search_form" action="/search/" method="get">
-                    <input type="text" name="text" placeholder="Поиск по сайту">
-                    <button type="submit"></button>
+                    <div style="overflow: auto; float: left">
+                        <input class="input" style="" type="text" name="text" placeholder="Поиск по сайту 123456789_123456789_123456789">
+                    </div>
+<!--                    <button type="submit"></button>-->
                 </form>
             </div>
 
-            <div class="header_main_information" style="display: inline-block">
-                <ul class="header_main_information_list">
-                    <li><a href ="/cabinet" style="color: black"><i class="fas fa-home"></i> Личный кабинет</a></li>
+            <div class="header_main_information" style="overflow: auto;">
+                <ul class="header_main_information_list scalable_text">
+
                     <li>
-                        <a href ="/cart" class="cart-count" style="color: black">
-                            <i class="fas fa-shopping-cart"></i>
-                            <?php
-                            if(isset($_SESSION['cart_product_amount'])){
-                                $cart_product_amount = $_SESSION['cart_product_amount'];
-                                echo "Корзина ($cart_product_amount)";
-                            }
-                            else {
-                                echo "Корзина";
-                            }
-                            ?>
-                        </a>
+                        <pre><a href ="/cabinet" style="color: black"><i class="fas fa-home"></i>Личный кабинет</a></pre>
                     </li>
+
                     <li>
-                        <a href ="/compare" class="compare-count" style="color: black">
-                            <i class="fas fa-balance-scale"></i>
-                            <?php
-                            if(isset($_SESSION['compare_product_amount'])){
-                                $compare_product_amount = $_SESSION['compare_product_amount'];
-                                echo "Сравнение ($compare_product_amount)";
-                            }
-                            else {
-                                echo "Сравнение";
-                            }
-                            ?>
-                        </a>
+                       <pre><a href ="/cart" class="cart-count" style="color: black"><?php
+                                if(isset($_SESSION['cart_product_amount'])){
+                                    $cart_product_amount = $_SESSION['cart_product_amount'];
+                                    echo "<i class='fas fa-shopping-cart'></i>Корзина($cart_product_amount)";
+                                }
+                                else {
+                                    echo "<i class='fas fa-shopping-cart'></i>Корзина";
+                                }
+                                ?></a></pre>
+                    </li>
+
+                    <li>
+                        <pre><a href ="/compare" class="compare-count" style="color: black"><?php
+                                if(isset($_SESSION['compare_product_amount'])){
+                                    $compare_product_amount = $_SESSION['compare_product_amount'];
+                                    echo "<i class='fas fa-balance-scale'></i>Сравнение ($compare_product_amount)";
+                                }
+                                else {
+                                    echo "<i class='fas fa-balance-scale'></i>Сравнение";
+                                }
+                                ?></a></pre>
                     </li>
                 </ul>
             </div>
@@ -108,4 +108,98 @@
 
 
 
+<script>
 
+
+    var buffer = [];
+
+    function resize_input_to_width_of_placeholder() {
+
+        var input = document.querySelectorAll('.input');
+        for (var i = 0; input.length > i; i++) {
+
+            if (input[i].placeholder !== '') {
+
+                if(buffer[i]){
+                    input[i].parentNode.removeChild(buffer[i]);
+                    console.log("buffer существует, удалил");
+                } else {
+                    console.log("buffer не существует");
+                }
+
+                input[i].parentElement.style.fontSize = 100 + "%";
+
+                buffer[i] = document.createElement('div');
+                buffer[i].className = "buffer";
+                //вставляем скрытый div.buffer
+                input[i].parentNode.insertBefore(buffer[i], input[i].nextSibling);
+
+                input[i].nextElementSibling.innerHTML = input[i].placeholder;
+                input[i].style.width = input[i].nextElementSibling.clientWidth + 'px';
+
+                input[i].parentElement.style.width = input[i].nextElementSibling.clientWidth + 'px';
+
+                var search_form_width = input[i].closest(".search_form").offsetWidth;
+
+                var necessary_width = search_form_width;
+                necessary_width = Math.ceil(necessary_width);
+                var real_width = input[i].scrollWidth;
+
+                var font_size = Math.floor((necessary_width / real_width)*100);
+                font_size = font_size - 1;
+                font_size = font_size + '%';
+
+                input[i].parentElement.style.fontSize = font_size;
+
+                input[i].parentElement.style.width = search_form_width + 'px';
+                input[i].style.width = search_form_width + 'px';
+            }
+
+            input[i].oninput = function() {
+                this.style.width = 100 + '%';
+            };
+
+        }
+
+    }
+
+    function resize_scalable_text() {
+
+        console.log("вызвана функция уменьшения текста");
+
+        var scalable_text_array = document.querySelectorAll('.scalable_text');
+
+        for (var i = 0; i < scalable_text_array.length; i++) {
+
+            console.log("Элемент #" + i);
+
+            var scalable_text = scalable_text_array[i];
+
+            scalable_text.parentElement.style.fontSize = 100 + "%";
+
+            console.log("scalable_text.parentElement ДО");
+            console.log(scalable_text.parentElement);
+            console.log(scalable_text.parentElement.style.fontSize);
+
+            var necessary_width = scalable_text.parentElement.clientWidth;
+            necessary_width = Math.ceil(necessary_width);
+            var real_width = scalable_text.scrollWidth;
+
+            console.log("necessary_width = " + necessary_width);
+            console.log("real_width = " + real_width);
+
+            var font_size = Math.floor((necessary_width / real_width)*100);
+            font_size = font_size - 1;
+            font_size = font_size + '%';
+
+            scalable_text.parentElement.style.fontSize = font_size;
+        }
+    };
+
+    window.addEventListener('resize', resize_input_to_width_of_placeholder);
+    window.addEventListener('resize', resize_scalable_text);
+
+    document.addEventListener("DOMContentLoaded", resize_input_to_width_of_placeholder);
+    document.addEventListener("DOMContentLoaded", resize_scalable_text);
+
+</script>
