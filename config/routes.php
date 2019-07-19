@@ -9,6 +9,7 @@
     '/product/add/([0-9]+)' => 'product/add/',
     '/product/add_compare/([0-9]+)' => 'product/add_compare/',
     '/product/save_product_review' => 'product/saveProductReview',
+    '/product/review_crud/(.*)' => 'product/reviewCrud',
 
     '/$' => 'TopMenu/homepage',
     '/\?(.*)' => 'TopMenu/homepage',

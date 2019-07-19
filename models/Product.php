@@ -159,9 +159,92 @@ class Product extends DatabaseConnect
 
         $mysqli->query ("INSERT INTO `product_reviews` (`product_id`, `user_id`, `review`, `rating`, `date`, `time`) VALUES ('$product_id', '$user_id', '$text_review', '$rating', '$date', '$time')");
 
+        parent::disconnect_database($mysqli);
+
+    }
+
+    public static function update_review($review_information){
+
+        $mysqli = parent::connect_to_database();
+
+        $product_id = $review_information['product_id'];
+        $user_id = $review_information['user_id'];
+        $text_review = $review_information['text_review'];
+        $rating = $review_information['rating'];
+        $date = $review_information['date'];
+        $time = $review_information['time'];
+
+        $mysqli->query ("UPDATE `product_reviews` SET `review`='$text_review', `rating`='$rating', `date`='$date', `time`='$time' WHERE `product_id`='$product_id' AND `user_id`='$user_id' ");
 
         parent::disconnect_database($mysqli);
 
+    }
+
+    public static function delete_review($product_id, $user_id){
+
+        $mysqli = parent::connect_to_database();
+
+        $mysqli->query ("DELETE FROM `product_reviews` WHERE `product_id`='$product_id' AND `user_id`='$user_id' ");
+
+        parent::disconnect_database($mysqli);
+
+    }
+
+    public static function get_product_review_list_by_product_id($product_id){
+
+        $mysqli = parent::connect_to_database();
+        $result = $mysqli->query ("SELECT * FROM product_reviews WHERE `product_id` = '$product_id'");
+        $i = 0;
+        $product_review_list = array();
+
+        while ($i < $result->num_rows){
+            $row = $result->fetch_array();
+            $product_review_list[$i]['product_id'] = $row['product_id'];
+            $product_review_list[$i]['user_id'] = $row['user_id'];
+            $product_review_list[$i]['review'] = $row['review'];
+            $product_review_list[$i]['rating'] = $row['rating'];
+            $product_review_list[$i]['date'] = $row['date'];
+            $product_review_list[$i]['time'] = $row['time'];
+            $i++;
+        }
+
+        parent::disconnect_database($mysqli);
+        return $product_review_list;
+    }
+
+    public static function get_product_review_by_product_id_and_user_id($product_id, $user_id){
+
+        $mysqli = parent::connect_to_database();
+        $result = $mysqli->query ("SELECT * FROM product_reviews WHERE `product_id` = '$product_id' AND `user_id` = '$user_id' LIMIT 1");
+        $review_information = array();
+        $row = $result->fetch_array();
+
+        if(!empty($row)){
+        $review_information['product_id'] = $row['product_id'];
+        $review_information['user_id'] = $row['user_id'];
+        $review_information['review'] = $row['review'];
+        $review_information['rating'] = $row['rating'];
+        $review_information['date'] = $row['date'];
+        $review_information['time'] = $row['time'];
+        }
+
+        parent::disconnect_database($mysqli);
+        return $review_information;
+    }
+
+    public static function check_review_exist($product_id, $user_id){
+
+        $mysqli = parent::connect_to_database();
+        $result = $mysqli->query ("SELECT * FROM product_reviews WHERE `product_id` = '$product_id' AND `user_id` = '$user_id' LIMIT 1");
+        $review_information = array();
+        $row = $result->fetch_array();
+
+        if(!empty($row)){
+            $result = true;
+        } else{
+            $result = false;
+        }
+        return $result;
     }
 
 }

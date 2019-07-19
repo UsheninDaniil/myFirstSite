@@ -203,19 +203,13 @@ class User extends DatabaseConnect
 
         $mysqli->query ("INSERT INTO `myFirstSite`.`orders` (`id`,`user_id`,`date`,`time`,`status`) VALUES ('$order_id', '$user_id', '$current_date', '$current_time', 'в обработке')");
 
-
         foreach ($cartData as $product_id => $product_amount){
 
             echo "<br/>product_id = $product_id <br/>";
             echo "product_amount = $product_amount <br/><br/>";
 
             $mysqli->query ("INSERT INTO `myFirstSite`.`orders_information` (`order_id`,`product_id`,`product_amount`) VALUES ('$order_id', '$product_id', '$product_amount')");
-
-
         }
-
-
-
 
         unset($_SESSION['cart_product_list']);
 
@@ -292,6 +286,21 @@ class User extends DatabaseConnect
 
         parent::disconnect_database($mysqli);
         return $product_id;
+    }
+
+    public static function get_user_name_by_user_id($user_id){
+
+        $mysqli = parent::connect_to_database();
+
+        $result = $mysqli->query ("SELECT * FROM `user` WHERE `id` = '$user_id' ");
+
+        $row = $result->fetch_assoc();
+
+        $user_name = $row['login'];
+
+        parent::disconnect_database($mysqli);
+        return $user_name;
+
     }
 
 

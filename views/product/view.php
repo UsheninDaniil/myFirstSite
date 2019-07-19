@@ -188,12 +188,100 @@ $slider_polosa_height = $element_height * $photo_amount + $padding_bottom;
         </table>
     </div>
 
+    <div class="review_container" style="width: 100%;">
 
-    <div class="review" style="margin:auto; text-align: center">
+    <div class="review_list" style="padding: 10px; border: 1px solid black; text-align: center">
+        <h4>Список отзывов</h4>
+
+<?php
+
+if(!empty($current_user_review)):
+
+    $product_id = $current_user_review['product_id'];
+    $user_id = $current_user_review['user_id'];
+
+    $user_name = User::get_user_name_by_user_id($user_id);
+
+
+    $review = $current_user_review['review'];
+    $rating = $current_user_review['rating'];
+    $date = $current_user_review['date'];
+    $time = $current_user_review['time'];
+    ?>
+
+    <div class="current_user_review" style="">
+
+        <div class="review_control_container" data-review-id>
+            <b>Ваш отзыв</b>
+            <span class="review_control">
+                <a href="javascript:void(0);" data-review-edit onclick="edit_product_review()"><b><i class="far fa-edit" style="color: black"></i></b></a>
+                <a href="javascript:void(0);" onclick="delete_product_review()"><b><i class="far fa-times-circle"></i></b></a>
+            </span>
+        </div>
+
+        <div class="review_item" style="border: 2px solid red">
+            <div class="review_information">
+                <div class="review_user_name"><b><?=$user_name?></b></div>
+                <div class="review_rating">
+
+                    <?php for ($i = 1; $i <= $rating; $i++):?>
+                        <div class="active_star"><i class="fa-star far"></i><i class="fa-star fas"></i></div>
+                    <? endfor; ?>
+
+                    <?php for ($i = 5; $i > $rating; $i--):?>
+                        <div><i class="fa-star far"></i></div>
+                    <? endfor; ?>
+
+                </div>
+                <div class="review_date"><?=$date?></div>
+            </div>
+            <div class="review_text"><?=$review?></div>
+
+        </div>
+
+    </div>
+
+<?php endif;?>
+
+
+<!--        --><?php //foreach ($product_review_list as $product_review):
+//            $user_id = $product_review['user_id'];
+//            $user_name = User::get_user_name_by_user_id($user_id);
+//            $review = $product_review['review'];
+//            $rating = $product_review['rating'];
+//            $date = $product_review['date'];
+//            $time = $product_review['time'];
+//
+//            ?>
+<!---->
+<!--            <div class="review_item">-->
+<!--                <div class="review_information">-->
+<!--                    <div class="review_user_name"><b>--><?//=$user_name ?><!--</b></div>-->
+<!--                    <div class="review_rating">-->
+<!---->
+<!--                        --><?php //for ($i = 1; $i <= $rating; $i++):?>
+<!--                            <div class="active_star"><i class="fa-star far"></i><i class="fa-star fas"></i></div>-->
+<!--                        --><?// endfor; ?>
+<!---->
+<!--                        --><?php //for ($i = 5; $i > $rating; $i--):?>
+<!--                            <div><i class="fa-star far"></i></div>-->
+<!--                        --><?// endfor; ?>
+<!---->
+<!--                    </div>-->
+<!--                    <div class="review_date">--><?//=$date ?><!--</div>-->
+<!--                </div>-->
+<!--                <div class="review_text">--><?//=$review ?><!--</div>-->
+<!--            </div>-->
+<!---->
+<!--        --><?php //endforeach; ?>
+
+    </div>
+
+    <div class="review" style="padding: 10px; text-align: center">
         <h4>Отзыв</h4>
 
         <form name="review_form" action="" method="post">
-            <textarea id="text_review"></textarea><br/>
+            <textarea id="text_review_new"></textarea><br/>
         </form>
 
         <div class="rating_star_container" data-product-id="<?=$product_id?>">
@@ -227,9 +315,20 @@ $slider_polosa_height = $element_height * $photo_amount + $padding_bottom;
 
         <br/>
 
-        <input type="button" form="review_form" name ="save_review" value="Отправить" onclick="save_product_review()">
+
+
+        <input  type="button" form="review_form" name ="save_review" value="Отправить" onclick="save_product_review()" <?php if(isset($review_exists)){if($review_exists === true){echo "disabled";}}?>>
+
+        <br/>
+        <br/>
+        <?php
+        echo "<b>Внимание! <br/> Отзыв можно оставлять только после покупки товара.</b>";
+        ?>
 
     </div>
+
+    </div>
+
 
 </div>
 
@@ -296,82 +395,8 @@ $slider_polosa_height = $element_height * $photo_amount + $padding_bottom;
 
 
 
+<script src="/template/js/rating_stars.js"></script>
 
-<script>
-
-    var rating_container = document.querySelector('.rating_star_container'),
-        ratingItem = document.querySelectorAll('.rating_star');
-
-
-    rating_container.onclick = function(e){
-        var target = e.target;
-
-        // console.log("click_target");
-        // console.log(target);
-
-        if(target.parentElement.classList.contains('rating_star')){
-            removeClass(ratingItem,'current-active');
-            target.parentElement.classList.add('active_star', 'current-active');
-
-            rating_container.dataset.rating = target.parentElement.dataset.rating;
-        }
-    };
-
-    rating_container.onmouseover = function(e) {
-        var target = e.target;
-
-        // console.log("mouseover_target");
-        // console.log(target);
-
-        if(target.parentElement.classList.contains('rating_star')){
-            removeClass(ratingItem,'active_star');
-
-            target.parentElement.classList.add('active_star');
-            mouseOverActiveClass(ratingItem);
-        }
-    };
-
-    rating_container.onmouseout = function(){
-        addClass(ratingItem,'active_star');
-        mouseOutActiveClas(ratingItem);
-    };
-
-    function removeClass(arr) {
-        for(var i = 0, iLen = arr.length; i <iLen; i ++) {
-            for(var j = 1; j < arguments.length; j ++) {
-                ratingItem[i].classList.remove(arguments[j]);
-            }
-        }
-    }
-    function addClass(arr) {
-        for(var i = 0, iLen = arr.length; i <iLen; i ++) {
-            for(var j = 1; j < arguments.length; j ++) {
-                ratingItem[i].classList.add(arguments[j]);
-            }
-        }
-    }
-
-    function mouseOverActiveClass(arr){
-        for(var i = 0, iLen = arr.length; i < iLen; i++) {
-            if(arr[i].classList.contains('active_star')){
-                break;
-            }else {
-                arr[i].classList.add('active_star');
-            }
-        }
-    }
-
-    function mouseOutActiveClas(arr){
-        for(var i = arr.length-1; i >=0; i--) {
-            if(arr[i].classList.contains('current-active')){
-                break;
-            }else {
-                arr[i].classList.remove('active_star');
-            }
-        }
-    }
-
-</script>
 
 
 

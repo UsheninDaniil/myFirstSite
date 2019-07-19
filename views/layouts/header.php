@@ -122,9 +122,9 @@
 
                 if(buffer[i]){
                     input[i].parentNode.removeChild(buffer[i]);
-                    console.log("buffer существует, удалил");
+                    // console.log("buffer существует, удалил");
                 } else {
-                    console.log("buffer не существует");
+                    // console.log("buffer не существует");
                 }
 
                 input[i].parentElement.style.fontSize = 100 + "%";
@@ -171,15 +171,9 @@
 
         for (var i = 0; i < scalable_text_array.length; i++) {
 
-            console.log("Элемент #" + i);
-
             var scalable_text = scalable_text_array[i];
 
             scalable_text.parentElement.style.fontSize = 100 + "%";
-
-            console.log("scalable_text.parentElement ДО");
-            console.log(scalable_text.parentElement);
-            console.log(scalable_text.parentElement.style.fontSize);
 
             var necessary_width = scalable_text.parentElement.clientWidth;
             necessary_width = Math.ceil(necessary_width);

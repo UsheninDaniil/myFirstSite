@@ -101,8 +101,6 @@
 
     </div>
 
-<!--  <div style="clear:both;"></div>-->
-
 </div>
 
 
@@ -111,76 +109,3 @@
 echo "<br />";
 echo $pagination->build_pagination($total_count, $current_page_number, $limit);
 ?>
-
-
-
-
-
-
-
-
-
-
-
-
-<!--<div class="swiper-container">-->
-<!--    <div class="swiper-wrapper">-->
-<!--        --><?php //foreach ($productList as $productItem) : ?>
-<!--        <div class="swiper-slide">-->
-<!--            --><?php
-//            $product_id =$productItem['id'];
-//            $path = "/images/small_product_images/"."$product_id.jpg";
-//            ?>
-<!--            <div><img src= "--><?php //echo $path ?><!--" alt="photo" class="product_photo" /></div>-->
-<!--            <div>-->
-<!--                <a href="/product/--><?//= $productItem['id']; ?><!--">-->
-<!--                    --><?php //echo $productItem['name']; ?>
-<!--                </a>-->
-<!--            </div>-->
-<!--            <div class="price"> --><?php //echo $productItem['price'].' грн'; ?><!--</div>-->
-<!--            <div>-->
-<!--                <form name = "cart" action="" method ="post"><br />-->
-<!--                    <input type="hidden" name="add_to_cart_product_id" value="--><?//= $productItem['id'] ?><!--">-->
-<!--                    <input type = "submit" name ="add_to_cart" value="Добавить в корзину"><br />-->
-<!--                </form>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        --><?php //endforeach; ?>
-<!--    </div>-->
-<!--    <div class="swiper-button-next"></div>-->
-<!--    <div class="swiper-button-prev"></div>-->
-<!--</div>-->
-
-<!-- Swiper JS -->
-<script src="../template/swiper-4.4.6/dist/js/swiper.min.js"></script>
-
-<!-- Initialize Swiper -->
-<script>
-    var swiper = new Swiper('.swiper-container', {
-        slidesPerView:3,
-        spaceBetween: 10,
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-        },
-    });
-</script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
