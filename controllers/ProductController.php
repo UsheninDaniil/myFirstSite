@@ -33,9 +33,6 @@ Class ProductController
             } else{
                 $review_exists = false;
             }
-
-            echo "current_user_review <br/>";
-            print_r($current_user_review);
         }
 
         require_once ('/views/layouts/header.php');
@@ -88,10 +85,8 @@ Class ProductController
             $product_id = $_POST['product_id'];
 
             $current_user_review = Product::get_product_review_by_product_id_and_user_id($product_id, $user_id);
-            $edit_subject = $segments[4];
 
-            if($edit_subject === 'review_stars'){
-                echo '
+            $review_rating = '
                 <div class="rating_star_container" data-product-id="'.$product_id.'" >
 
                     <div data-rating="1" class="rating_star">
@@ -121,12 +116,15 @@ Class ProductController
 
                 </div>
                 ';
-            }
 
-            if($edit_subject === 'review_text'){
-                $review = $current_user_review['review'];
-                echo "<form><textarea id='text_review_update'>$review</textarea></form>";
-            }
+
+            $review = $current_user_review['review'];
+            $review_text = "<form><textarea id='text_review_update'>$review</textarea></form>";
+
+            $result = json_encode(['stars'=>$review_rating, 'text'=>$review_text]);
+
+            echo  $result;
+
 
         }
 

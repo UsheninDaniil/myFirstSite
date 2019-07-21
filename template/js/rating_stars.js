@@ -3,44 +3,20 @@ var container_amount = undefined;
 
 function raiting_stars_inicialization(e, container_location){
 
-    console.clear();
-
-    console.log('container_location');
-    console.log(container_location);
-
     if (container_location === undefined) {
         container_location = document;
     }
 
-    console.log('container_location');
-    console.log(container_location);
-
     var rating_container = container_location.getElementsByClassName('rating_star_container');
-
-    console.log('rating_container');
-    console.log(rating_container);
 
     if(container_amount === undefined){
         container_amount = 0;
     }
 
-    console.log('container_amount');
-    console.log(container_amount);
-
     for (var i = 0; i < rating_container.length; i++) {
         var current_container_number = container_amount;
-        console.log('элемент' + current_container_number);
-        console.log(rating_container[i]);
         ratingItem[current_container_number] = rating_container[i].querySelectorAll('.rating_star');
-
-        console.log('Длина');
-        console.log(ratingItem[current_container_number].length);
-
-        console.log('список звездочек');
-        console.log(ratingItem[current_container_number]);
-
         add_event_to_rating_container(rating_container, i, current_container_number);
-
         container_amount = container_amount + 1;
     }
 
@@ -79,17 +55,17 @@ function rating_container_mouseover(e, current_container_number) {
 
     var target = e.target;
 
-    console.clear();
-    console.log('%cВызвана функция OnMouseOver ', 'color: red');
-
-    console.log('%ccurrent_container_number ', 'color: green');
-    console.log(current_container_number);
-
-    console.log('%cСодержимое ratingItem ', 'color: green');
-    console.log(ratingItem[current_container_number]);
-
-    console.log('%cTARGET ', 'color: green');
-    console.log(target);
+    // console.clear();
+    // console.log('%cВызвана функция OnMouseOver ', 'color: red');
+    //
+    // console.log('%ccurrent_container_number ', 'color: green');
+    // console.log(current_container_number);
+    //
+    // console.log('%cСодержимое ratingItem ', 'color: green');
+    // console.log(ratingItem[current_container_number]);
+    //
+    // console.log('%cTARGET ', 'color: green');
+    // console.log(target);
 
     if(target.parentElement.classList.contains('rating_star')){
         removeClass(ratingItem[current_container_number],'active_star');

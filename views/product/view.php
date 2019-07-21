@@ -214,7 +214,7 @@ if(!empty($current_user_review)):
         <div class="review_control_container" data-review-id>
             <b>Ваш отзыв</b>
             <span class="review_control">
-                <a href="javascript:void(0);" data-review-edit onclick="edit_product_review()"><b><i class="far fa-edit" style="color: black"></i></b></a>
+                <a href="javascript:void(0);" onclick="edit_product_review()" data-review-edit data-is-edited-now="false"><b><i class="far fa-edit" style="color: black"></i></b></a>
                 <a href="javascript:void(0);" onclick="delete_product_review()"><b><i class="far fa-times-circle"></i></b></a>
             </span>
         </div>
@@ -236,6 +236,11 @@ if(!empty($current_user_review)):
                 <div class="review_date"><?=$date?></div>
             </div>
             <div class="review_text"><?=$review?></div>
+
+            <div class="review_update_and_cancel" hidden="true">
+                <a href='javascript:void(0);' onclick='update_product_review()'>Сохранить</a>
+                <a href='javascript:void(0);' onclick='cancel_edit_review()'>Отмена</a>
+            </div>
 
         </div>
 

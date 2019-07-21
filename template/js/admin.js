@@ -432,7 +432,21 @@ function save_product_review(){
 
 }
 
-function edit_product_review() {
+
+function edit_product_review(event) {
+
+    var edit_review_button = $('*[data-review-edit]')[0];
+    var is_edited_now = edit_review_button.dataset.isEditedNow;
+
+    if(is_edited_now === 'true'){
+        return;
+    } else {
+        is_edited_now = 'true';
+        edit_review_button.dataset.isEditedNow = is_edited_now;
+        window.original_review_rating = $(".current_user_review .review_item .review_rating").eq(0).html();
+        window.original_review_text = $(".current_user_review .review_item .review_text").eq(0).html();
+    }
+
     console.log('изменение отзыва');
 
     var action = 'edit';
@@ -442,26 +456,21 @@ function edit_product_review() {
     var product_id = segments[4];
     console.log('product_id =' + product_id);
 
-    $.post("/product/review_crud/" + action + "/review_stars", {product_id: product_id}, function (data) {
-        $(".current_user_review .review_item .review_rating").html(data);
+    $.post("/product/review_crud/" + action, {product_id: product_id}, function (data) {
+
+        // var result = JSON.parse(data);
+
+        $(".current_user_review .review_item .review_rating").html(data.stars);
+        $(".current_user_review .review_item .review_text").html(data.text);
 
         var container_location = document.querySelector('.current_user_review .review_item .review_rating');
         raiting_stars_inicialization(event, container_location);
 
-        },"html"
+        },"json"
     );
 
-    $.post("/product/review_crud/" + action + "/review_text", {product_id: product_id}, function (data) {
-            $(".current_user_review .review_item .review_text").html(data);
-        },"html"
-    );
+    document.querySelector('.review_update_and_cancel').hidden = false;
 
-    var update_button_container = document.createElement("div");
-    update_button_container.innerHTML = "<a href='javascript:void(0);' onclick='update_product_review()'>Сохранить</a>";
-
-    current_user_review = document.querySelector(".current_user_review");
-    review_item = current_user_review.querySelector(".review_item");
-    review_item.appendChild(update_button_container);
 }
 
 function delete_product_review() {
@@ -496,16 +505,26 @@ function update_product_review() {
     );
 }
 
+function cancel_edit_review(){
+    var edit_review_button = $('*[data-review-edit]')[0];
+    var is_edited_now = edit_review_button.dataset.isEditedNow;
 
-$(document).ready(function(){
-    $('[data-review-edit]').click(function () {
-        console.log('Проверка удалась');
-    });
+    $(".current_user_review .review_item .review_rating").eq(0).html(original_review_rating);
+    $(".current_user_review .review_item .review_text").eq(0).html(original_review_text);
+    is_edited_now = 'false';
+    edit_review_button.dataset.isEditedNow = is_edited_now;
+    document.querySelector('.review_update_and_cancel').hidden = true;
+}
 
-    $(document).on('click', '[data-review-edit]', function () {
-        console.log('Проверка удалась 2');
-    });
-});
+// $(document).ready(function(){
+//     $('[data-review-edit]').click(function () {
+//         console.log('Проверка удалась');
+//     });
+//
+//     $(document).on('click', '[data-review-edit]', function () {
+//         console.log('Проверка удалась 2');
+//     });
+// });
 
 
 

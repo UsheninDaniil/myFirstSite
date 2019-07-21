@@ -165,7 +165,7 @@
 
     function resize_scalable_text() {
 
-        console.log("вызвана функция уменьшения текста");
+        // console.log("вызвана функция уменьшения текста");
 
         var scalable_text_array = document.querySelectorAll('.scalable_text');
 
@@ -179,8 +179,8 @@
             necessary_width = Math.ceil(necessary_width);
             var real_width = scalable_text.scrollWidth;
 
-            console.log("necessary_width = " + necessary_width);
-            console.log("real_width = " + real_width);
+            // console.log("necessary_width = " + necessary_width);
+            // console.log("real_width = " + real_width);
 
             var font_size = Math.floor((necessary_width / real_width)*100);
             font_size = font_size - 1;
