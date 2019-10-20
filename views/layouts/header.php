@@ -3,6 +3,8 @@
 <head>
     <meta charset="utf-8">
 
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <!--Сторонние файлы и плагины-->
 
     <link rel="stylesheet" href="/template/third_party_files/fontawesome-free-5.8.1-web/css/all.min.css" >
@@ -21,13 +23,18 @@
     <link rel="stylesheet" href="/template/third_party_files/tagify-plugin-old-version/tagify.css">
     <link rel="stylesheet" href="/template/third_party_files/tagify-plugin-old-version/jquerysctipttop.css">
 
+    <link rel="stylesheet" href="/template/third_party_files/ON-OFF-Toggle-Switches-Switcher/css/switcher.css" >
+
+    <link rel="stylesheet" href="/template/third_party_files/lou-multi-select/css/multi-select.css" media="screen"  type="text/css">
+
     <!--Самописные файлы и плагины-->
 
     <link rel="stylesheet" href="/template/css/images_preview.css">
 
-    <link rel="stylesheet" href="/template/css/main.css?v=<?php echo uniqid()?>">
-
     <link rel="stylesheet" href="/template/css/product_images_slider.css">
+
+    <link rel="stylesheet" href="/template/css/main.css?v=<?php echo uniqid()?>">
+    <link rel="stylesheet" href="/template/css/media_screen.css?v=<?php echo uniqid()?>">
 
 </head>
 <body>
@@ -38,162 +45,38 @@
     <div class="header">
         <div class="top-menu" >
 
-            <div class="header_left_part" style="overflow: auto;">
-
-                    <ul class="topmenu scalable_text">
-                        <li>
-                            <div><pre><b><a href="" class="header_show_category_list"><i class="fas fa-list"></i> Каталог товаров </a></b></pre></div>
-
-<!--                            <ul class="submenu">-->
-<!--                                <li><a href="">Компьютеры</a></li>-->
-<!--                                <li><a href="">Ноутбуки</a></li>-->
-<!--                                <li><a href="">Планшеты</a></li>-->
-<!--                                <li><a href="">Телефоны</a></li>-->
-<!--                            </ul>-->
-
-                        </li>
-                        <li>
-                            <div><pre><a href="/" class="header_go_to_homepage"><i class="fas fa-home"></i></a></pre></div>
-                        </li>
-                    </ul>
-
+            <div class="header_left_part">
+                <div class="header_show_category_list_container">
+                    <b><a href="" class="header_show_category_list"><i class="fas fa-list"></i><span> Каталог товаров</span></a></b>
+                </div>
+                <div>
+                    <a href="/" class="header_go_to_homepage"><i class="fas fa-home"></i></a>
+                </div>
             </div>
 
-            <div class="header_search" style="display: inline-block">
+            <div class="header_search">
                 <form class="search_form" action="/search/" method="get">
-                    <div style="overflow: auto; float: left">
-                        <input class="input" style="" type="text" name="text" placeholder="Поиск по сайту 123456789_123456789_123456789">
+                    <div class="header_search_inner">
+                    <input class="input" style="" type="text" name="text" placeholder="Поиск по сайту">
+                    <button type="submit"></button>
                     </div>
-<!--                    <button type="submit"></button>-->
                 </form>
             </div>
 
-            <div class="header_main_information" style="overflow: auto;">
-                <ul class="header_main_information_list scalable_text">
-
-                    <li>
-                        <pre><a href ="/cabinet" style="color: black"><i class="fas fa-home"></i>Личный кабинет</a></pre>
-                    </li>
-
-                    <li>
-                       <pre><a href ="/cart" class="cart-count" style="color: black"><?php
-                                if(isset($_SESSION['cart_product_amount'])){
-                                    $cart_product_amount = $_SESSION['cart_product_amount'];
-                                    echo "<i class='fas fa-shopping-cart'></i>Корзина($cart_product_amount)";
-                                }
-                                else {
-                                    echo "<i class='fas fa-shopping-cart'></i>Корзина";
-                                }
-                                ?></a></pre>
-                    </li>
-
-                    <li>
-                        <pre><a href ="/compare" class="compare-count" style="color: black"><?php
-                                if(isset($_SESSION['compare_product_amount'])){
-                                    $compare_product_amount = $_SESSION['compare_product_amount'];
-                                    echo "<i class='fas fa-balance-scale'></i>Сравнение ($compare_product_amount)";
-                                }
-                                else {
-                                    echo "<i class='fas fa-balance-scale'></i>Сравнение";
-                                }
-                                ?></a></pre>
-                    </li>
-                </ul>
+            <div class="header_right_part">
+                <a href ="/cabinet" style="color: black"><i class="fas fa-user"></i><span> Личный кабинет</span></a>
+                <?php
+                        require_once (ROOT.'/views/layouts/cart_template.php');
+                        require_once (ROOT.'/views/layouts/compare_template.php');
+                ?>
             </div>
 
         </div>
+
+<!--        место для важных заметок-->
 
 
     </div>
 
 
 
-<script>
-
-
-    var buffer = [];
-
-    function resize_input_to_width_of_placeholder() {
-
-        var input = document.querySelectorAll('.input');
-        for (var i = 0; input.length > i; i++) {
-
-            if (input[i].placeholder !== '') {
-
-                if(buffer[i]){
-                    input[i].parentNode.removeChild(buffer[i]);
-                    // console.log("buffer существует, удалил");
-                } else {
-                    // console.log("buffer не существует");
-                }
-
-                input[i].parentElement.style.fontSize = 100 + "%";
-
-                buffer[i] = document.createElement('div');
-                buffer[i].className = "buffer";
-                //вставляем скрытый div.buffer
-                input[i].parentNode.insertBefore(buffer[i], input[i].nextSibling);
-
-                input[i].nextElementSibling.innerHTML = input[i].placeholder;
-                input[i].style.width = input[i].nextElementSibling.clientWidth + 'px';
-
-                input[i].parentElement.style.width = input[i].nextElementSibling.clientWidth + 'px';
-
-                var search_form_width = input[i].closest(".search_form").offsetWidth;
-
-                var necessary_width = search_form_width;
-                necessary_width = Math.ceil(necessary_width);
-                var real_width = input[i].scrollWidth;
-
-                var font_size = Math.floor((necessary_width / real_width)*100);
-                font_size = font_size - 1;
-                font_size = font_size + '%';
-
-                input[i].parentElement.style.fontSize = font_size;
-
-                input[i].parentElement.style.width = search_form_width + 'px';
-                input[i].style.width = search_form_width + 'px';
-            }
-
-            input[i].oninput = function() {
-                this.style.width = 100 + '%';
-            };
-
-        }
-
-    }
-
-    function resize_scalable_text() {
-
-        // console.log("вызвана функция уменьшения текста");
-
-        var scalable_text_array = document.querySelectorAll('.scalable_text');
-
-        for (var i = 0; i < scalable_text_array.length; i++) {
-
-            var scalable_text = scalable_text_array[i];
-
-            scalable_text.parentElement.style.fontSize = 100 + "%";
-
-            var necessary_width = scalable_text.parentElement.clientWidth;
-            necessary_width = Math.ceil(necessary_width);
-            var real_width = scalable_text.scrollWidth;
-
-            // console.log("necessary_width = " + necessary_width);
-            // console.log("real_width = " + real_width);
-
-            var font_size = Math.floor((necessary_width / real_width)*100);
-            font_size = font_size - 1;
-            font_size = font_size + '%';
-
-            scalable_text.parentElement.style.fontSize = font_size;
-        }
-    };
-
-    window.addEventListener('resize', resize_input_to_width_of_placeholder);
-    window.addEventListener('resize', resize_scalable_text);
-
-    document.addEventListener("DOMContentLoaded", resize_input_to_width_of_placeholder);
-    document.addEventListener("DOMContentLoaded", resize_scalable_text);
-
-</script>

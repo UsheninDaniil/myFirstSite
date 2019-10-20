@@ -10,17 +10,9 @@ class Search extends DatabaseConnect
 
         $result = $mysqli->query ("SELECT * FROM product WHERE  name LIKE '%$search_query%' ORDER BY id, name ASC");
 
-        $i = 0;
-        $product_list = array();
+        $parameters_list = ['id', 'name', 'price', 'status'];
 
-        while ($i < $result->num_rows){
-            $row = $result->fetch_array();
-            $product_list[$i]['id'] = $row['id'];
-            $product_list[$i]['name'] = $row['name'];
-            $product_list[$i]['price'] = $row['price'];
-            $product_list[$i]['status'] = $row['status'];
-            $i++;
-        }
+        $product_list = DatabaseConnect::fetch_two_dimensional_array($result, $parameters_list);
 
         parent::disconnect_database($mysqli);
         return $product_list;

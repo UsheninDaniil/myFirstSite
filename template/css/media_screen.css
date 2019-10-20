@@ -1,0 +1,151 @@
+@media screen and (max-width:1281px) {
+    .header_right_part span{
+        display: none;
+    }
+
+    .header_left_part span{
+        display: none;
+    }
+
+    .header_search{
+        width: 65%;
+    }
+
+    .header_left_part{
+        width: 15%;
+    }
+
+    .header_right_part{
+        width: 20%;
+    }
+}
+
+
+@media screen and (max-width:1025px) {
+    body{
+        /*color: green;*/
+    }
+
+    #slider_with_buttons{
+        display: none;
+    }
+
+    #selected_photo_container{
+        display: none;
+    }
+
+    .product_photo_swiper_container{
+        display: block;
+    }
+
+    .view_product_image{
+        padding: 3%;
+    }
+
+}
+
+
+@media screen and (max-width:769px) {
+    body{
+        /*color: blue;*/
+    }
+
+    .view_product_image{
+        width: 100%;
+    }
+
+    .name_and_price_outer_block{
+        width: 100%;
+    }
+
+    .view_product_table td,
+    .view_product_table th{
+        padding: 5px 15px;
+    }
+
+    .header_search{
+        width: 53%;
+    }
+
+    .header_left_part{
+        width: 20%;
+    }
+
+    .header_right_part{
+        width: 27%;
+    }
+}
+
+
+@media screen and (max-width:426px) {
+    .header_right_part .compare-count{
+        display: none;
+    }
+}
+
+@media screen and (max-width:376px) {
+    .review_information{
+        display: flex;
+        flex-wrap: wrap;
+        /*display: block;*/
+        /*float: left;*/
+    }
+
+    .review_user_name{
+        order: 1;
+        width: 50%;
+        text-align: center;
+        flex-grow: 1;
+    }
+
+    .review_item .review_rating{
+        order: 3;
+        width: 100%;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+    }
+
+    .review_date{
+        order: 2;
+        width: 50%;
+        text-align: center;
+        flex-grow: 1;
+
+    }
+
+    .view_product_table td,
+    .view_product_table th{
+        padding: 5px 10px;
+    }
+
+    .header_show_category_list_container{
+        display: none;
+    }
+}
+
+@media screen and (max-width:321px) {
+    .review_user_name{
+        width: 100%;
+        text-align: center;
+        float: left;
+    }
+
+    .review_date{
+        width: 100%;
+        text-align: center;
+    }
+
+    .review_item .review_rating{
+        width: 100%;
+        display: flex;
+        justify-content: center; /*Центрирование по горизонтали*/
+
+    }
+
+    .view_product_table td,
+    .view_product_table th{
+        padding: 5px 5px;
+    }
+}
+

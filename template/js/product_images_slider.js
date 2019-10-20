@@ -71,7 +71,7 @@ function ShowSelectedPhoto(element_div)
     border_width = small_photo.dataset.borderWidth;
 
     $(".element").css("border-color", "transparent");
-    element_div.style.border = border_width +"px solid SeaGreen";
+    element_div.style.border = border_width +"px solid mediumseagreen";
 
     current_source = small_photo.src;
     document.getElementById ('selected_photo').src = current_source.replace('small_images', 'middle_images');

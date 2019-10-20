@@ -6,9 +6,7 @@
     display: flex;
     flex-direction: column;
     position: relative;
-    margin-right: 5px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin: 5px;
 
     /*!*дополнительные стили чтоб работало с bootstrap*!*/
     line-height: 1;
@@ -53,6 +51,7 @@
     align-items: center;
 
     flex-wrap: wrap;
+    margin-top: 10px;
 }
 
 b{

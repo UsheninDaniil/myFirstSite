@@ -42,6 +42,7 @@
 
 #product_photos{
     display: flex;
+    /*flex-wrap: wrap;*/
 }
 
 #selected_photo_container{
@@ -50,12 +51,11 @@
     align-items: center;
     flex-grow: 1;
     /*background-color: pink;*/
+    margin: 5%;
+    height: 350px;
+
 }
 
 #slider .element, ::after, ::before {
      box-sizing: content-box;
-}
-
-#selected_photo_container{
-    padding: 20px;
 }

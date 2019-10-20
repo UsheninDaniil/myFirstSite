@@ -39,7 +39,7 @@ class AdminCategory extends DatabaseConnect
 
         $result = $mysqli->query ("SELECT id FROM parameters_list WHERE  name = '$parameter_name' ");
 
-        $result_array = $result->fetch_array();
+        $result_array = $result->fetch_assoc();
 
         $new_parameter_id = $result_array['id'];
 

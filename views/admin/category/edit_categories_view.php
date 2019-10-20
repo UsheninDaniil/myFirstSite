@@ -1,9 +1,3 @@
-<?php
-require_once (ROOT. '/models/Category.php');
-$categoryList = Category::get_category_list();
-
-print_r($_POST);
-?>
 
 <br />
 <a href="/admin" class="go-back-to-admin-panel" ><b>Панель администратора</b></a>
@@ -14,13 +8,8 @@ print_r($_POST);
 
 
 
-<table border='1' cellpadding='5' class='parameter_list_table' id="sortable_categories_list_table" >
-<!--    style="table-layout:fixed"-->
-<!--    <col width="12%">-->
-<!--    <col width="25%">-->
-<!--    <col width="12%">-->
-<!--    <col width="25%">-->
-<!--    <col width="25%">-->
+<table border='1' cellpadding='5' id="sortable_categories_list_table">
+
     <thead>
     <tr>
         <th colspan="5">Список категорий</th>
@@ -61,23 +50,25 @@ print_r($_POST);
         <tr data-category-id="<?=$category_id?>" style="cursor: move">
             <th style="width:<?=$narrow_column_width?>%"><?php echo $category_id ?></th>
 
-            <th style="width:<?=$wide_column_width?>%" class="cell_with_category_name"><a href="#" class="category_name" data-pk="<?=$category_id ?>" > <?=$category_name ?></a></th>
+            <th style="width:<?=$wide_column_width?>%" class="cell_with_category_name"><a href="javascript:void(0);" class="category_name" data-pk="<?=$category_id ?>" > <?=$category_name ?></a></th>
             <th style="width:<?=$narrow_column_width?>%" id="sort_order"><?=$sort_order?></th>
             <th style="width:<?=$wide_column_width?>%">
 
-<!--                <a href="#" class="category_status" data-pk="--><?//=$category_id ?><!--" data-source="{'1': 'отображается', '0': 'не отображается'}">--><?php //echo  ($status == 1)? "отображается" : "не отображается"; ?><!--</a>-->
+                <div class="category_status_cell" data-category-id="<?=$category_id ?>">
 
-              <?php if ($status=1){
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1" <?php if ($status==1){echo "checked";}?> >
+                    </div>
 
+<!--                    <div>-->
+<!--                        <button style="padding: 1px 4px;" disabled type="button" class="btn btn-success"><span style=""><i class="fas fa-check"></i></span></button>-->
+<!--                    </div>-->
+<!--                    <div>-->
+<!--                        <button style="padding: 1px 4px" disabled type="button" class="btn btn-danger"><i class="fas fa-ban"></i></button>-->
+<!--                    </div>-->
 
-                  echo '<button class="btn btn-primary btn-sm" style="background-color: salmon; color: white"><i class="fas fa-eye"></i></button>';
+                </div>
 
-                  echo '<button class="btn btn-primary btn-sm" style="background-color: dodgerblue; color: white"><i class="fas fa-eye-slash"></i></button>';
-              }
-              else{
-                  echo '<i class="fas fa-eye-slash" style="color: red"></i>';
-              }
-              ?>
 
             </th>
             <th style="width:<?=$wide_column_width?>%"><a href="/admin/edit_selected_category/<?=$category_id?>">настроить</a> </th>
@@ -96,6 +87,58 @@ print_r($_POST);
 </div>
 
 <div class="editable_information"></div>
+
+
+
+<div class="container edit_categories_grid" style="text-align: center">
+
+    <div class="row justify-content-center header">
+        <div class="col-1">
+            id
+        </div>
+        <div class="col-2">
+            Название
+        </div>
+        <div class="col-2">
+            Сортировка
+        </div>
+        <div class="col-1">
+            Статус
+        </div>
+        <div class="col-2">
+            Параметры
+        </div>
+    </div>
+
+    <div class="test_container">
+
+    <?php foreach ($categoryList as $category_information):
+        $category_name = $category_information['name'];
+        $category_id = $category_information['id'];
+        $sort_order = $category_information['sort_order'];
+        $status = $category_information['status'];
+        ?>
+
+    <div class="row justify-content-center">
+        <div class="col-1"><?php echo $category_id ?></div>
+        <div class="col-2"><a href="javascript:void(0);" class="category_name" data-pk="<?=$category_id ?>" > <?=$category_name ?></a></div>
+        <div class="col-2"><?=$sort_order?></div>
+        <div class="col-1">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1" <?php if ($status==1){echo "checked";}?> >
+            </div>
+        </div>
+        <div class="col-2"><a href="/admin/edit_selected_category/<?=$category_id?>">настроить</a></div>
+
+    </div>
+
+    <?php endforeach;?>
+
+
+    </div>
+
+
+</div>
 
 
 

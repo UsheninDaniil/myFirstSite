@@ -215,21 +215,38 @@ $(document).on('click', 'form#edit_product a.remove_additional_parameter', funct
 
 });
 
-function load_category_parameters() {
+$(document).on('change', '#load_category_parameters_to_add_product', function (event){
+
     var form = document.getElementById("load_category_parameters_to_add_product");
     category_id = form.options[form.selectedIndex].value;
 
     $.post("/admin/load_category_parameters_to_add_product/"+category_id, {}, function (data) {
             // $("form#add_product .category_parameters_list").html(data);
             $("#category_parameters_list").html(data);
+
+            $( ".tags" ).autocomplete({
+                source: function( request, response ) {
+                    // Fetch data
+                    $.ajax({
+                        url: "/admin/test_autocomplete",
+                        type: 'post',
+                        dataType: "json",
+                        data: {
+                            search: request.term,
+                            parameter_id: $(this.element).data('parameterId')
+                        },
+                        success: function( data ) {
+                            response( data );
+                        }
+                    });
+                }
+            });
+
         },"html"
     );
-}
 
 
-
-
-
+});
 
 
 $(function() {
@@ -259,19 +276,6 @@ if($('#sortable_categories_list_table .category_name').length > 0){
         url: '/admin/update_category_name_using_editable',
         title: 'Enter username',
         // original-title:'Enter username'
-    });
-}
-
-if($('#sortable_categories_list_table .category_status').length > 0){
-
-    $('#sortable_categories_list_table .category_status').on('shown', function(e, editable) {
-        changeEditableInputWidth();
-    });
-
-    $('#sortable_categories_list_table .category_status').editable({
-        name: 'category_status',
-        type: 'select',
-        url: '/admin/update_category_status_using_editable',
     });
 }
 
@@ -328,6 +332,67 @@ $(function() {
 });
 
 
+
+
+
+
+
+
+$(function() {
+
+    var root = $('.test_container');
+
+    if(root.length > 0){
+
+        // root.children().each(function (index) {
+        //
+        //     var category_id = $(this).data("categoryId");
+        //
+        //     this.id = 'category_id_list-' + category_id;
+        //
+        // });
+
+        root.sortable({
+
+            containment: "parent",
+
+            // 'helper': function(e, tr)
+            // {
+            //     var $originals = tr.children();
+            //     var $helper = tr.clone();
+            //     $helper.children().each(function(index)
+            //     {
+            //         // Set helper cell sizes to match the original sizes
+            //         $(this).width($originals.eq(index).width());
+            //     });
+            //     return $helper;
+            // },
+            //
+            //
+            // 'update': function (event, ui) {
+            //     var order = $(this).sortable('serialize');
+            //
+            //     $(this).children().each(function(index) {
+            //         $(this).find('#sort_order').html(index + 1)
+            //     });
+            //
+            //     $.post("/admin/change_the_sort_order_of_categories", order, function (data) {
+            //             $(".information").html(data);
+            //         }, "html"
+            //     );
+            // }
+        });
+
+    }
+});
+
+
+
+
+
+
+
+
 function changeEditableInputWidth(){
     document.getElementById('information').style.border = '1px solid red';
     document.getElementById('information').style.border = '1px solid red';
@@ -373,7 +438,7 @@ $(function() {
     }
 });
 
-$(document).on('click', 'tag x', function (e) {
+$(document).on('click', '.admin_product_filter_tags tag x', function (e) {
 
     var tag_name = $(this).next().text();
     tag_name = $.trim(tag_name);
@@ -516,15 +581,297 @@ function cancel_edit_review(){
     document.querySelector('.review_update_and_cancel').hidden = true;
 }
 
-// $(document).ready(function(){
-//     $('[data-review-edit]').click(function () {
-//         console.log('Проверка удалась');
-//     });
-//
-//     $(document).on('click', '[data-review-edit]', function () {
-//         console.log('Проверка удалась 2');
-//     });
-// });
+
+
+$(document).on('click', '.delete_product_review', function (event) {
+
+    event.preventDefault();
+    var review_id = $(this).attr("data-review_id");
+
+    $.post("/admin/reviews_control/delete_review", {review_id: review_id}, function (data) {
+        var location = document.location.href;
+        document.location.href = location;
+        },"html"
+    );
+
+});
+
+
+$(document).on('click', '.show_review_rating_sorting', function(){
+
+    var review_rating_sorting = document.querySelector('.review_rating_sorting');
+    if(review_rating_sorting.hidden === false){
+        review_rating_sorting.hidden = true;
+    } else{
+        review_rating_sorting.hidden = false;
+    }
+});
+
+$(document).on('click', '.review_rating_sorting .sorting_ascending', function(){
+    var location = document.location.href;
+    location = location + '&sorting=ascending';
+    document.location.href = location;
+});
+
+$(document).on('click', '.review_rating_sorting .sorting_descending', function(){
+    var location = document.location.href;
+    location = location + '&sorting=descending';
+    document.location.href = location;
+});
+
+if($('[data-toggle="tooltip"]').length>0) {
+    $('[data-toggle="tooltip"]').tooltip()
+}
+
+
+$(document).on('change', '.form-check-input', function(){
+    console.log('работает');
+    console.log(this.checked);
+
+    var category_status;
+
+    if(this.checked == true) {
+        category_status = 1;
+    } else {
+        category_status = 0;
+    }
+
+    var category_status_cell = this.closest(".category_status_cell");
+    var category_id = category_status_cell.dataset.categoryId;
+
+    console.log('category_id = ' + category_id);
+
+    information = {category_status:category_status, category_id: category_id};
+
+    $.post("/admin/update_category_status", information, function (data) {
+        },"html"
+    );
+
+});
+
+
+$(document).on('click', '.add_new_product_main_container input[name ="availability_to_choose_the_color"]', function(){
+
+    var value = $(this).val();
+
+    if(value === '1'){
+        $('.product_colors').css('display', 'block');
+        $('.select_available_colors').css('display', 'block');
+        $('.only_one_color_input').css('display', 'none');
+    } else if(value === '0'){
+        $('.product_colors').css('display', 'none');
+        $('.select_available_colors').css('display', 'none');
+        $('.only_one_color_input').css('display', 'block');
+    }
+});
+
+
+$(document).on('click', '.edit_selected_product_main_container input[name ="availability_to_choose_the_color"]', function(){
+
+    var value = $(this).val();
+
+    if(value === '1'){
+        $('[data-target="#AddNewColorModal"]').prop('disabled', false);
+        $('.color_amount[data-color-id="1"]').remove();
+    } else if(value === '0'){
+
+        $('tr.color_amount').each(function( index ) {
+            var table_row = $( this );
+            var color_id = table_row.data("colorId");
+            var color_name = table_row.data("colorName");
+            $("#multiple_colors_list").append('<option value="' + color_id + '">' + color_name + '</option>');
+            $('#multiple_colors_list').multiSelect('refresh');
+            $(this).remove();
+        });
+
+        selected_colors = {1:'no_color'};
+        $.post("/admin/edit_selected_product/load_new_rows_with_selected_colors", {selected_colors:selected_colors}, function (data) {
+                $('.product_colors_table').append(data);
+                // $('.delete_selected_product_color').addClass("disabled");
+            },"html"
+        );
+
+        $('[data-target="#AddNewColorModal"]').prop('disabled', true);
+    }
+});
+
+if($('#tabs').length>0) {
+    $(function () {
+        $("#tabs").tabs();
+    });
+}
+
+if($('#multiple_colors_list').length>0) {
+
+    $('.add_new_product_main_container #multiple_colors_list').multiSelect({
+        selectableHeader: "<div class='custom-header'>Список цветов</div>",
+        selectionHeader: "<div class='custom-header'>Выбранные цвета</div>",
+        afterSelect: function (values) {
+
+            var color_id = values;
+            var all_colors_object = $('.all_colors_information').val();
+            all_colors_object = JSON.parse(all_colors_object);
+            var color_name = all_colors_object[color_id];
+
+            $(".product_colors_table").append("<tr class='color_amount' data-color-id='" + color_id + "'><td>" + color_name + "</td> <td><input name='color[" + values + "]'></td> </tr>"
+            );
+
+        },
+        afterDeselect: function (values) {
+            $('.color_amount[data-color-id="' + values + '"]').remove();
+        }
+    });
+}
+
+
+if($('#AddNewColorModal #multiple_colors_list').length>0) {
+
+    $('#AddNewColorModal #multiple_colors_list').multiSelect({
+        selectableHeader: "<div class='custom-header'>Список цветов</div>",
+        selectionHeader: "<div class='custom-header'>Выбранные цвета</div>",
+        afterSelect: function (values) {
+            $(".selected_colors").append("<input value='"+ values + "' disabled type='hidden' >");
+        },
+        afterDeselect: function (values) {
+            $('.selected_colors input[value=' + values + ']').remove();
+        }
+    });
+}
+
+$(document).on('click', '.edit_selected_product_main_container .product_amount_decrement', function (e) {
+    var input = $(this).parents('.amount_cell').find('.input_product_amount')[0];
+    var product_amount = input.getAttribute('value');
+
+    new_product_amount = +product_amount - 1;
+    input.setAttribute('value', new_product_amount);
+
+    if(new_product_amount === 0){
+        $(this).attr("disabled", true);
+    }
+});
+
+$(document).on('click', '.edit_selected_product_main_container .product_amount_increment', function (e) {
+    var input = $(this).parents('.amount_cell').find('.input_product_amount')[0];
+    var product_amount = input.getAttribute('value');
+
+    new_product_amount = +product_amount + 1;
+    input.setAttribute('value', new_product_amount);
+
+    if(new_product_amount === 1){
+        $(this).siblings('.product_amount_decrement').attr("disabled", false);
+    }
+});
+
+
+$(document).on('click', '.add_colors_modal_submit', function (e) {
+
+    var hidden_inputs = $('.selected_colors input');
+
+    var selected_colors = {};
+
+    var all_colors_object = $('.all_colors_information').val();
+    all_colors_object = JSON.parse(all_colors_object);
+
+    hidden_inputs.each(function( index ) {
+        color_id = $(this).val();
+        color_id = +color_id;
+        color_name = all_colors_object[color_id];
+
+        selected_colors[color_id] = color_name;
+    });
+
+    for (var key in selected_colors) {
+        color_id = key;
+        $("#multiple_colors_list option[value=" + color_id + "]").remove();
+    }
+
+    $('.selected_colors').empty();
+
+    console.log('selected_colors');
+    console.log(selected_colors);
+
+    $.post("/admin/edit_selected_product/load_new_rows_with_selected_colors", {selected_colors:selected_colors}, function (data) {
+        $('.product_colors_table').append(data);
+        },"html"
+    );
+
+    $('#multiple_colors_list').multiSelect('refresh');
+
+});
+
+$(document).on('click', '.edit_selected_product_main_container .delete_selected_product_color', function (e) {
+
+    var table_row = $(this).parents("tr.color_amount");
+    var color_id = table_row.data("colorId");
+    var color_name = table_row.data("colorName");
+
+    if(color_name === 'no_color'){
+
+        var input =  $(this).parents("tr.color_amount").find('.input_product_amount');
+
+        console.log('input');
+        console.log(input);
+
+        input[0].setAttribute('value', 0);
+        table_row.find('.product_amount_decrement').prop('disabled', true);
+
+    } else {
+        table_row.remove();
+        $("#multiple_colors_list").append('<option value="' + color_id + '">' + color_name + '</option>');
+        $('#multiple_colors_list').multiSelect('refresh');
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Не забыть включть!!!
+// $.switcher('input[type=checkbox]');
+// $.switcher('input[type=radio]');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

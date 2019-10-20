@@ -10,12 +10,9 @@
 
 
 <?php
-    if(isset($get_parameters_without_page)){
-        echo "Содержимое <b style='color: darkred;'>get_parameters_without_page</b> <br />";
-        print_r($get_parameters_without_page);
-    }
 
-        $status_list = array(1 => 'отображается' ,0 => 'не отображается');
+
+    $status_list = array(1 => 'отображается' ,0 => 'не отображается');
 
     if(isset($_GET['name'])){
         $search_product_name = $_GET['name'];
@@ -92,58 +89,59 @@ if(!empty($_GET)) {
     }
     $get_parameters_without_page = $get_parameters_array;
 
-    foreach ($get_parameters_without_page as $parameter_name => $parameter_content){
+    foreach ($get_parameters_without_page as $parameter_name => $parameter_values){
 
-        if(!empty($parameter_content)) {
+        if(empty($parameter_values)) {
+            continue;
+        }
 
-            if (gettype($parameter_content) == "array") {
+        if (gettype($parameter_values) == "array") {
 
-                $parameter_values_array = $parameter_content;
-
-                foreach ($parameter_values_array as $parameter_value) {
-                    if ($parameter_name == "category_id") {
-                        include_once('/models/Category.php');
-                        $category_list = Category::get_category_list();
-                        $row = $category_list[$parameter_value - 1]['name'];
-                    }
-                    if ($parameter_name == "status") {
-                        if ($parameter_value == 1) {
-                            $row = "отображается";
-                        } elseif ($parameter_value == 0) {
-                            $row = "не отображается";
-                        }
-                    }
-                    if (strlen($filter_tags) == 0) {
-                        $filter_tags = $filter_tags . $row;
-                    } else {
-                        $filter_tags = $filter_tags . ',' . $row;
+            foreach ($parameter_values as $parameter_value) {
+                if ($parameter_name == "category_id") {
+                    include_once('/models/Category.php');
+                    $category_list = Category::get_category_list();
+                    $key = array_search($parameter_value, array_column($category_list, 'id'));
+                    $tag_name = $category_list[$key]['name'];
+                }
+                if ($parameter_name == "status") {
+                    if ($parameter_value == 1) {
+                        $tag_name = "отображается";
+                    } elseif ($parameter_value == 0) {
+                        $tag_name = "не отображается";
                     }
                 }
-            } else {
-
-                $parameter_value = $parameter_content;
-
-                if ($parameter_name == "name") {
-                    $row = "name = $parameter_value";
-                }
-
-                if ($parameter_name == "id") {
-                    $row = "id = $parameter_value";
-                }
-
-                if ((strlen($filter_tags) == 0) && (!empty($row))) {
-                    $filter_tags = $filter_tags . $row;
+                if (strlen($filter_tags) == 0) {
+                    $filter_tags = $filter_tags . $tag_name;
                 } else {
-                    $filter_tags = $filter_tags . ',' . $row;
+                    $filter_tags = $filter_tags . ',' . $tag_name;
                 }
             }
+        } else {
 
+            $parameter_value = $parameter_values;
+
+            if ($parameter_name == "name") {
+                $tag_name = "name = $parameter_value";
+            }
+
+            if ($parameter_name == "id") {
+                $tag_name = "id = $parameter_value";
+            }
+
+            if ((strlen($filter_tags) == 0) && (!empty($tag_name))) {
+                $filter_tags = $filter_tags . $tag_name;
+            } else {
+                $filter_tags = $filter_tags . ',' . $tag_name;
+            }
         }
     }
 }
 ?>
 
-<input  name="tags" placeholder="текст" value="<?=$filter_tags?>">
+    <div class="admin_product_filter_tags">
+        <input  name="tags" placeholder="текст" value="<?=$filter_tags?>">
+    </div>
 
     <br/>
 

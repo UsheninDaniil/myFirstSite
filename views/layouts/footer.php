@@ -8,7 +8,7 @@
     <footer id="footer" class="container">
         <div class="row justify-content-around">
 
-            <div class="col-2 col-6-medium col-12-small">
+            <div class="col-12 col-sm-6 col-md-4">
                 <section>
                     <h5>Помощь</h5>
                     <ul class="footer_ul">
@@ -19,7 +19,7 @@
                 </section>
             </div>
 
-            <div class="col-3 col-6-medium col-12-small">
+            <div class="col-12 col-sm-6 col-md-4">
                 <section>
                     <h5>Информация о компании</h5>
                     <ul class="footer_ul">
@@ -30,7 +30,7 @@
                 </section>
             </div>
 
-            <div class="col-2 col-6-medium col-12-small">
+            <div class="col-12 col-sm-6 col-md-4">
                 <section>
                     <dl class="contact">
                         <dt>График работы </dt>
@@ -71,11 +71,11 @@ foreach ($assets_routes as $uri => $scripts_array){
 
     if (preg_match("~$uri~",$current_uri)){
 
-        echo "<br/><b>uri шаблон = $uri</b>";
+//        echo "<br/><b>uri шаблон = $uri</b>";
 
         foreach ($scripts_array as $script_src){
-            echo $script_src;
-            echo "<br/>";
+//            echo $script_src;
+//            echo "<br/>";
             echo "<script src='$script_src'></script>";
         }
     }

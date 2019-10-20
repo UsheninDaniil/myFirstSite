@@ -5,19 +5,12 @@
     <a href="/admin" class="go-back-to-admin-panel" /><b>Панель администратора</b></a>
 </div>
 
-<div>
-    <br />
+<div style="display: flex; flex-direction: column">
     <a href="/admin/edit_products">Управление товарами</a>
-</div>
-
-<div>
     <a href="/admin/edit_category">Управление категориями</a>
-</div>
-
-<div>
     <a href="/admin/edit_parameters">Управление параметрами</a>
+    <a href="/admin/reviews_control">Управление отзывами</a>
+    <a href="/admin/orders_control">Управление заказами</a>
 </div>
 
 </div>
-
-

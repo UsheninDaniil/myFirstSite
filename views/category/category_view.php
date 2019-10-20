@@ -30,13 +30,15 @@
 
             <?php
             $category_parameters_list = Parameters::get_category_parameters_list_for_category_filter($category_id);
-            foreach ($category_parameters_list as $parameter_id):
+
+            foreach ($category_parameters_list as $parameter):
+                $parameter_id = $parameter['id'];
                 $parameter_name = Parameters::get_parameter_name_by_parameter_id($parameter_id);
                 ?>
 
-                <div>
+                <div class="filter_parameter_item">
 
-                    <h4 style="color: darkred; text-align:left "><b><?= $parameter_name ?></b></h4>
+                    <b><?= $parameter_name ?></b>
 
                     <div class="parameter_filter" style="text-align: left; padding-left : 10px; padding-right: 10px">
                         <?php
@@ -45,9 +47,13 @@
 
                         <?php foreach ($most_popular_parameter_values_list as $element):
                             $value = $element['value'];
+                            $value_id = Parameters::get_value_id($value, $parameter_id);
+
+                            echo "value_id = $value_id";
+
                             $count = $element['count'];
                             ?>
-                            <input type="checkbox" name='<?php echo $parameter_id ?>[]' value="<?= $value ?>" form='category_parameters_filter'
+                            <input type="checkbox" name='<?php echo $parameter_id ?>[]' value="<?= $value_id ?>" form='category_parameters_filter'
 
                                 <?php
                                 if (!empty($_GET)) {
@@ -83,79 +89,77 @@
 <div class="product_block">
     <h2 class="headline">Товары</h2>
 
+
+
+    <?php
+    $filter_tags = '';
+
+    if(!empty($_GET)) {
+        $get_parameters_array = $_GET;
+        if(isset($get_parameters_array['page'])){
+            unset($get_parameters_array['page']);
+        }
+        $get_parameters_without_page = $get_parameters_array;
+
+        foreach ($get_parameters_without_page as $parameter_id => $parameter_values_id){
+
+            if(empty($parameter_values_id)) {
+                continue;
+            }
+
+            $parameter_name = Parameters::get_parameter_name_by_parameter_id($parameter_id);
+
+            if (gettype($parameter_values_id) == "array") {
+                foreach ($parameter_values_id as $value_id) {
+                    $parameter_value = Parameters::get_value_by_value_id($value_id);
+                    $tag_name = $parameter_name.' = '.$parameter_value;
+                    if (strlen($filter_tags) == 0) {
+                        $filter_tags = $filter_tags . $tag_name;
+                    } else {
+                        $filter_tags = $filter_tags . ',' . $tag_name;
+                    }
+                }
+            } else {
+                $value_id = $parameter_values_id;
+                $parameter_value = Parameters::get_value_by_value_id($value_id);
+                $tag_name = $parameter_name.' = '.$parameter_value;
+                if ((strlen($filter_tags) == 0) && (!empty($tag_name))) {
+                    $filter_tags = $filter_tags . $tag_name;
+                } else {
+                    $filter_tags = $filter_tags . ',' . $tag_name;
+                }
+            }
+
+//            $filter_tags = $filter_tags.' value_id = '.$value_id;
+        }
+    }
+    ?>
+
+    <div class="category_filter_tags">
+        <input  name="tags" placeholder="текст" value="<?=$filter_tags?>">
+
+        <br/>
+        <span class="category_filter_tags_test"></span>
+    </div>
+
+    <br/>
+
+
+
+
+
+
+
+
+
     <div class="product_list">
 
+        <?php
 
-        <?php foreach ($productList as $productItem) : ?>
-
-            <div class="product_field">
-
-                <div class="product_inside_field">
-
-                    <?php
-                    $product_id = $productItem['id'];
-                    if (file_exists(ROOT . "/images/preview_images/id_{$product_id}_photo_1.jpg")) {
-                        $path = "/images/preview_images/id_{$product_id}_photo_1.jpg";
-                    } else {
-                        $path = "/images/no_photo.png";
-                    }
-                    ?>
-
-                    <div>
-
-                        <a href="/product/<?= $productItem['id']; ?>">
-                            <img src="<?php echo $path ?>" alt="photo" class="product_photo"/>
-                        </a>
-
-                    </div>
-
-                    <a href="/product/<?= $productItem['id']; ?>" class="product-name">
-                        <?php echo $productItem['name']; ?>
-                    </a>
-                    <div class="price"> <?php echo $productItem['price'] . ' грн'; ?></div>
-
-                    <a href="#" data-id="<?php echo $productItem['id']; ?>" class="add-to-cart">
-                        В корзину <i class="fas fa-shopping-cart"></i>
-
-                        <span class="check-in-the-cart<?php echo $productItem['id']; ?>">
-                    <?php
-                    if (isset($_SESSION['cart_product_list'])) {
-                        $cartData = unserialize($_SESSION['cart_product_list']);
-                        if (isset($cartData[$productItem['id']])) {
-                            echo "<i class='far fa-check-square'></i>";
-                        }
-                    }
-                    ?>
-                </span>
-
-                    </a>
-
-                    <div>
-                        <a href="javascript:void(0);" data-id="<?php echo $productItem['id']; ?>"
-                           class="add-to-compare">
-                            Сравнить <i class="fas fa-balance-scale"></i>
-
-                            <span class="check-in-the-compare<?= $product_id ?>">
-                    <?php
-                    if (isset($_SESSION['compare_product_list'])) {
-                        $compareData = unserialize($_SESSION['compare_product_list']);  // тут хранятся айди товаров, добавленных в сравнение
-
-                        foreach ($compareData as $compare_category_products) {
-                            if (in_array($product_id, $compare_category_products)) {
-                                echo "<i class='far fa-check-square'></i>";
-                            }
-                        }
-                    }
-                    ?>
-                </span>
-                        </a>
-                    </div>
-
-                </div>
-
-            </div>
-
-        <?php endforeach; ?>
+            foreach ($productList as $productItem){
+                include('/views/product/product_item_template.php');
+            }
+        ?>
 
     </div>
 
@@ -170,14 +174,6 @@
         echo "<br />";
     }
 
-    //    if(!empty($get_total_elements_amount_request)) {
-    //        echo "<br /><b style='color: darkred'>get_total_elements_amount_request</b><br /> $get_total_elements_amount_request <br />";
-    //    }
-    //
-    //    if(!empty($get_elements_request)) {
-    //        echo "<br /><b style='color: darkred'>get_elements_request</b><br /> $get_elements_request <br />";
-    //    }
-
     ?>
 
 </div>
@@ -190,6 +186,9 @@ echo $pagination->build_pagination($total_count, $current_page_number, $limit);
 
 
 
+<?php
+include_once('/views/product/select_product_color_modal.php');
+?>
 
 
 

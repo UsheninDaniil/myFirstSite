@@ -28,76 +28,12 @@
 
     <div class="product_list">
 
-    <?php foreach ($productList as $productItem) : ?>
+        <?php
 
-        <div class="product_field">
-
-        <div class="product_inside_field">
-
-            <?php
-            $product_id =$productItem['id'];
-            if (file_exists(ROOT."/images/preview_images/id_{$product_id}_photo_1.jpg")) {
-                $path = "/images/preview_images/id_{$product_id}_photo_1.jpg";
+            foreach ($productList as $productItem){
+                include('/views/product/product_item_template.php');
             }
-            else {
-                $path = "/images/no_photo.png";
-            }
-            ?>
-
-            <div >
-
-            <a href="/product/<?= $productItem['id']; ?>" >
-                <img src= "<?php echo $path ?>" alt="photo" class="product_photo" >
-            </a>
-
-            </div>
-
-            <a href="/product/<?= $productItem['id']; ?>" class="product-name">
-                <?php echo $productItem['name']; ?>
-            </a>
-            <div class="price"> <?php echo $productItem['price'].' грн'; ?></div>
-
-            <a href="#" data-id="<?php echo $productItem['id']; ?>" class="add-to-cart">
-                В корзину <i class="fas fa-shopping-cart"></i>
-
-                <span class="check-in-the-cart<?php echo $productItem['id']; ?>">
-                    <?php
-                    if (isset($_SESSION['cart_product_list'])){
-                        $cartData = unserialize($_SESSION['cart_product_list']);
-                        if (isset($cartData[$productItem['id']])){
-                            echo "<i class='far fa-check-square'></i>";
-                        }
-                    }
-                    ?>
-                </span>
-
-            </a>
-
-            <div>
-            <a href="#" data-id="<?php echo $productItem['id']; ?>" class="add-to-compare">
-                Сравнить <i class="fas fa-balance-scale"></i>
-
-                <span class="check-in-the-compare<?=$product_id?>">
-                    <?php
-                    if (isset($_SESSION['compare_product_list'])){
-                        $compareData = unserialize($_SESSION['compare_product_list']);  // тут хранятся айди товаров, добавленных в сравнение
-
-                        foreach ($compareData as $compare_category_products){
-                            if(in_array ($product_id, $compare_category_products)){
-                                echo "<i class='far fa-check-square'></i>";
-                            }
-                        }
-                    }
-                    ?>
-                </span>
-            </a>
-            </div>
-
-        </div>
-
-        </div>
-
-    <?php endforeach; ?>
+        ?>
 
     </div>
 
@@ -109,3 +45,11 @@
 echo "<br />";
 echo $pagination->build_pagination($total_count, $current_page_number, $limit);
 ?>
+
+
+<?php
+include_once('/views/product/select_product_color_modal.php');
+?>
+
+
+

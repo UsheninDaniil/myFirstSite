@@ -18,8 +18,8 @@
             <td><a href="/product/<?= $product['id']?> "> <?= $product['name'] ?></a></td>
             <td><?= $product['price'] ?></td>
             <td><?php if($product['status']==1){echo "отображается";}else {echo "не отображается";} ?></td>
-            <td><a href="/admin/delete_product/<?= $product['id']?>"><i class="fas fa-trash-alt"></i></a></td>
             <td><a href="/admin/edit_product/<?= $product['id']?>"><i class="far fa-edit"></i></a></td>
+            <td><a href="/admin/delete_product/<?= $product['id']?>"><i class="fas fa-trash-alt"></i></a></td>
         </tr>
 
     <?php endforeach; ?>

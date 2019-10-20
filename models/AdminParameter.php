@@ -31,13 +31,9 @@ class AdminParameter extends DatabaseConnect
 
         $result = $mysqli->query ("SELECT * FROM `myFirstSite`.`parameters_list` WHERE `id`='$parameter_id'");
 
-        $result_array = $result->fetch_array();
+        $parameters_list = ['id', 'name', 'russian_name', 'unit'];
 
-        $parameter_information=[];
-        $parameter_information['id']=$result_array['id'];
-        $parameter_information['name']=$result_array['name'];
-        $parameter_information['russian_name']=$result_array['russian_name'];
-        $parameter_information['unit']=$result_array['unit'];
+        $parameter_information = DatabaseConnect::fetch_one_dimensional_array($result, $parameters_list);
 
         parent::disconnect_database($mysqli);
 
@@ -58,9 +54,14 @@ class AdminParameter extends DatabaseConnect
     {
         $mysqli = parent::connect_to_database();
 
-        $result = $mysqli->query ("SELECT value FROM `myFirstSite`.`parameter_values` WHERE `product_id`='$product_id' AND `parameter_id`='$parameter_id' ");
+        $result = $mysqli->query ("
+        SELECT value FROM parameter_values
+        INNER JOIN product_parameter_values
+        ON parameter_values.id = product_parameter_values.value_id
+        WHERE product_id='$product_id' 
+        AND parameter_values.parameter_id='$parameter_id' ");
 
-        $result_array = $result->fetch_array();
+        $result_array = $result->fetch_assoc();
 
         $parameter_value=$result_array['value'];
 
@@ -73,16 +74,11 @@ class AdminParameter extends DatabaseConnect
     {
         $mysqli = parent::connect_to_database();
 
-        $result = $mysqli->query ("SELECT * FROM `myFirstSite`.`parameter_values` WHERE `product_id`='$product_id' ");
+        $result = $mysqli->query ("SELECT * FROM product_parameter_values WHERE product_id='$product_id' ");
 
-        $i = 0;
-        $specified_parameters_list = array();
+        $parameter = 'parameter_id';
 
-        while ($i < $result->num_rows){
-            $row = $result->fetch_array();
-            $specified_parameters_list[] = $row['parameter_id'];
-            $i++;
-        }
+        $specified_parameters_list = DatabaseConnect::fetch_array_of_one_parameter($result, $parameter);
 
         parent::disconnect_database($mysqli);
 

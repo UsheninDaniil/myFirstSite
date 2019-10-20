@@ -1,6 +1,17 @@
 <?php
 
+require_once('/models/Admin.php');
+require_once('/models/AdminCategory.php');
+require_once('/models/AdminParameter.php');
+require_once('/models/AdminProduct.php');
+require_once('/models/AdminReview.php');
+require_once('/models/Category.php');
 require_once('/models/DatabaseConnect.php');
+require_once('/models/Parameters.php');
+require_once('/models/Product.php');
+require_once('/models/Search.php');
+require_once('/models/User.php');
+require_once('/models/Color.php');
 
 class TopMenuController
 {
@@ -8,29 +19,26 @@ class TopMenuController
     public function actionAbout()
     {
         require_once('/views/layouts/header.php');
-        require_once(ROOT . '/views/TopMenu/about.php');
+        require_once('/views/TopMenu/about.php');
         require_once('/views/layouts/footer.php');
     }
 
     public function actionContact()
     {
         require_once('/views/layouts/header.php');
-        require_once(ROOT . '/views/TopMenu/contact.php');
+        require_once('/views/TopMenu/contact.php');
         require_once('/views/layouts/footer.php');
     }
 
     public function actionDelivery()
     {
         require_once('/views/layouts/header.php');
-        require_once(ROOT . '/views/TopMenu/delivery.php');
+        require_once('/views/TopMenu/delivery.php');
         require_once('/views/layouts/footer.php');
     }
 
     public function actionHomepage()
     {
-        require_once(ROOT . '/models/Category.php');
-        require_once(ROOT . '/models/Product.php');
-        require_once(ROOT . '/models/User.php');
         require_once(ROOT . '/components/Pagination.php');
 
         $categoryList = Category::get_category_list();
@@ -63,7 +71,7 @@ class TopMenuController
         $limit = 4;
 
         require_once('/views/layouts/header.php');
-        require_once(ROOT . '/views/TopMenu/homepage.php');
+        require_once('/views/TopMenu/homepage.php');
         require_once('/views/layouts/footer.php');
     }
 }
