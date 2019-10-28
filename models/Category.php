@@ -75,6 +75,49 @@ class Category extends DatabaseConnect
         return $product_list;
     }
 
+    public static function build_request_for_filter($filter_parameters, $category_id)
+    {
+        $total_amount = count($filter_parameters);
+        $counter = 0;
+        $united_request = "";
+
+        foreach ($filter_parameters as $parameter_id => $parameter_values_id_array) {
+
+            $counter = $counter + 1;
+
+            $request_first_part = "
+                SELECT product.* FROM product
+                INNER JOIN product_parameter_values ON product.id = product_parameter_values.product_id 
+                INNER JOIN parameter_values ON parameter_values.id = product_parameter_values.value_id
+                INNER JOIN category_parameters ON product_parameter_values.parameter_id = category_parameters.parameter_id 
+                WHERE product.category_id = '$category_id'
+                ";
+
+            $request_second_part = "
+                AND product_parameter_values.product_id IN (
+                SELECT product_id FROM product_parameter_values
+                INNER JOIN parameter_values ON parameter_values.id = product_parameter_values.value_id
+                WHERE product_parameter_values.parameter_id = '$parameter_id' 
+                AND parameter_values.id IN ('" . implode("','", $parameter_values_id_array) . "') )
+                ";
+
+            $request_third_part = "
+                GROUP BY product_parameter_values.product_id
+                ";
+
+            if (strlen($united_request) < 1) {
+                $united_request = $united_request . $request_first_part . $request_second_part;
+            } else {
+                $united_request = $united_request . $request_second_part;
+            }
+
+            if ($counter == $total_amount) {
+                $united_request = $united_request . $request_third_part;
+            }
+        }
+        return $united_request;
+    }
+
 }
 
 

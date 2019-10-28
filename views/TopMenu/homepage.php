@@ -43,7 +43,7 @@
 
 <?php
 echo "<br />";
-echo $pagination->build_pagination($total_count, $current_page_number, $limit);
+echo $pagination->build_pagination();
 ?>
 
 

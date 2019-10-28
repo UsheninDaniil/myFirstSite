@@ -11,6 +11,7 @@ require_once('/models/Parameters.php');
 require_once('/models/Product.php');
 require_once('/models/Search.php');
 require_once('/models/User.php');
+require_once('/components/Helper.php');
 require_once('/controllers/AdminController.php');
 
 
@@ -22,131 +23,32 @@ class AdminReviewController
 
         Admin::check_if_administrator();
 
-        $review_list = AdminReview::get_review_list();
+        // настройки пагинации, которые влияют на ее отображение
+        $pagination = new Pagination(10);
 
-        if (!empty($_GET)) {
-            $get_parameters_array = $_GET;
-            if (isset($get_parameters_array['page'])) {
-                unset($get_parameters_array['page']);
-            }
-            $get_parameters_without_page = $get_parameters_array;
+        $filter_parameters = Helper::get_get_parameters_from_url_without_page();
+
+        if (!empty ($filter_parameters)) {
+            $get_elements_request = AdminReview::build_request_for_filter($filter_parameters);
         }
 
-        $get_products_without_filter = false;
-
-        if (!empty($get_parameters_without_page)) {
-
-            $united_request = '';
-
-            foreach ($get_parameters_without_page as $parameter_name => $parameter_content) {
-
-                if (gettype($parameter_content) == "array") {
-
-                    $parameter_values_array = $parameter_content;
-
-                    if (!empty($parameter_values_array)) {
-                        $request_first_part = "SELECT * FROM product_reviews WHERE ";
-                        $request_second_part = "$parameter_name  IN (" . implode(',', $parameter_values_array) . ")";
-
-                        if (strlen($united_request) < 1) {
-                            $united_request = $united_request . $request_first_part . $request_second_part;
-                        } else {
-                            $united_request = $united_request . ' AND ' . $request_second_part;
-                        }
-                    }
-                } else {
-                    $parameter_value = $parameter_content;
-                    if (!empty($parameter_value)) {
-                        $request_first_part = "SELECT * FROM product_reviews WHERE ";
-
-                        if ($parameter_name === "product_id") {
-                            $request_second_part = "$parameter_name = '$parameter_value'";
-                        }
-
-                        if ($parameter_name === "user_id") {
-                            $request_second_part = "$parameter_name = '$parameter_value'";
-                        }
-
-                        if ($parameter_name === "rating") {
-                            $request_second_part = "$parameter_name = '$parameter_value'";
-                        }
-
-
-                        if ((strlen($united_request) < 1) && (!empty($request_second_part))) {
-                            $united_request = $united_request . $request_first_part . $request_second_part;
-                        } else {
-                            $united_request = $united_request . ' AND ' . $request_second_part;
-                        }
-                    }
-                }
-
-            }
-
-            if (!empty($united_request)) {
-
-                $pagination = new Pagination();
-
-                if (isset($_GET['page'])) {
-                    $current_page_number = $_GET['page'];
-                } else {
-                    $current_page_number = 1;
-                }
-
-                $amount_of_elements_on_page = 1;
-                $get_total_elements_amount_request = "SELECT COUNT(*) FROM($united_request) tmp";
-
-                $result_parameters = $pagination->get_pagination_parameters($current_page_number, $amount_of_elements_on_page, $get_total_elements_amount_request);
-
-                $total_count = $result_parameters['total_count'];
-                $start = $result_parameters['start'];
-
-                $get_elements_request = "$united_request";
-
-                $review_list = $pagination->get_pagination_elements($start, $amount_of_elements_on_page, $get_elements_request);
-
-                $limit = 4;
-
-            } else {
-                $get_products_without_filter = true;
-            }
-
-        } else {
-            $get_products_without_filter = true;
-        }
-
-        if ($get_products_without_filter == true) {
-
-            $pagination = new Pagination();
-
-            $amount_of_elements_on_page = 10;
-
-            if (isset($_GET['page'])) {
-                $current_page_number = $_GET['page'];
-            } else {
-                $current_page_number = 1;
-            }
-
-            $get_total_elements_amount_request = "SELECT COUNT(*) FROM product_reviews";
-
-            $result_parameters = $pagination->get_pagination_parameters($current_page_number, $amount_of_elements_on_page, $get_total_elements_amount_request);
-
-            $total_count = $result_parameters['total_count'];
-            $start = $result_parameters['start'];
-
+        if(empty($get_elements_request)){
             $get_elements_request = "SELECT * FROM product_reviews";
-
-            $review_list = $pagination->get_pagination_elements($start, $amount_of_elements_on_page, $get_elements_request);
-
-            $limit = 4;
         }
 
-        if (empty($review_list)) {
-            $current_page_number = 0;
-        }
+        $get_total_elements_amount_request = "SELECT COUNT(*) FROM($get_elements_request) tmp";
 
-//        if(!empty($united_request)){
-//            echo "united_request <br/>".$united_request;
-//        }
+        $review_list = $pagination->get_pagination_elements($get_elements_request, $get_total_elements_amount_request);
+
+        if(isset($_GET['user_id'])){
+            $search_user_id = $_GET['user_id'];
+        }
+        if(isset($_GET['product_id'])){
+            $search_product_id = $_GET['product_id'];
+        }
+        if(isset($_GET['rating'])){
+            $search_rating = $_GET['rating'];
+        }
 
         require_once('/views/layouts/header.php');
         require_once('/views/admin/review/review_control.php');

@@ -1,19 +1,3 @@
-<?php
-
-if(isset($_GET['user_id'])){
-    $search_user_id = $_GET['user_id'];
-}
-
-if(isset($_GET['product_id'])){
-    $search_product_id = $_GET['product_id'];
-}
-
-if(isset($_GET['rating'])){
-    $search_rating = $_GET['rating'];
-}
-
-?>
-
 
 <div class="container_with_breadcrumb">
 
@@ -23,7 +7,7 @@ if(isset($_GET['rating'])){
         <a href="/admin/reviews_control" class="go-back-to-admin-panel"/><b>Управление отзывами</b></a>
     </div>
 
-    <form method="get" action="/admin/reviews_control?">
+    <form method="get" class="review_filter_form" action="/admin/reviews_control?">
         <div style="display: flex; justify-content: space-between; ">
 
         <div style="padding: 10px; display:flex; flex-direction:column;">
@@ -54,7 +38,7 @@ if(isset($_GET['rating'])){
     </form>
 
 <div style="width: 100%">
-    <table border="1" style="width: 60%; margin: auto; text-align: center" id="review_control_table">
+    <table border="1" class="review_control_table">
         <tr>
             <th rowspan="2">Id</th>
             <th colspan="2">Товар</th>
@@ -114,7 +98,7 @@ if(isset($_GET['rating'])){
 
     <?php
     echo "<br />";
-    echo $pagination->build_pagination($total_count, $current_page_number, $limit);
+    echo $pagination->build_pagination();
     ?>
 
 </div>

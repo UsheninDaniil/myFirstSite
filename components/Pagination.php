@@ -8,14 +8,27 @@
 
 class Pagination
 {
+    // сколько показывать кнопок пагинации
+    public $limit = null;
+    // сколько показывать элементов на странице
+    public $amount_of_elements_on_page = null;
+    // после получения элементов для пагинации будет проверка, есть ли хоть 1 элемент, если нет - пагинация не будет построена
+    public $elements_exist = null;
+    public $total_amount = null;
+    public $start = null;
+    public $current_page_number = null;
 
-    public function __construct()
+    public function __construct($amount_of_elements_on_page = 1, $limit = 4)
     {
+        $this->amount_of_elements_on_page = $amount_of_elements_on_page;
+        $this->limit = $limit;
+        $this->current_page_number = $this->get_current_page_number_from_url();
     }
 
-    public function get_pagination_parameters($current_page_number, $amount_of_elements_on_page, $get_total_elements_amount_request)
+    public function calculate_parameters($get_total_elements_amount_request)
     {
-
+        $current_page_number = $this->current_page_number;
+        $amount_of_elements_on_page = $this->amount_of_elements_on_page;
         $mysqli = DatabaseConnect::connect_to_database();
 
         // Получаем адресную строку без get параметров
@@ -35,7 +48,7 @@ class Pagination
         }
 
         // Находим общее число страниц
-        $total_count = ceil(($total_elements_amount / $amount_of_elements_on_page));
+        $total_amount = ceil(($total_elements_amount / $amount_of_elements_on_page));
 
         // Определяем начало сообщений для текущей страницы
         $current_page_number = intval($current_page_number);
@@ -46,8 +59,8 @@ class Pagination
         }
 
         // Если значение $current_page_number слишком большое, то переходим на последнюю
-        if ($current_page_number > $total_count) {
-            $current_page_number = $total_count;
+        if ($current_page_number > $total_amount) {
+            $current_page_number = $total_amount;
         }
 
         // Вычисляем начиная к какого номера следует выводить сообщения
@@ -56,16 +69,26 @@ class Pagination
             $start = 0;
         };
 
-        $result_parameters = array();
-        $result_parameters['total_count'] = $total_count;
-        $result_parameters['start'] = $start;
-
-        return $result_parameters;
+        $this->total_amount = $total_amount;
+        $this->start = $start;
     }
 
-    public function get_pagination_elements($start, $amount_of_elements_on_page, $get_elements_request)
-    {
+     public function get_current_page_number_from_url()
+     {
+         if (isset($_GET['page'])) {
+             $current_page_number = $_GET['page'];
+         } else {
+             $current_page_number = 1;
+         }
+         return $current_page_number;
+     }
 
+    public function get_pagination_elements($get_elements_request, $get_total_elements_amount_request)
+    {
+        $this->calculate_parameters($get_total_elements_amount_request);
+        $start = $this->start;
+
+        $amount_of_elements_on_page = $this->amount_of_elements_on_page;
         $mysqli = DatabaseConnect::connect_to_database();
 
         // Выбираем заданное количество элементов из базы данных, начиная с номера $start
@@ -75,22 +98,29 @@ class Pagination
         $elements_list = array();
 
         while ($i < $result->num_rows) {
-            $row = $result->fetch_array(MYSQLI_ASSOC);
+            $row = $result->fetch_assoc();
             array_push($elements_list, $row);
             $i++;
+        }
+
+        if(empty($elements_list)){
+            $this->elements_exist = false;
+        } else{
+            $this->elements_exist = true;
         }
 
         return $elements_list;
     }
 
-    public function build_pagination($total_count, $current_page_number, $limit)
+    public function build_pagination()
     {
-        if ($current_page_number > 0) {
+        $current_page_number = $this->current_page_number;
+        $total_amount = $this->total_amount;
+        $limit = $this->limit;
+
+        if ($this->elements_exist === true) {
 
             if (!empty($_GET)) {
-//                $url = $_SERVER['REQUEST_URI'];
-//                $url_array = parse_url($url);
-
                 $get_parameters = $_GET;
 
                 if (isset($get_parameters['page'])) {
@@ -111,8 +141,8 @@ class Pagination
             if ($current_page_number <= $limit / 2) {
                 $page_left_amount = $current_page_number - 1;
                 $page_right_amount = $limit - $page_left_amount;
-            } elseif (($total_count - $current_page_number) < $limit / 2) {
-                $page_right_amount = $total_count - $current_page_number;
+            } elseif (($total_amount - $current_page_number) < $limit / 2) {
+                $page_right_amount = $total_amount - $current_page_number;
                 $page_left_amount = $limit - $page_right_amount;
             } else {
                 $page_right_amount = $limit / 2;
@@ -138,21 +168,21 @@ class Pagination
             $left_ellipsis = "<a href='' class='page-link' style='visibility: hidden'>...</a>";
 
 
-            if (($total_count - $current_page_number - $page_right_amount) >= 1) {
+            if (($total_amount - $current_page_number - $page_right_amount) >= 1) {
                 if (!empty($get_parameters_without_page)) {
-                    $new_get_parameters = "?page=$total_count&" . $get_parameters_without_page;
+                    $new_get_parameters = "?page=$total_amount&" . $get_parameters_without_page;
                 } else {
-                    $new_get_parameters = "?page=$total_count";
+                    $new_get_parameters = "?page=$total_amount";
                 }
-                $last_page = " <a href='$newUri{$new_get_parameters}' class='page-link'>$total_count</a>";
+                $last_page = " <a href='$newUri{$new_get_parameters}' class='page-link'>$total_amount</a>";
                 $right_ellipsis = "<a href='' class='page-link'>...</a>";
             } else {
                 if (!empty($get_parameters_without_page)) {
-                    $new_get_parameters = "?page=$total_count&" . $get_parameters_without_page;
+                    $new_get_parameters = "?page=$total_amount&" . $get_parameters_without_page;
                 } else {
-                    $new_get_parameters = "?page=$total_count";
+                    $new_get_parameters = "?page=$total_amount";
                 }
-                $last_page = " <a href='$newUri{$new_get_parameters}' class='page-link' style='visibility: hidden'>$total_count</a>";
+                $last_page = " <a href='$newUri{$new_get_parameters}' class='page-link' style='visibility: hidden'>$total_amount</a>";
                 $right_ellipsis = "<a href='' class='page-link' style='visibility: hidden'>...</a>";
             }
 
@@ -186,7 +216,7 @@ class Pagination
 
             for ($i = 1; $i <= $page_right_amount; $i++) {
                 $page_number = $current_page_number + $i;
-                if ($page_number <= $total_count) {
+                if ($page_number <= $total_amount) {
                     if (!empty($get_parameters_without_page)) {
                         $new_get_parameters = "?page=$page_number&" . $get_parameters_without_page;
                     } else {

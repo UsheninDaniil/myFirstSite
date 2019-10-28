@@ -56,137 +56,115 @@ Class ProductController
         require_once('/views/layouts/footer.php');
     }
 
-    public function actionReviewCrud()
+    public function actionCreateReview()
     {
-        $uri = $_SERVER['REQUEST_URI'];
-        $segments = explode('/', $uri);
-        $action = $segments[3];
+        $text_review = htmlspecialchars($_POST["text_review"]);
+        $rating = htmlspecialchars($_POST["rating"]);
+        $product_id = htmlspecialchars($_POST["product_id"]);
 
-        if ($action === "create") {
-
-            if (isset($_POST)) {
-                $text_review = htmlspecialchars($_POST["text_review"]);
-                $rating = htmlspecialchars($_POST["rating"]);
-                $product_id = htmlspecialchars($_POST["product_id"]);
-
-                if (isset($_SESSION["user_id"])) {
-
-                    $user_id = $_SESSION["user_id"];
-                    if (Product::check_review_exist($product_id, $user_id) === false) {
-                        $current_date = date("d.m.y");
-                        $current_time = date("H:i");
-
-                        $review_information['product_id'] = $product_id;
-                        $review_information['user_id'] = $user_id;
-                        $review_information['text_review'] = $text_review;
-                        $review_information['rating'] = $rating;
-                        $review_information['date'] = $current_date;
-                        $review_information['time'] = $current_time;
-
-                        Product::save_review($review_information);
-                    }
-                }
-            }
-        }
-
-//        $this ->actionAdd();
-
-        if ($action === "edit") {
+        if (isset($_SESSION["user_id"])) {
 
             $user_id = $_SESSION["user_id"];
+            if (Product::check_review_exist($product_id, $user_id) === false) {
+                $current_date = date("d.m.y");
+                $current_time = date("H:i");
 
-            $product_id = $_POST['product_id'];
+                $review_information['product_id'] = $product_id;
+                $review_information['user_id'] = $user_id;
+                $review_information['text_review'] = $text_review;
+                $review_information['rating'] = $rating;
+                $review_information['date'] = $current_date;
+                $review_information['time'] = $current_time;
 
-            $current_user_review = Product::get_product_review_by_product_id_and_user_id($product_id, $user_id);
+                Product::save_review($review_information);
+                echo "отзыв был сохранен";
+            }
+        }
+    }
 
-            $review_rating = '
-                <div class="rating_star_container" data-product-id="' . $product_id . '" >
+    public function actionEditReview()
+    {
+        $user_id = $_SESSION["user_id"];
+        $product_id = $_POST['product_id'];
+        $current_user_review = Product::get_product_review_by_product_id_and_user_id($product_id, $user_id);
 
-                    <div data-rating="1" class="rating_star">
-                        <i class="fa-star far"></i>
-                        <i class="fa-star fas"></i>
-                    </div>
+        $review_rating = '
+            <div class="rating_star_container" data-product-id="' . $product_id . '" >
 
-                    <div data-rating="2" class="rating_star">
-                        <i class="fa-star far"></i>
-                        <i class="fa-star fas"></i>
-                    </div>
-
-                    <div data-rating="3" class="rating_star">
-                        <i class="fa-star far"></i>
-                        <i class="fa-star fas"></i>
-                    </div>
-
-                    <div data-rating="4" class="rating_star">
-                        <i class="fa-star far"></i>
-                        <i class="fa-star fas"></i>
-                    </div>
-
-                    <div data-rating="5" class="rating_star">
-                        <i class="fa-star far"></i>
-                        <i class="fa-star fas"></i>
-                    </div>
-
+                <div data-rating="1" class="rating_star">
+                    <i class="fa-star far"></i>
+                    <i class="fa-star fas"></i>
                 </div>
-                ';
+
+                <div data-rating="2" class="rating_star">
+                    <i class="fa-star far"></i>
+                    <i class="fa-star fas"></i>
+                </div>
+
+                <div data-rating="3" class="rating_star">
+                    <i class="fa-star far"></i>
+                    <i class="fa-star fas"></i>
+                </div>
+
+                <div data-rating="4" class="rating_star">
+                    <i class="fa-star far"></i>
+                    <i class="fa-star fas"></i>
+                </div>
+
+                <div data-rating="5" class="rating_star">
+                    <i class="fa-star far"></i>
+                    <i class="fa-star fas"></i>
+                </div>
+
+            </div>
+            ';
 
 
-            $review = $current_user_review['review'];
-            $review_text = "<form><textarea id='text_review_update'>$review</textarea></form>";
+        $review = $current_user_review['review'];
+        $review_text = "<form><textarea id='text_review_update'>$review</textarea></form>";
 
-            $result = json_encode(['stars' => $review_rating, 'text' => $review_text]);
+        $result = json_encode(['stars' => $review_rating, 'text' => $review_text]);
 
-            echo $result;
+        echo $result;
+    }
 
+    public function actionUpdateReview()
+    {
+        $text_review = htmlspecialchars($_POST["text_review"]);
+        $rating = htmlspecialchars($_POST["rating"]);
+        $product_id = htmlspecialchars($_POST["product_id"]);
 
-        }
+        if (isset($_SESSION["user_id"])) {
 
-        if ($action === "update") {
+            $user_id = $_SESSION["user_id"];
+            if (Product::check_review_exist($product_id, $user_id) === true) {
 
-            if (isset($_POST)) {
+                $current_date = date("d.m.y");
+                $current_time = date("H:i");
 
-                $text_review = htmlspecialchars($_POST["text_review"]);
-                $rating = htmlspecialchars($_POST["rating"]);
-                $product_id = htmlspecialchars($_POST["product_id"]);
+                $review_information['product_id'] = $product_id;
+                $review_information['user_id'] = $user_id;
+                $review_information['text_review'] = $text_review;
+                $review_information['rating'] = $rating;
+                $review_information['date'] = $current_date;
+                $review_information['time'] = $current_time;
 
-                if (isset($_SESSION["user_id"])) {
-
-                    $user_id = $_SESSION["user_id"];
-                    if (Product::check_review_exist($product_id, $user_id) === true) {
-
-                        $current_date = date("d.m.y");
-                        $current_time = date("H:i");
-
-                        $review_information['product_id'] = $product_id;
-                        $review_information['user_id'] = $user_id;
-                        $review_information['text_review'] = $text_review;
-                        $review_information['rating'] = $rating;
-                        $review_information['date'] = $current_date;
-                        $review_information['time'] = $current_time;
-
-                        Product::update_review($review_information);
-                    }
-                }
+                Product::update_review($review_information);
             }
-
         }
+    }
 
-        if ($action === "delete") {
+    public function actionDeleteReview()
+    {
+        $product_id = $_POST['product_id'];
 
-            if (isset($_POST)) {
+        if (isset($_SESSION["user_id"])) {
 
-                $product_id = $_POST['product_id'];
-
-                if (isset($_SESSION["user_id"])) {
-
-                    $user_id = $_SESSION["user_id"];
-                    if (Product::check_review_exist($product_id, $user_id) === true) {
-                        Product::delete_review($product_id, $user_id);
-                    }
-                }
+            $user_id = $_SESSION["user_id"];
+            if (Product::check_review_exist($product_id, $user_id) === true) {
+                Product::delete_review($product_id, $user_id);
             }
         }
-
     }
 
     public function actionAdd()
@@ -366,7 +344,6 @@ Class ProductController
             $category_id = $_POST['category_id'];
             User::delete_product_from_compare_list($product_id, $category_id);
         }
-
     }
 
 

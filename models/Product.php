@@ -135,7 +135,7 @@ class Product extends DatabaseConnect
         $date = $review_information['date'];
         $time = $review_information['time'];
 
-        $mysqli->query("INSERT INTO `product_reviews` (`product_id`, `user_id`, `review`, `rating`, `date`, `time`) VALUES ('$product_id', '$user_id', '$text_review', '$rating', '$date', '$time')");
+        $mysqli->query("INSERT INTO product_reviews (product_id, user_id, review, rating, date, time) VALUES ('$product_id', '$user_id', '$text_review', '$rating', '$date', '$time')");
 
         parent::disconnect_database($mysqli);
 

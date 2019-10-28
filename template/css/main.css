@@ -157,11 +157,18 @@ padding: 5px;
     max-width: 50%;
 }
 
-.product_list_table{
+.product_list_table, .review_list_table{
     text-align: center;
     margin-left: 30%;
     margin-right: 30%;
     width: 40%;
+}
+
+.review_information_table, .review_control_table{
+    text-align: center;
+    margin-left: 20%;
+    margin-right: 20%;
+    width: 60%;
 }
 
 .view_product_table{
@@ -849,31 +856,9 @@ table .btn-secondary, table .btn-secondary:hover{
 }
 
 #sortable_categories_list_table{
-    width: 60%;
+    width: 50%;
     margin: auto;
     text-align: center;
-}
-
-
-.edit_categories_grid .row{
-    /*border: 1px solid black;*/
-    /*background-color: white;*/
-    /*background-color: #2C8DFB;*/
-    background-color: white;
-    /*margin: 10px 0;*/
-
-}
-
-.edit_categories_grid .row > .col, .edit_categories_grid .row > [class^=col-] {
-    padding-top: .75rem;
-    padding-bottom: .75rem;
-    background-color: #D8E6F3;
-    border: 1px solid white;
-    color: black;
-}
-
-.edit_categories_grid .header > .col, .edit_categories_grid .header > [class^=col-]{
-    background-color: #AFCDE7;
 }
 
 .color_link{

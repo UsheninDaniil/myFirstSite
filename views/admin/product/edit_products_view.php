@@ -8,10 +8,7 @@
 </div>
 
 
-
 <?php
-
-
     $status_list = array(1 => 'отображается' ,0 => 'не отображается');
 
     if(isset($_GET['name'])){
@@ -21,7 +18,6 @@
     if(isset($_GET['id'])){
         $search_product_id = $_GET['id'];
     }
-
 ?>
 
 <br/><br/>

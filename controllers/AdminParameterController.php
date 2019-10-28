@@ -11,6 +11,7 @@ require_once('/models/Parameters.php');
 require_once('/models/Product.php');
 require_once('/models/Search.php');
 require_once('/models/User.php');
+require_once('/components/Helper.php');
 require_once('/controllers/AdminController.php');
 
 
@@ -40,12 +41,9 @@ class AdminParameterController
     {
         Admin::check_if_administrator();
 
-        $uri = $_SERVER['REQUEST_URI'];
-        $segments = explode('/', $uri);
-        if (isset($segments[3])) {
-            $parameter_id = $segments[3];
-        }
+        $parameter_id = Helper::get_information_from_url(3);
         $parameter_information = AdminParameter::get_parameter_information_by_parameter_id($parameter_id);
+
         require_once('/views/layouts/header.php');
         require_once('/views/admin/parameters/edit_parameter.php');
         require_once('/views/layouts/footer.php');
@@ -55,45 +53,31 @@ class AdminParameterController
     {
         Admin::check_if_administrator();
 
-        $uri = $_SERVER['REQUEST_URI'];
-        $segments = explode('/', $uri);
-        if (isset($segments[3])) {
-            $parameter_id = $segments[3];
-        }
-
         $parameter_information = [];
 
-        if (isset($_POST['parameter_name'])) {
+        if (isset($_POST['parameter_id'], $_POST['parameter_name'], $_POST['parameter_russian_name'], $_POST['parameter_unit'])) {
+            $parameter_id = $_POST['parameter_id'];
             $name = $_POST['parameter_name'];
-        }
-
-        if (isset($_POST['parameter_russian_name'])) {
             $russian_name = $_POST['parameter_russian_name'];
-        }
-
-        if (isset($_POST['parameter_unit'])) {
             $unit = $_POST['parameter_unit'];
+
+            AdminParameter::update_parameter_information_by_parameter_id($parameter_id, $name, $russian_name, $unit);
         }
 
-        AdminParameter::update_parameter_information_by_parameter_id($parameter_id, $name, $russian_name, $unit);
     }
 
     public function actionRemoveSelectedParameter()
     {
         Admin::check_if_administrator();
 
-        $existing_parameters_list = Parameters::get_all_parameters();
-
-        $uri = $_SERVER['REQUEST_URI'];
-        $segments = explode('/', $uri);
-        if (isset($segments[3])) {
-            $parameter_id = $segments[3];
+        if(isset($_POST['parameter_id'])){
+            $parameter_id = $_POST['parameter_id'];
+        } else{
+            return;
         }
 
         AdminParameter::RemoveSelectedParameter($parameter_id);
-
         $existing_parameters_list = Parameters::get_all_parameters();
-
         require_once(ROOT . '/views/admin/parameters/parameters_table.php');
     }
 
@@ -101,23 +85,12 @@ class AdminParameterController
     {
         Admin::check_if_administrator();
 
-        $uri = $_SERVER['REQUEST_URI'];
-
-        $segments = explode('/', $uri);
-
-        if (isset($_POST['parameter_name'])) {
+        if (isset($_POST['parameter_name'], $_POST['parameter_russian_name'], $_POST['parameter_unit'])) {
             $parameter_name = $_POST['parameter_name'];
-        }
-
-        if (isset($_POST['parameter_russian_name'])) {
             $parameter_russian_name = $_POST['parameter_russian_name'];
-        }
-
-        if (isset($_POST['parameter_unit'])) {
             $parameter_unit = $_POST['parameter_unit'];
+            AdminParameter::save_new_parameter($parameter_name, $parameter_russian_name, $parameter_unit);
         }
-
-        AdminParameter::save_new_parameter($parameter_name, $parameter_russian_name, $parameter_unit);
     }
 
 

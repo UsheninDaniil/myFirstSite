@@ -66,9 +66,9 @@ class Parameters extends DatabaseConnect
     {
         $mysqli = parent::connect_to_database();
 
-        $result = $mysqli->query("SELECT show_in_filter, sort_order FROM category_parameters WHERE  category_id = '$category_id' AND parameter_id = '$parameter_id' ");
+        $request = "SELECT show_in_filter, sort_order FROM category_parameters WHERE  category_id = '$category_id' AND parameter_id = '$parameter_id'";
 
-        $result_array = $result->fetch_array();
+        $result = $mysqli->query($request);
 
         $parameters_list = ['show_in_filter', 'sort_order'];
 

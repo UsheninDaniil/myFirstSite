@@ -49,7 +49,7 @@
                     <?php
                         foreach ($not_category_parameters as $parameter_id){
                         $russian_name = Parameters::get_parameter_name_by_parameter_id($parameter_id);
-                        echo "<input type='checkbox' name='parameter_id[]'  value='$parameter_id' data-parameters-list='$parameter_id' class='save_parameters_list'>".$russian_name."<br />";
+                        echo "<input type='checkbox' name='parameters_list[]'  value='$parameter_id' class='save_parameters_list'>".$russian_name."<br />";
                         }
                     ?>
                 </form>

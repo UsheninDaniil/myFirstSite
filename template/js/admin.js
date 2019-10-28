@@ -48,15 +48,12 @@ $(document).on('click', '.save_new_parameter_to_category', function (event)
     var value1 = form.find('input[name="parameter_name"]').val();
     var value2 = form.find('input[name="parameter_russian_name"]').val();
     var value3 = form.find('input[name="parameter_unit"]').val();
-    var new_parameter_information={parameter_name:value1, parameter_russian_name:value2, parameter_unit:value3};
     var category_id = $(this).parents(".parameter_list_table").data("categoryId");
+    var new_parameter_information={parameter_name:value1, parameter_russian_name:value2, parameter_unit:value3, category_id:category_id};
 
-    $.post("/admin/save_new_parameter_to_category/"+category_id, new_parameter_information , function (data) {
-            $(".remove_info").html(data);
-        }, "html"
-    );
+    $.post("/admin/save_new_parameter_to_category", new_parameter_information , function (data) {}, "html");
 
-    $.post("/admin/reload_category_parameters_table/"+category_id, {}, function (data) {
+    $.post("/admin/reload_category_parameters_table", {category_id:category_id}, function (data) {
             $(".category_parameters_table").html(data);
         },"html"
     );
@@ -68,12 +65,9 @@ $(document).on('click', '.remove_parameter_from_category', function (event) {
     var remove_parameter_id = $(this).data("parameterId");
     var category_id = $(this).parents(".parameter_list_table").data("categoryId");
 
-    $.post("/admin/remove_parameter_from_category/"+remove_parameter_id+"/"+category_id, {}, function (data) {
-            $(".remove_info").html(data);
-        }, "html"
-    );
+    $.post("/admin/remove_parameter_from_category", {category_id:category_id, remove_parameter_id:remove_parameter_id}, function (data) {}, "html");
 
-    $.post("/admin/reload_category_parameters_table/"+category_id, {}, function (data) {
+    $.post("/admin/reload_category_parameters_table", {category_id:category_id}, function (data) {
             $(".category_parameters_table").html(data);
         },"html"
     );
@@ -83,15 +77,12 @@ $(document).on('click', '.save_selected_existing_parameters_to_category', functi
     event.preventDefault();
 
     var form = $('#save_parameters_list');
-    var parameters_list_data = form.serialize();
+    var form_data = form.serialize();
     var category_id = $(this).parents(".parameter_list_table").data("categoryId");
 
-    $.post("/admin/save_selected_existing_parameters_to_category/"+category_id, parameters_list_data, function (data) {
-            $(".remove_info").html(data);
-        }, "html"
-    );
+    $.post("/admin/save_selected_existing_parameters_to_category", {form_data:form_data, category_id:category_id}, function (data) {}, "html");
 
-    $.post("/admin/reload_category_parameters_table/"+category_id, {}, function (data) {
+    $.post("/admin/reload_category_parameters_table", {category_id:category_id}, function (data) {
             $(".category_parameters_table").html(data);
         },"html"
     );
@@ -120,8 +111,8 @@ $(document).on('click', '.parameters_list_table .remove_selected_parameter', fun
     event.preventDefault();
     var remove_parameter_id = $(this).data("parameterId");
 
-    if (confirm("Вы действительно хотите удалить параметер #remove_parameter_id ?")){
-        $.post("/admin/remove_selected_parameter/"+remove_parameter_id, {}, function (data) {
+    if (confirm("Вы действительно хотите удалить параметер #" +  remove_parameter_id + " ?")){
+        $.post("/admin/remove_selected_parameter", {remove_parameter_id:remove_parameter_id}, function (data) {
                 $(".parameters_list_table").html(data);
             },"html"
         );
@@ -141,7 +132,6 @@ $(document).on('click', '.parameters_list_table .save_new_parameter', function (
     var category_id = $(this).parents(".parameter_list_table").data("categoryId");
 
     $.post("/admin/save_new_parameter", new_parameter_information , function (data) {
-            $(".check_result").html(data);
         }, "html"
     );
 
@@ -159,9 +149,9 @@ $(document).on('click', '.update_selected_parameter_information', function (even
     var value1 = form.find('input[name="update_parameter_name"]').val();
     var value2 = form.find('input[name="update_parameter_russian_name"]').val();
     var value3 = form.find('input[name="update_parameter_unit"]').val();
-    var new_parameter_information = {parameter_name: value1, parameter_russian_name: value2, parameter_unit: value3};
+    var new_parameter_information = {parameter_id:parameter_id, parameter_name: value1, parameter_russian_name: value2, parameter_unit: value3};
 
-    $.post("/admin/update_selected_parameter/" + parameter_id, new_parameter_information, function (data) {
+    $.post("/admin/update_selected_parameter", new_parameter_information, function (data) {
             document.location.href = "/admin/edit_parameters";
         }, "html"
     );
@@ -208,7 +198,7 @@ $(document).on('click', 'form#edit_product a.remove_additional_parameter', funct
     var product_id = $('form#edit_product').data("productId");
     var parameter_id = $(this).data("parameterId");
 
-    $.post("/admin/delete_additional_parameter_from_edit_product/"+ product_id + "/" + parameter_id, {}, function (data) {
+    $.post("/admin/delete_additional_parameter_from_edit_product", {product_id:product_id, parameter_id:parameter_id}, function (data) {
             document.location.href = "/admin/edit_product/" + product_id;
         }, "html"
     );
@@ -220,7 +210,7 @@ $(document).on('change', '#load_category_parameters_to_add_product', function (e
     var form = document.getElementById("load_category_parameters_to_add_product");
     category_id = form.options[form.selectedIndex].value;
 
-    $.post("/admin/load_category_parameters_to_add_product/"+category_id, {}, function (data) {
+    $.post("/admin/load_category_parameters_to_add_product", {category_id:category_id}, function (data) {
             // $("form#add_product .category_parameters_list").html(data);
             $("#category_parameters_list").html(data);
 
@@ -265,6 +255,8 @@ if($('#accordion  > div').length>0){
 }
 
 if($('#sortable_categories_list_table .category_name').length > 0){
+
+    console.log('существует');
 
     $('#sortable_categories_list_table .category_name').on('shown', function(e, editable) {
         changeEditableInputWidth();
@@ -321,7 +313,7 @@ $(function() {
                 $(this).find('#sort_order').html(index + 1)
             });
 
-            $.post("/admin/change_the_sort_order_of_categories", order, function (data) {
+            $.post("/admin/update_the_sort_order_of_categories", order, function (data) {
                     $(".information").html(data);
                 }, "html"
             );
@@ -330,64 +322,6 @@ $(function() {
 
     }
 });
-
-
-
-
-
-
-
-
-$(function() {
-
-    var root = $('.test_container');
-
-    if(root.length > 0){
-
-        // root.children().each(function (index) {
-        //
-        //     var category_id = $(this).data("categoryId");
-        //
-        //     this.id = 'category_id_list-' + category_id;
-        //
-        // });
-
-        root.sortable({
-
-            containment: "parent",
-
-            // 'helper': function(e, tr)
-            // {
-            //     var $originals = tr.children();
-            //     var $helper = tr.clone();
-            //     $helper.children().each(function(index)
-            //     {
-            //         // Set helper cell sizes to match the original sizes
-            //         $(this).width($originals.eq(index).width());
-            //     });
-            //     return $helper;
-            // },
-            //
-            //
-            // 'update': function (event, ui) {
-            //     var order = $(this).sortable('serialize');
-            //
-            //     $(this).children().each(function(index) {
-            //         $(this).find('#sort_order').html(index + 1)
-            //     });
-            //
-            //     $.post("/admin/change_the_sort_order_of_categories", order, function (data) {
-            //             $(".information").html(data);
-            //         }, "html"
-            //     );
-            // }
-        });
-
-    }
-});
-
-
-
 
 
 
@@ -476,10 +410,6 @@ function apply_filter_in_edit_products(){
 
 
 function save_product_review(){
-    console.log('создание отзыва');
-
-    var action = 'create';
-
     var text_review = document.getElementById("text_review_new").value;
     var rating = document.querySelector('.rating_star_container').dataset.rating;
     var product_id = document.querySelector('.rating_star_container').dataset.productId;
@@ -490,11 +420,10 @@ function save_product_review(){
 
     var review_information = {text_review: text_review, rating: rating, product_id:product_id};
 
-    $.post("/product/review_crud/" + action , review_information, function (data) {
+    $.post("/product/create_review" , review_information, function (data) {
         document.location.href = "/product/"+product_id;
         },"html"
     );
-
 }
 
 
@@ -512,18 +441,12 @@ function edit_product_review(event) {
         window.original_review_text = $(".current_user_review .review_item .review_text").eq(0).html();
     }
 
-    console.log('изменение отзыва');
-
-    var action = 'edit';
-
     var location = document.location.href;
     var segments = location.split('/');
     var product_id = segments[4];
     console.log('product_id =' + product_id);
 
-    $.post("/product/review_crud/" + action, {product_id: product_id}, function (data) {
-
-        // var result = JSON.parse(data);
+    $.post("/product/edit_review", {product_id: product_id}, function (data) {
 
         $(".current_user_review .review_item .review_rating").html(data.stars);
         $(".current_user_review .review_item .review_text").html(data.text);
@@ -535,24 +458,10 @@ function edit_product_review(event) {
     );
 
     document.querySelector('.review_update_and_cancel').hidden = false;
-
 }
 
-function delete_product_review() {
-    console.log('удаление отзыва');
-
-    var product_id = document.querySelector('.rating_star_container').dataset.productId;
-
-    var action = 'delete';
-    $.post("/product/review_crud/" + action , {product_id:product_id}, function (data) {
-        document.location.href = "/product/"+product_id;
-        },"html"
-    );
-}
 
 function update_product_review() {
-    console.log('обновление отзыва');
-
     var text_review = document.getElementById("text_review_update").value;
     var rating = document.querySelector('.rating_star_container').dataset.rating;
     var product_id = document.querySelector('.rating_star_container').dataset.productId;
@@ -563,10 +472,18 @@ function update_product_review() {
 
     var review_information = {text_review: text_review, rating: rating, product_id:product_id};
 
-    var action = 'update';
-    $.post("/product/review_crud/" + action, review_information, function (data) {
+    $.post("/product/update_review", review_information, function (data) {
         document.location.href = "/product/"+product_id;
         },"html"
+    );
+}
+
+function delete_product_review() {
+    var product_id = document.querySelector('.rating_star_container').dataset.productId;
+
+    $.post("/product/delete_review", {product_id: product_id}, function (data) {
+            document.location.href = "/product/" + product_id;
+        }, "html"
     );
 }
 
@@ -588,12 +505,13 @@ $(document).on('click', '.delete_product_review', function (event) {
     event.preventDefault();
     var review_id = $(this).attr("data-review_id");
 
-    $.post("/admin/reviews_control/delete_review", {review_id: review_id}, function (data) {
-        var location = document.location.href;
-        document.location.href = location;
-        },"html"
-    );
-
+    if (confirm("Вы действительно хотите удалить отзыв?")) {
+        $.post("/admin/reviews_control/delete_review", {review_id: review_id}, function (data) {
+                var location = document.location.href;
+                document.location.href = location;
+            }, "html"
+        );
+    }
 });
 
 
@@ -608,15 +526,30 @@ $(document).on('click', '.show_review_rating_sorting', function(){
 });
 
 $(document).on('click', '.review_rating_sorting .sorting_ascending', function(){
-    var location = document.location.href;
-    location = location + '&sorting=ascending';
-    document.location.href = location;
+
+    var form=document.querySelector('.review_filter_form');//retrieve the form as a DOM element
+
+    var input = document.createElement('input');//prepare a new input DOM element
+    input.setAttribute('name', 'sorting');//set the param name
+    input.setAttribute('value', 'ascending');//set the value
+    input.setAttribute('type', 'hidden');//set the type
+
+    form.appendChild(input);//append the input to the form
+    form.submit();//send with added input
 });
 
 $(document).on('click', '.review_rating_sorting .sorting_descending', function(){
-    var location = document.location.href;
-    location = location + '&sorting=descending';
-    document.location.href = location;
+
+    var form=document.querySelector('.review_filter_form');//retrieve the form as a DOM element
+
+    var input = document.createElement('input');//prepare a new input DOM element
+    input.setAttribute('name', 'sorting');//set the param name
+    input.setAttribute('value', 'descending');//set the value
+    input.setAttribute('type', 'hidden');//set the type
+
+    form.appendChild(input);//append the input to the form
+    form.submit();//send with added input
+
 });
 
 if($('[data-toggle="tooltip"]').length>0) {
@@ -823,43 +756,36 @@ $(document).on('click', '.edit_selected_product_main_container .delete_selected_
 });
 
 
+if($('.category_status_checkbox').length>0) {
+    $.switcher('.category_status_checkbox');
+}
+
+
+$(document).on('click', '.delete_selected_order', function (e) {
+
+    var order_id = $(this).attr('data-order-id');
+
+    $.post("/admin/delete_order", {order_id:order_id}, function (data) {
+        document.location.href = "/admin/orders_control";
+        },"html"
+    );
+});
 
 
 
+$(document).on('click', '.logout_link', function(){
 
+    var form=document.querySelector('.logout_form');//retrieve the form as a DOM element
 
+    var input = document.createElement('input');//prepare a new input DOM element
+    input.setAttribute('name', 'logout');//set the param name
+    input.setAttribute('value', 'descending');//set the value
+    input.setAttribute('type', 'hidden');//set the type
 
+    form.appendChild(input);//append the input to the form
+    form.submit();//send with added input
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Не забыть включть!!!
-// $.switcher('input[type=checkbox]');
-// $.switcher('input[type=radio]');
-
-
-
-
+});
 
 
 

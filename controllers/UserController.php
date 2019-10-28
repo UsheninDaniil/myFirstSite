@@ -5,6 +5,7 @@ require_once('/models/AdminCategory.php');
 require_once('/models/AdminParameter.php');
 require_once('/models/AdminProduct.php');
 require_once('/models/AdminReview.php');
+require_once('/models/AdminOrder.php');
 require_once('/models/Category.php');
 require_once('/models/DatabaseConnect.php');
 require_once('/models/Parameters.php');
@@ -12,6 +13,7 @@ require_once('/models/Product.php');
 require_once('/models/Search.php');
 require_once('/models/User.php');
 require_once('/models/Color.php');
+require_once('/components/Helper.php');
 require_once('/components/Validator.php');
 
 class UserController
@@ -74,7 +76,7 @@ class UserController
 
         $user_id = $_SESSION["user_id"];
         $user_role = Admin::check_user_role($user_id);
-        $order_list = User::get_order_list_by_user_id($user_id);
+        $orders_list = AdminOrder::get_order_list_by_user_id($user_id);
 
         require_once('/views/layouts/header.php');
         require_once('/views/user/cabinet.php');
@@ -163,5 +165,26 @@ class UserController
         }
     }
 
+    public function actionViewOrderInformation(){
+
+        $order_id = Helper::get_information_from_url(3);
+        $order_information = AdminOrder::get_order_information($order_id);
+        $product_list = AdminOrder::get_product_list_by_order_id($order_id);
+
+        require_once('/views/layouts/header.php');
+        require_once('/views/user/order_information.php');
+        require_once('/views/layouts/footer.php');
+    }
+
+    public function actionViewUserOrdersList(){
+
+        $user_id = $_SESSION["user_id"];
+        $user_role = Admin::check_user_role($user_id);
+        $orders_list = AdminOrder::get_order_list_by_user_id($user_id);
+
+        require_once('/views/layouts/header.php');
+        require_once('/views/user/orders_list.php');
+        require_once('/views/layouts/footer.php');
+    }
 
 }

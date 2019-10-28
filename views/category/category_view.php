@@ -48,9 +48,6 @@
                         <?php foreach ($most_popular_parameter_values_list as $element):
                             $value = $element['value'];
                             $value_id = Parameters::get_value_id($value, $parameter_id);
-
-                            echo "value_id = $value_id";
-
                             $count = $element['count'];
                             ?>
                             <input type="checkbox" name='<?php echo $parameter_id ?>[]' value="<?= $value_id ?>" form='category_parameters_filter'
@@ -129,8 +126,6 @@
                     $filter_tags = $filter_tags . ',' . $tag_name;
                 }
             }
-
-//            $filter_tags = $filter_tags.' value_id = '.$value_id;
         }
     }
     ?>
@@ -144,44 +139,20 @@
 
     <br/>
 
-
-
-
-
-
-
-
-
     <div class="product_list">
-
         <?php
-
             foreach ($productList as $productItem){
                 include('/views/product/product_item_template.php');
             }
         ?>
-
     </div>
-
-    <?php
-    if (isset($united_request)) {
-        echo "<br /><b style='color: darkred'>Запрос:</b><br /> $united_request <br />";
-    }
-
-    if (!empty($_GET)) {
-        echo "<br /><b style='color: darkred'>Содержимое GET:</b><br />";
-        print_r($_GET);
-        echo "<br />";
-    }
-
-    ?>
 
 </div>
 
 
 <?php
 echo "<br />";
-echo $pagination->build_pagination($total_count, $current_page_number, $limit);
+echo $pagination->build_pagination();
 ?>
 
 

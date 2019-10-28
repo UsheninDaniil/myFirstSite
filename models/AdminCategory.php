@@ -50,4 +50,31 @@ class AdminCategory extends DatabaseConnect
         parent::disconnect_database($mysqli);
     }
 
+    public static function update_the_sort_order_of_categories($category_id_list)
+    {
+        $i = 1;
+        foreach ($category_id_list as $category_id) {
+            $mysqli = DatabaseConnect::connect_to_database();
+            $mysqli->query("UPDATE category SET `sort_order` = '$i' WHERE id = '$category_id'");
+            DatabaseConnect::disconnect_database($mysqli);
+            $i = $i + 1;
+        }
+    }
+
+    public static function update_category_name($category_id, $new_category_name)
+    {
+        $mysqli = DatabaseConnect::connect_to_database();
+        $sql = "UPDATE category SET `name` = '$new_category_name' WHERE id='$category_id'";
+        $mysqli->query($sql);
+        DatabaseConnect::disconnect_database($mysqli);
+    }
+
+    public static function update_category_status($category_id, $new_category_status)
+    {
+        $mysqli = DatabaseConnect::connect_to_database();
+        $sql = "UPDATE category SET `status` = '$new_category_status' WHERE id='$category_id'";
+        $mysqli->query($sql);
+        DatabaseConnect::disconnect_database($mysqli);
+    }
+
 }

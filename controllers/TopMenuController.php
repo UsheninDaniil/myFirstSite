@@ -12,6 +12,7 @@ require_once('/models/Product.php');
 require_once('/models/Search.php');
 require_once('/models/User.php');
 require_once('/models/Color.php');
+require_once('/components/Helper.php');
 
 class TopMenuController
 {
@@ -43,32 +44,12 @@ class TopMenuController
 
         $categoryList = Category::get_category_list();
 
-        $pagination = new Pagination();
-
-        $amount_of_elements_on_page = 3;
-
-        if (isset($_GET['page'])) {
-            $current_page_number = $_GET['page'];
-        } else {
-            $current_page_number = 1;
-        }
-
-        $get_total_elements_amount_request = "SELECT COUNT(*) FROM product";
-
-        $result_parameters = $pagination->get_pagination_parameters($current_page_number, $amount_of_elements_on_page, $get_total_elements_amount_request);
-
-        $total_count = $result_parameters['total_count'];
-        $start = $result_parameters['start'];
+        $pagination = new Pagination(10);
 
         $get_elements_request = "SELECT * FROM product";
+        $get_total_elements_amount_request = "SELECT COUNT(*) FROM product";
 
-        $productList = $pagination->get_pagination_elements($start, $amount_of_elements_on_page, $get_elements_request);
-
-        if(empty($productList)){
-            $current_page_number = 0;
-        }
-
-        $limit = 4;
+        $productList = $pagination->get_pagination_elements($get_elements_request, $get_total_elements_amount_request);
 
         require_once('/views/layouts/header.php');
         require_once('/views/TopMenu/homepage.php');

@@ -121,7 +121,7 @@ class User extends DatabaseConnect
 
         if (!$error) {
             $subject = "=?utf-8?B?" . base64_encode($subject) . "?=";
-            mail($to, $subject, $message, $headers);
+            mail($to, $subject, $message);
             header("Location: successfeedback.php");
             exit;
         }
@@ -132,35 +132,6 @@ class User extends DatabaseConnect
             "error_to" => $error_to,
             "error_subject" => $error_subject,
             "error_message" => $error_message);
-    }
-
-
-    public static function get_order_list_by_user_id($user_id)
-    {
-        $mysqli = parent::connect_to_database();
-
-        $result = $mysqli->query("SELECT * FROM orders  WHERE user_id = '$user_id' ORDER BY id");
-
-        $parameters_list = ['id', 'user_id', 'date', 'time', 'status'];
-
-        $order_list = DatabaseConnect::fetch_two_dimensional_array($result, $parameters_list);
-
-        parent::disconnect_database($mysqli);
-        return $order_list;
-    }
-
-    public static function get_product_list_by_order_id_and_user_id($order_id, $user_id)
-    {
-        $mysqli = parent::connect_to_database();
-
-        $result = $mysqli->query("SELECT * FROM orders INNER JOIN orders_information ON orders.id = orders_information.order_id WHERE user_id = '$user_id' AND order_id = '$order_id' ORDER BY orders.id");
-
-        $parameters_list = ['product_id', 'color_id', 'product_amount', 'product_price'];
-
-        $product_list = DatabaseConnect::fetch_two_dimensional_array($result, $parameters_list);
-
-        parent::disconnect_database($mysqli);
-        return $product_list;
     }
 
 

@@ -1,5 +1,3 @@
-<!--Управление корзиной-->
-
 $(document).ready(function () {
     $(".add_to_cart_from_modal").click(function (event) {
 

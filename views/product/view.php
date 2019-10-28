@@ -24,10 +24,6 @@ while ($i < $result->num_rows) {
 
 $root = $_SERVER['DOCUMENT_ROOT'];
 
-//echo "root = $root<br/>";
-//$root_old = ROOT;
-//echo "ROOT = $root_old<br/>";
-
 foreach ($product_images_list as $image) {
 
     $image_path = ROOT . "/images/small_images/$image";
@@ -117,12 +113,12 @@ $ability_to_choose_the_color = Color::check_is_there_ability_to_choose_the_color
 
                 <?php
                 $image_path = "/images/middle_images/id_{$product_id}_photo_1.jpg";
-                //                echo "$image_path";
-                if (file_exists($image_path)) {
-//                    echo "файл существует";
-                } else {
-//                    echo "файла нету";
-                }
+                $image_path_backslash = str_replace('/', '\\', $image_path);
+                $full_path = ROOT.$image_path_backslash;
+
+                if (!file_exists($full_path)) {
+                    $image_path = "/images/middle_images/no_photo.png";
+                } else
                 ?>
                 <img id="selected_photo" src="<?= $image_path ?>">
 
@@ -558,21 +554,14 @@ $ability_to_choose_the_color = Color::check_is_there_ability_to_choose_the_color
             } ?>>
 
             <br/>
-            <br/>
-            <?php
-            echo "<b>Внимание! <br/> Отзыв можно оставлять только после покупки товара.</b>";
-            ?>
 
         </div>
 
     </div>
 
+    
 
-    <div style="border: 1px solid black; width: 100%">
-
-    </div>
-
-
+    
 </div>
 
 <br/>
@@ -604,74 +593,17 @@ $ability_to_choose_the_color = Color::check_is_there_ability_to_choose_the_color
 </div>
 
 
+<script src="/template/js/rating_stars.js"></script>
+
+
+
+
 <h2 style="text-align: center">Похожие товары</h2>
 
-<!-- Swiper -->
-<!--<div class="swiper-container">-->
-<!--    <div class="swiper-wrapper">-->
-<!--        --><?php //foreach ($productList as $productItem) : ?>
-<!--            <div class="swiper-slide">-->
-<!--                --><?php
-//                $product_id = $productItem['id'];
-//                $path = "/images/preview_images/id_{$product_id}_photo_1.jpg";
-////                if(!file_exists($path)){
-////                    $path = "/images/preview_images/no_photo.png";
-////                }
-//                ?>
-<!--                <div><img src="--><?php //echo $path ?><!--" alt="photo" class="product_photo"/></div>-->
-<!--                <div>-->
-<!--                    <a href="/product/--><? //= $productItem['id']; ?><!--">-->
-<!--                        --><?php //echo $productItem['name']; ?>
-<!--                    </a>-->
-<!--                </div>-->
-<!--                <div class="price"> --><?php //echo $productItem['price'] . ' грн'; ?><!--</div>-->
-<!--                <div>-->
-<!--                    <form name="cart" action="" method="post"><br/>-->
-<!--                        <input type="hidden" name="add_to_cart_product_id" value="--><? //= $productItem['id'] ?><!--">-->
-<!--                        <input type="submit" name="add_to_cart" value="Добавить в корзину"><br/>-->
-<!--                    </form>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        --><?php //endforeach; ?>
-<!--    </div>-->
-<!--    <!-- Add Arrows -->-->
-<!--    <div class="swiper-button-next"></div>-->
-<!--    <div class="swiper-button-prev"></div>-->
-<!--</div>-->
 
 
 <script src="/template/third_party_files/swiper-4.4.6/dist/js/swiper.min.js"></script>
 
-
-<!-- Initialize Swiper -->
-<!--<script>-->
-<!--    var swiper = new Swiper('.swiper-container', {-->
-<!--        slidesPerView: 3,-->
-<!--        spaceBetween: 10,-->
-<!--        navigation: {-->
-<!--            nextEl: '.swiper-button-next',-->
-<!--            prevEl: '.swiper-button-prev',-->
-<!--        },-->
-<!---->
-<!--        breakpoints: {-->
-<!--            // when window width is <= 480px-->
-<!--            640: {-->
-<!--                slidesPerView: 1,-->
-<!--                spaceBetween: 10-->
-<!--            },-->
-<!--            // when window width is <= 640px-->
-<!--            800: {-->
-<!--                slidesPerView: 2,-->
-<!--                spaceBetween: 20-->
-<!--            }-->
-<!--        },-->
-<!---->
-<!--        pagination: {-->
-<!--            el: '.swiper-pagination',-->
-<!--            type: 'bullets',-->
-<!--        },-->
-<!--    });-->
-<!--</script>-->
 
 
 <script>
@@ -692,11 +624,6 @@ $ability_to_choose_the_color = Color::check_is_there_ability_to_choose_the_color
         },
     });
 </script>
-
-
-<script src="/template/js/rating_stars.js"></script>
-
-
 
 
 
